@@ -57,7 +57,6 @@ const Layout = {
           <a href="boutique.html" data-i18n="nav.shop">Boutique</a>
         </nav>
         <div class="footer__meta">
-          <p data-i18n="footer.made">Fait avec soin, en partenariat avec la Zawia.</p>
           <p class="footer__rights">© <span id="year"></span> Chemin Vert — <span data-i18n="footer.rights">Tous droits réservés.</span></p>
         </div>
       </div>
