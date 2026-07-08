@@ -5,23 +5,6 @@
 (function () {
   "use strict";
 
-  /* ---------- Injection du logo (nav, hero, footer, produits) ---------- */
-  const logoMarkup = fetch("assets/logo.svg").then(r => r.text());
-  logoMarkup.then(svg => {
-    ["navLogo", "footerLogo"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = svg;
-    });
-    const emblem = document.getElementById("heroEmblem");
-    if (emblem) {
-      emblem.innerHTML = svg;
-      emblem.classList.add("emblem-animate");
-    }
-    const about = document.querySelector(".about__emblem");
-    if (about) about.innerHTML = svg;
-    document.querySelectorAll(".product__emblem").forEach(el => (el.innerHTML = svg));
-  });
-
   /* ---------- Année du footer ---------- */
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();

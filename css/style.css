@@ -159,8 +159,7 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 1px 0 var(--line), 0 10px 30px -20px rgba(12,56,35,.4);
 }
 .nav__brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; }
-.nav__logo { width: 40px; height: 40px; color: var(--green-700); }
-.nav__logo svg { width: 100%; height: 100%; }
+.nav__logo { width: 40px; height: 40px; object-fit: contain; }
 .nav__name { font-family: var(--font-display); font-size: 1.25rem; color: var(--green-900); letter-spacing: -.01em; }
 
 .nav__links { display: flex; gap: 1.6rem; }
@@ -232,8 +231,10 @@ a { color: inherit; text-decoration: none; }
 }
 .counter__label { color: var(--muted); font-size: 1.02rem; }
 
-.hero__emblem { aspect-ratio: 1; width: 100%; max-width: 440px; margin-inline: auto; color: var(--green-700); position: relative; }
-.hero__emblem svg { width: 100%; height: 100%; filter: drop-shadow(0 24px 40px rgba(20,113,60,.25)); animation: floaty 7s ease-in-out infinite; }
+.hero__emblem {
+  aspect-ratio: 1; width: 100%; max-width: 440px; margin-inline: auto;
+  position: relative; display: grid; place-items: center;
+}
 @keyframes floaty { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-16px) } }
 
 .hero__scroll {
@@ -244,15 +245,32 @@ a { color: inherit; text-decoration: none; }
 .hero__scroll svg { animation: bob 1.8s ease-in-out infinite; }
 @keyframes bob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(5px) } }
 
-/* Tracé animé du logo */
-.cv-draw { stroke-dasharray: 1; stroke-dashoffset: 0; }
-.emblem-animate .cv-draw {
-  stroke-dasharray: 600; stroke-dashoffset: 600;
-  animation: draw 2.4s cubic-bezier(.6,.05,.3,1) forwards;
+/* -------------------------------------------------------------------------
+   Forme organique abstraite (emblème provisoire, en attendant le logo)
+   ------------------------------------------------------------------------- */
+.blob-shape {
+  display: block; width: 72%; aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--green-400), var(--green-700));
+  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+  animation: morph 11s ease-in-out infinite, floaty 7s ease-in-out infinite;
 }
-.emblem-animate .cv-draw:nth-child(n+3) { animation-delay: .3s; }
-.emblem-animate .cv-draw:nth-child(n+6) { animation-delay: .6s; }
-@keyframes draw { to { stroke-dashoffset: 0; } }
+.blob-shape::before {
+  content: ""; position: absolute; inset: 8%;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.45), transparent 60%);
+}
+.blob-shape--sm { width: 100%; max-width: 300px; }
+.blob-ring {
+  position: absolute; inset: 0; margin: auto; width: 92%; aspect-ratio: 1;
+  border: 1.5px dashed var(--green-300); border-radius: 50%;
+  animation: spin 40s linear infinite;
+}
+@keyframes morph {
+  0%,100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+  50%     { border-radius: 62% 38% 32% 68% / 55% 62% 38% 45%; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* -------------------------------------------------------------------------
    Section charte : grille de valeurs
@@ -340,8 +358,10 @@ a { color: inherit; text-decoration: none; }
 .product__visual--1 { background: linear-gradient(135deg, var(--green-100), var(--green-300)); }
 .product__visual--2 { background: linear-gradient(135deg, var(--green-300), var(--green-500)); }
 .product__visual--3 { background: linear-gradient(135deg, var(--green-500), var(--green-700)); }
-.product__emblem { width: 46%; color: #fff; opacity: .92; }
-.product__emblem svg { width: 100%; }
+.product__visual::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.5), transparent 55%);
+}
 .product__soon {
   position: absolute; top: 1rem; inset-inline-start: 1rem;
   background: rgba(255,255,255,.92); color: var(--green-700);
@@ -357,8 +377,7 @@ a { color: inherit; text-decoration: none; }
    ------------------------------------------------------------------------- */
 .section--about { background: linear-gradient(180deg, transparent, rgba(215,240,224,.4)); }
 .about__grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3rem; align-items: center; }
-.about__emblem { color: var(--green-600); }
-.about__emblem svg { width: 100%; max-width: 340px; margin-inline: auto; animation: floaty 8s ease-in-out infinite; }
+.about__emblem { display: grid; place-items: center; }
 .about__contact { margin-top: 1.4rem; color: #33463b; }
 
 /* -------------------------------------------------------------------------
@@ -379,7 +398,7 @@ a { color: inherit; text-decoration: none; }
 .footer { background: var(--green-900); color: #d9ebe0; padding: 3.5rem 0 2.5rem; margin-top: 2rem; }
 .footer__inner { display: flex; justify-content: space-between; gap: 2rem; flex-wrap: wrap; align-items: flex-start; }
 .footer__brand { display: flex; gap: 1rem; align-items: center; max-width: 30rem; }
-.footer__logo { width: 54px; height: 54px; color: var(--green-300); flex: 0 0 auto; }
+.footer__logo { width: 54px; height: 54px; object-fit: contain; flex: 0 0 auto; }
 .footer__brand strong { font-family: var(--font-display); font-size: 1.3rem; color: #fff; }
 .footer__brand p { color: #a9c9b6; font-size: .95rem; margin-top: .2rem; }
 .footer__meta { text-align: end; font-size: .9rem; color: #a9c9b6; }
