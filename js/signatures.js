@@ -42,7 +42,13 @@ const Signatures = (() => {
 
     if (supabase) {
       const lang = (typeof I18nEngine !== "undefined" && I18nEngine.current) || null;
-      const { error } = await supabase.from("signatures").insert({ email, lang });
+      let { error } = await supabase.from("signatures").insert({ email, lang });
+
+      // Si la colonne « lang » n'existe pas dans la table, on réessaie avec l'e-mail seul.
+      if (error && (error.code === "PGRST204" || /'lang'|column .*lang/i.test(error.message || ""))) {
+        ({ error } = await supabase.from("signatures").insert({ email }));
+      }
+
       if (error) {
         // 23505 = violation de contrainte d'unicité (déjà signé)
         if (error.code === "23505" || /duplicate|unique/i.test(error.message)) {
