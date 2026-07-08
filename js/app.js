@@ -72,15 +72,19 @@
     const primary = I18N.values[current];
     const others = Object.keys(I18N.values).filter(l => l !== current).slice(0, 2);
     valuesGrid.innerHTML = "";
+    const globe =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>';
     primary.forEach((name, i) => {
       const alt = others.map(l => `<span>${I18N.values[l][i]}</span>`).join("");
       const card = document.createElement("article");
       card.className = "value";
       card.style.transitionDelay = (i % 5) * 60 + "ms";
       card.innerHTML =
-        `<div class="value__idx">${String(i + 1).padStart(2, "0")}</div>` +
-        `<div class="value__name">${name}</div>` +
-        `<div class="value__alt">${alt}</div>`;
+        `<span class="value__idx">${String(i + 1).padStart(2, "0")}</span>` +
+        `<h3 class="value__name">${name}</h3>` +
+        `<div class="value__alt">${alt}</div>` +
+        `<span class="value__globe">${globe}</span>`;
       valuesGrid.appendChild(card);
     });
     observeValues();

@@ -695,43 +695,50 @@ const I18N_EXT = {
     "milestone.next": "Prochain objectif", "value.all_title": "Dans les 7 langues", "value.close": "Fermer",
     "shop.add": "Ajouter au panier", "shop.added": "Ajouté ✓", "shop.cart": "Panier",
     "shop.cart_empty": "Votre panier est vide.", "shop.total": "Total", "shop.checkout": "Commander",
-    "shop.checkout_soon": "Le paiement en ligne arrive très bientôt. Merci de votre soutien !", "shop.remove": "Retirer"
+    "shop.checkout_soon": "Le paiement en ligne arrive très bientôt. Merci de votre soutien !", "shop.remove": "Retirer",
+    "charter.click_hint": "Cliquez sur une valeur pour la lire dans les 7 langues"
   },
   en: {
     "milestone.next": "Next goal", "value.all_title": "In all 7 languages", "value.close": "Close",
     "shop.add": "Add to cart", "shop.added": "Added ✓", "shop.cart": "Cart",
     "shop.cart_empty": "Your cart is empty.", "shop.total": "Total", "shop.checkout": "Checkout",
-    "shop.checkout_soon": "Online payment is coming very soon. Thank you for your support!", "shop.remove": "Remove"
+    "shop.checkout_soon": "Online payment is coming very soon. Thank you for your support!", "shop.remove": "Remove",
+    "charter.click_hint": "Tap a value to read it in all 7 languages"
   },
   es: {
     "milestone.next": "Próximo objetivo", "value.all_title": "En los 7 idiomas", "value.close": "Cerrar",
     "shop.add": "Añadir al carrito", "shop.added": "Añadido ✓", "shop.cart": "Carrito",
     "shop.cart_empty": "Tu carrito está vacío.", "shop.total": "Total", "shop.checkout": "Pagar",
-    "shop.checkout_soon": "El pago en línea llegará muy pronto. ¡Gracias por tu apoyo!", "shop.remove": "Quitar"
+    "shop.checkout_soon": "El pago en línea llegará muy pronto. ¡Gracias por tu apoyo!", "shop.remove": "Quitar",
+    "charter.click_hint": "Toca un valor para leerlo en los 7 idiomas"
   },
   it: {
     "milestone.next": "Prossimo obiettivo", "value.all_title": "Nelle 7 lingue", "value.close": "Chiudi",
     "shop.add": "Aggiungi al carrello", "shop.added": "Aggiunto ✓", "shop.cart": "Carrello",
     "shop.cart_empty": "Il tuo carrello è vuoto.", "shop.total": "Totale", "shop.checkout": "Ordina",
-    "shop.checkout_soon": "Il pagamento online arriva molto presto. Grazie del supporto!", "shop.remove": "Rimuovi"
+    "shop.checkout_soon": "Il pagamento online arriva molto presto. Grazie del supporto!", "shop.remove": "Rimuovi",
+    "charter.click_hint": "Tocca un valore per leggerlo nelle 7 lingue"
   },
   de: {
     "milestone.next": "Nächstes Ziel", "value.all_title": "In allen 7 Sprachen", "value.close": "Schließen",
     "shop.add": "In den Warenkorb", "shop.added": "Hinzugefügt ✓", "shop.cart": "Warenkorb",
     "shop.cart_empty": "Dein Warenkorb ist leer.", "shop.total": "Summe", "shop.checkout": "Zur Kasse",
-    "shop.checkout_soon": "Online-Bezahlung kommt sehr bald. Danke für deine Unterstützung!", "shop.remove": "Entfernen"
+    "shop.checkout_soon": "Online-Bezahlung kommt sehr bald. Danke für deine Unterstützung!", "shop.remove": "Entfernen",
+    "charter.click_hint": "Tippe auf einen Wert, um ihn in allen 7 Sprachen zu lesen"
   },
   tr: {
     "milestone.next": "Sonraki hedef", "value.all_title": "7 dilde", "value.close": "Kapat",
     "shop.add": "Sepete ekle", "shop.added": "Eklendi ✓", "shop.cart": "Sepet",
     "shop.cart_empty": "Sepetin boş.", "shop.total": "Toplam", "shop.checkout": "Sipariş ver",
-    "shop.checkout_soon": "Çevrimiçi ödeme çok yakında. Desteğin için teşekkürler!", "shop.remove": "Kaldır"
+    "shop.checkout_soon": "Çevrimiçi ödeme çok yakında. Desteğin için teşekkürler!", "shop.remove": "Kaldır",
+    "charter.click_hint": "Bir değere dokunarak 7 dilde oku"
   },
   ar: {
     "milestone.next": "الهدف التالي", "value.all_title": "بجميع اللغات السبع", "value.close": "إغلاق",
     "shop.add": "أضف إلى السلة", "shop.added": "أُضيف ✓", "shop.cart": "السلة",
     "shop.cart_empty": "سلتك فارغة.", "shop.total": "الإجمالي", "shop.checkout": "إتمام الطلب",
-    "shop.checkout_soon": "الدفع الإلكتروني قريبًا جدًا. شكرًا لدعمك!", "shop.remove": "إزالة"
+    "shop.checkout_soon": "الدفع الإلكتروني قريبًا جدًا. شكرًا لدعمك!", "shop.remove": "إزالة",
+    "charter.click_hint": "انقر على قيمة لقراءتها بجميع اللغات السبع"
   }
 };
 Object.keys(I18N_EXT).forEach(l => Object.assign(I18N.t[l], I18N_EXT[l]));
