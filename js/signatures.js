@@ -67,5 +67,28 @@ const Signatures = (() => {
     return "ok";
   }
 
-  return { getCount, sign, emailValid, configured };
+  /* --- Désinscription ---
+     Retourne : "ok" | "notfound" | "invalid" | lève une erreur           */
+  async function unsubscribe(rawEmail) {
+    const email = String(rawEmail).trim().toLowerCase();
+    if (!emailValid(email)) return "invalid";
+
+    if (supabase) {
+      // Passe par la fonction SECURITY DEFINER `unsubscribe` (aucune policy
+      // DELETE ouverte : la suppression est encadrée côté base).
+      const { data, error } = await supabase.rpc("unsubscribe", { p_email: email });
+      if (error) throw error;
+      return Number(data) > 0 ? "ok" : "notfound";
+    }
+
+    // Mode démo
+    const demo = JSON.parse(localStorage.getItem(DEMO_KEY) || "[]");
+    const i = demo.indexOf(email);
+    if (i === -1) return "notfound";
+    demo.splice(i, 1);
+    localStorage.setItem(DEMO_KEY, JSON.stringify(demo));
+    return "ok";
+  }
+
+  return { getCount, sign, unsubscribe, emailValid, configured };
 })();

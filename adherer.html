@@ -52,6 +52,22 @@
         </form>
         <p class="sign__msg" id="signMsg" role="status" aria-live="polite"></p>
         <p class="sign__privacy" data-i18n="sign.privacy"></p>
+
+        <!-- Désinscription -->
+        <div class="unsub" id="unsub">
+          <button type="button" class="unsub__toggle" id="unsubToggle" aria-expanded="false" data-i18n="unsub.link">Se désinscrire</button>
+          <div class="unsub__panel" id="unsubPanel" hidden>
+            <p class="unsub__intro" data-i18n="unsub.intro">Entrez l'adresse utilisée pour signer.</p>
+            <form class="sign__form" id="unsubForm" novalidate>
+              <input type="email" id="unsubEmail" class="sign__input" autocomplete="email"
+                     data-i18n-attr="placeholder:sign.placeholder" placeholder="votre@email.com" />
+              <button type="submit" class="btn btn--ghost" id="unsubBtn">
+                <span data-i18n="unsub.button">Se désinscrire</span>
+              </button>
+            </form>
+            <p class="sign__msg" id="unsubMsg" role="status" aria-live="polite"></p>
+          </div>
+        </div>
       </div>
     </section>
 

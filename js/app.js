@@ -199,6 +199,62 @@
     });
   }
 
+  /* ---------- Désinscription ---------- */
+  const unsubToggle = document.getElementById("unsubToggle");
+  if (unsubToggle) {
+    const unsubPanel = document.getElementById("unsubPanel");
+    const unsubForm = document.getElementById("unsubForm");
+    const unsubEmail = document.getElementById("unsubEmail");
+    const unsubBtn = document.getElementById("unsubBtn");
+    const unsubMsg = document.getElementById("unsubMsg");
+
+    unsubToggle.addEventListener("click", () => {
+      const willOpen = unsubPanel.hidden;
+      unsubPanel.hidden = !willOpen;
+      unsubToggle.setAttribute("aria-expanded", String(willOpen));
+      unsubToggle.classList.toggle("open", willOpen);
+      if (willOpen) unsubEmail.focus();
+    });
+
+    unsubForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      unsubMsg.textContent = "";
+      unsubMsg.className = "sign__msg";
+      const email = unsubEmail.value;
+      if (!Signatures.emailValid(email)) {
+        unsubMsg.textContent = I18nEngine.get("sign.invalid");
+        unsubMsg.classList.add("err");
+        return;
+      }
+      unsubBtn.classList.add("is-loading");
+      const span = unsubBtn.querySelector("span");
+      const prev = span.textContent;
+      span.textContent = I18nEngine.get("sign.sending");
+      try {
+        const res = await Signatures.unsubscribe(email);
+        if (res === "ok") {
+          unsubMsg.textContent = I18nEngine.get("unsub.success");
+          unsubMsg.classList.add("ok");
+          unsubEmail.value = "";
+          refreshCount();
+        } else if (res === "notfound") {
+          unsubMsg.textContent = I18nEngine.get("unsub.notfound");
+          unsubMsg.classList.add("err");
+        } else {
+          unsubMsg.textContent = I18nEngine.get("sign.invalid");
+          unsubMsg.classList.add("err");
+        }
+      } catch (err) {
+        console.error(err);
+        unsubMsg.textContent = I18nEngine.get("sign.error");
+        unsubMsg.classList.add("err");
+      } finally {
+        unsubBtn.classList.remove("is-loading");
+        span.textContent = prev;
+      }
+    });
+  }
+
   function burstConfetti() {
     const host = document.querySelector(".sign__card") || form;
     if (!host) return;
