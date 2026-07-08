@@ -14,8 +14,8 @@
    ========================================================================== */
 
 window.CHEMIN_VERT_CONFIG = {
-  SUPABASE_URL: "",       // ex : "https://xxxxxxxx.supabase.co"
-  SUPABASE_ANON_KEY: "",  // ex : "eyJhbGciOi..."
+  SUPABASE_URL: "https://ohjtqxeaqaohlobymcmd.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable__3n6E9aOsxbdWCLvx9Y2KA_kXPCwKOu",
 
   // Chiffre affiché au démarrage si la base n'est pas encore branchée
   // (utile pour lancer le site avant Supabase, ou pour amorcer le compteur).
