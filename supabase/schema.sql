@@ -48,6 +48,25 @@ $$;
 
 grant execute on function public.signatures_count() to anon, authenticated;
 
+-- 4) Désinscription via une fonction SECURITY DEFINER
+--    (aucune policy DELETE ouverte : la suppression est encadrée ici,
+--     par e-mail exact. Renvoie le nombre de lignes supprimées.)
+create or replace function public.unsubscribe(p_email text)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare n integer;
+begin
+  delete from public.signatures where email = lower(trim(p_email));
+  get diagnostics n = row_count;
+  return n;
+end;
+$$;
+
+grant execute on function public.unsubscribe(text) to anon, authenticated;
+
 -- ============================================================================
 --  C'est tout ! Récupérez ensuite dans Project Settings → API :
 --    • Project URL      → SUPABASE_URL      (dans config.js)
