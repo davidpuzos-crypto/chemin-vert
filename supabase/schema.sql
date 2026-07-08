@@ -18,6 +18,9 @@ create table if not exists public.signatures (
   created_at timestamptz not null default now()
 );
 
+-- 1b) Si la table existait déjà sans la colonne « lang », on l'ajoute.
+alter table public.signatures add column if not exists lang text;
+
 -- 2) Sécurité au niveau des lignes (RLS)
 alter table public.signatures enable row level security;
 
