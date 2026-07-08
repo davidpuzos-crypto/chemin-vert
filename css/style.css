@@ -114,8 +114,8 @@ a { color: inherit; text-decoration: none; }
 }
 .btn--primary:hover { transform: translateY(-3px); box-shadow: 0 20px 34px -12px rgba(20,113,60,.75); }
 .btn--ghost {
-  background: rgba(255,255,255,.55); color: var(--green-800);
-  border-color: var(--line); backdrop-filter: blur(8px);
+  background: rgba(255,255,255,.72); color: var(--green-800);
+  border-color: var(--line);
 }
 .btn--ghost:hover { transform: translateY(-3px); background: #fff; box-shadow: var(--shadow-sm); }
 
@@ -126,8 +126,8 @@ a { color: inherit; text-decoration: none; }
 }
 .pill {
   display: inline-block; padding: .5em 1.1em; border-radius: 999px;
-  background: rgba(255,255,255,.6); border: 1px solid var(--line);
-  backdrop-filter: blur(8px); font-size: .9rem; color: var(--green-800);
+  background: rgba(255,255,255,.78); border: 1px solid var(--line);
+  font-size: .9rem; color: var(--green-800);
   font-weight: 500; box-shadow: var(--shadow-sm);
 }
 .link { color: var(--green-700); font-weight: 600; border-bottom: 1.5px solid var(--green-300); }
@@ -201,7 +201,7 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; gap: .4rem; cursor: pointer;
   background: rgba(255,255,255,.55); border: 1px solid var(--line);
   border-radius: 999px; padding: .45rem .7rem; font-weight: 600; font-size: .85rem;
-  color: var(--green-800); backdrop-filter: blur(8px); transition: background .2s;
+  color: var(--green-800); transition: background .2s;
 }
 .lang__btn:hover { background: #fff; }
 .lang__flag { font-size: 1.05rem; line-height: 1; }
@@ -322,9 +322,9 @@ a { color: inherit; text-decoration: none; }
   gap: 1rem;
 }
 .value {
-  position: relative; padding: 1.5rem 1.4rem 1.4rem;
-  background: rgba(255,255,255,.6); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); backdrop-filter: blur(10px);
+  position: relative; padding: 1.5rem 1.4rem 1.4rem; contain: content;
+  background: rgba(255,255,255,.78); border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm); overflow: hidden; cursor: pointer;
   transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s;
   opacity: 0; transform: translateY(18px);
@@ -433,8 +433,8 @@ a { color: inherit; text-decoration: none; }
    ------------------------------------------------------------------------- */
 .shop__grid { margin-top: 2.6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .product {
-  background: rgba(255,255,255,.6); border: 1px solid var(--line);
-  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
+  background: rgba(255,255,255,.78); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); contain: content;
   padding-bottom: 1.4rem; transition: transform .35s, box-shadow .35s; position: relative;
 }
 .product:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
@@ -472,9 +472,9 @@ a { color: inherit; text-decoration: none; }
 .badges { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
 .badge {
   display: inline-flex; align-items: center; gap: .5rem;
-  background: rgba(255,255,255,.6); border: 1px solid var(--line);
+  background: rgba(255,255,255,.78); border: 1px solid var(--line);
   border-radius: 999px; padding: .55em 1.1em; font-weight: 500; font-size: .95rem;
-  color: var(--green-800); backdrop-filter: blur(8px);
+  color: var(--green-800);
 }
 .badge__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-500); }
 
@@ -583,9 +583,9 @@ body.rtl .value__alt span::after { content: " · "; }
 .section--explore { }
 .cards { margin-top: 2.6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .card {
-  display: block; padding: 2rem 1.8rem; border-radius: var(--radius);
-  background: rgba(255,255,255,.6); border: 1px solid var(--line);
-  backdrop-filter: blur(10px); box-shadow: var(--shadow-sm);
+  display: block; padding: 2rem 1.8rem; border-radius: var(--radius); contain: content;
+  background: rgba(255,255,255,.78); border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
   transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
 }
 .card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
@@ -631,17 +631,53 @@ body.rtl .card__link::after { content: " ←"; }
   border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(14px);
   padding: clamp(1.8rem, 4vw, 3rem);
 }
+/* Vignette « mini-charte » avec profondeur */
 .download__doc {
-  width: 120px; height: 150px; border-radius: 10px; background: #fff;
-  border: 1px solid var(--line); box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
-  flex: 0 0 auto;
+  position: relative; flex: 0 0 auto; width: 150px; height: 186px;
+  perspective: 600px;
 }
-.download__doc::before {
-  content: ""; position: absolute; top: 0; inset-inline: 0; height: 34px;
-  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+.dd-sheet {
+  position: absolute; inset: 0; border-radius: 12px; background: #fff;
+  box-shadow: 0 18px 40px -18px rgba(12,56,35,.4);
 }
-.download__lines { position: absolute; inset: 46px 16px 16px; display: block;
-  background: repeating-linear-gradient(var(--green-100) 0 3px, transparent 3px 13px); border-radius: 2px; }
+.dd-sheet--back {
+  background: var(--green-50);
+  transform: rotate(-6deg) translate(-8px, 6px) scale(.97);
+  box-shadow: 0 10px 26px -16px rgba(12,56,35,.35);
+}
+.dd-sheet--front {
+  display: flex; flex-direction: column; gap: 9px; padding: 0 0 14px;
+  overflow: hidden; border: 1px solid rgba(20,113,60,.1);
+  transform: rotate(2deg);
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+  animation: docfloat 6s ease-in-out infinite;
+}
+.download:hover .dd-sheet--front { transform: rotate(0deg) translateY(-4px); }
+@keyframes docfloat { 0%,100%{ transform: rotate(2deg) translateY(0) } 50%{ transform: rotate(2deg) translateY(-7px) } }
+.dd-head {
+  height: 42px; background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  display: flex; align-items: center; gap: 6px; padding: 0 12px; margin-bottom: 5px;
+}
+.dd-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,.9); flex: 0 0 auto; }
+.dd-brand { height: 5px; width: 62px; border-radius: 3px; background: rgba(255,255,255,.6); }
+.dd-title { height: 9px; width: 64%; margin: 2px 14px 4px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--green-700), var(--green-400)); }
+.dd-rows { display: flex; flex-direction: column; gap: 8px; padding: 4px 14px 0; }
+.dd-rows span { height: 6px; border-radius: 3px; background: var(--green-100); position: relative; }
+.dd-rows span::before {
+  content: ""; position: absolute; inset-inline-start: 0; top: -1px; width: 12px; height: 8px;
+  border-radius: 2px; background: var(--green-300);
+}
+.dd-rows span { padding-inline-start: 18px; }
+.dd-rows span:nth-child(1) { width: 92%; } .dd-rows span:nth-child(2) { width: 82%; }
+.dd-rows span:nth-child(3) { width: 88%; } .dd-rows span:nth-child(4) { width: 74%; }
+.dd-badge {
+  position: absolute; bottom: -8px; inset-inline-end: -8px; z-index: 2;
+  font-family: var(--font-ui); font-weight: 600; font-size: .68rem; letter-spacing: .08em;
+  color: #fff; background: linear-gradient(135deg, #b4471f, #d9632f);
+  padding: .4em .7em; border-radius: 8px; box-shadow: 0 8px 18px -8px rgba(180,71,31,.7);
+  transform: rotate(3deg);
+}
 .download__body .section__title { max-width: none; }
 .download__body .section__intro { margin-bottom: 1.3rem; }
 
@@ -670,8 +706,8 @@ body.rtl .card__link::after { content: " ←"; }
 /* -------- Pourquoi adhérer -------- */
 .why { margin-top: 2.4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .why__item {
-  padding: 1.8rem; background: rgba(255,255,255,.55); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm);
+  padding: 1.8rem; background: rgba(255,255,255,.78); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
 }
 .why__num { font-family: var(--font-display); font-size: 1.4rem; color: var(--green-400); font-weight: 600; }
 .why__item h3 { font-family: var(--font-display); font-size: 1.35rem; color: var(--green-900); margin: .3rem 0 .5rem; }
