@@ -589,10 +589,26 @@ body.rtl .value__alt span::after { content: " · "; }
   transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
 }
 .card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
-.card__ico { display: block; width: 46px; height: 46px; border-radius: 14px; margin-bottom: 1.1rem; }
-.card__ico--1 { background: linear-gradient(135deg, var(--green-300), var(--green-500)); }
-.card__ico--2 { background: linear-gradient(135deg, var(--green-500), var(--green-700)); }
-.card__ico--3 { background: linear-gradient(135deg, var(--green-400), var(--green-800)); }
+.card__art {
+  display: grid; place-items: center; position: relative; overflow: hidden;
+  width: 64px; height: 64px; border-radius: 18px; margin-bottom: 1.3rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.card__art::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.5), transparent 60%);
+}
+.card__art--1 { background: linear-gradient(135deg, var(--green-300), var(--green-500)); }
+.card__art--2 { background: linear-gradient(135deg, var(--green-500), var(--green-700)); }
+.card__art--3 { background: linear-gradient(135deg, var(--green-400), var(--green-800)); }
+.card__art-icon {
+  position: relative; z-index: 1; width: 28px; height: 28px;
+  filter: drop-shadow(0 2px 3px rgba(12,56,35,.2));
+  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.card:hover .card__art { transform: translateY(-2px) rotate(-3deg); }
+.card:hover .card__art-icon { transform: scale(1.12) rotate(5deg); }
 .card h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--green-900); }
 .card p { color: var(--muted); margin: .5rem 0 1rem; }
 .card__link { font-weight: 600; color: var(--green-700); }
