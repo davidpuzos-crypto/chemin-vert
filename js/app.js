@@ -1,27 +1,29 @@
 /* ==========================================================================
-   Chemin Vert — Interactions
+   Chemin Vert — Logique commune à toutes les pages
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  /* ---------- Année du footer ---------- */
-  const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  /* ---------- Injecte l'en-tête et le pied de page partagés ---------- */
+  Layout.inject();
 
   /* ---------- Navigation : ombre au scroll + menu mobile ---------- */
   const nav = document.getElementById("nav");
   const burger = document.getElementById("burger");
   const navLinks = document.getElementById("navLinks");
 
-  const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 24);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
-
-  burger.addEventListener("click", () => nav.classList.toggle("open"));
-  navLinks.addEventListener("click", e => {
-    if (e.target.tagName === "A") nav.classList.remove("open");
-  });
+  if (nav) {
+    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+  if (burger) burger.addEventListener("click", () => nav.classList.toggle("open"));
+  if (navLinks) {
+    navLinks.addEventListener("click", e => {
+      if (e.target.tagName === "A") nav.classList.remove("open");
+    });
+  }
 
   /* ---------- Sélecteur de langue ---------- */
   const lang = document.getElementById("lang");
@@ -30,7 +32,6 @@
   const langFlag = document.getElementById("langFlag");
   const langCode = document.getElementById("langCode");
 
-  // Construit la liste des langues
   Object.entries(I18N.languages).forEach(([code, meta]) => {
     const li = document.createElement("li");
     li.setAttribute("role", "option");
@@ -66,15 +67,13 @@
   /* ---------- Valeurs de la charte (rendu multilingue) ---------- */
   const valuesGrid = document.getElementById("valuesGrid");
 
-  function renderValues(lang) {
-    const primary = I18N.values[lang];
-    // Deux autres langues affichées en sous-titre, pour l'esprit universel
-    const others = Object.keys(I18N.values).filter(l => l !== lang).slice(0, 2);
+  function renderValues(current) {
+    if (!valuesGrid) return;
+    const primary = I18N.values[current];
+    const others = Object.keys(I18N.values).filter(l => l !== current).slice(0, 2);
     valuesGrid.innerHTML = "";
     primary.forEach((name, i) => {
-      const alt = others
-        .map(l => `<span>${I18N.values[l][i]}</span>`)
-        .join("");
+      const alt = others.map(l => `<span>${I18N.values[l][i]}</span>`).join("");
       const card = document.createElement("article");
       card.className = "value";
       card.style.transitionDelay = (i % 5) * 60 + "ms";
@@ -87,21 +86,23 @@
     observeValues();
   }
 
-  /* ---------- Compteur de signatures ---------- */
-  const counterNum = document.getElementById("counterNum");
-  const signCounterNum = document.getElementById("signCounterNum");
+  /* ---------- Compteur de signatures (générique : .js-counter) ---------- */
+  const counterEls = () => document.querySelectorAll(".js-counter");
+  const hasCounter = counterEls().length > 0;
   let currentCount = null;
 
+  function paintCount(val) {
+    counterEls().forEach(el => (el.textContent = val.toLocaleString(I18nEngine.current)));
+  }
+
   function animateCount(target) {
-    const els = [counterNum, signCounterNum].filter(Boolean);
     const from = currentCount ?? 0;
-    const dur = 1100;
+    const dur = 1200;
     const start = performance.now();
     function tick(now) {
       const p = Math.min((now - start) / dur, 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      const val = Math.round(from + (target - from) * eased);
-      els.forEach(el => (el.textContent = val.toLocaleString(I18nEngine.current)));
+      paintCount(Math.round(from + (target - from) * eased));
       if (p < 1) requestAnimationFrame(tick);
       else currentCount = target;
     }
@@ -110,97 +111,100 @@
 
   async function refreshCount() {
     try {
-      const c = await Signatures.getCount();
-      animateCount(c);
+      animateCount(await Signatures.getCount());
     } catch (err) {
       console.warn("Compteur indisponible :", err.message);
-      if (counterNum.textContent === "—") animateCount(0);
+      if (currentCount === null) animateCount(0);
     }
   }
 
   /* ---------- Formulaire de signature ---------- */
   const form = document.getElementById("signForm");
-  const emailInput = document.getElementById("signEmail");
-  const signBtn = document.getElementById("signBtn");
-  const signMsg = document.getElementById("signMsg");
+  if (form) {
+    const emailInput = document.getElementById("signEmail");
+    const signBtn = document.getElementById("signBtn");
+    const signMsg = document.getElementById("signMsg");
 
-  form.addEventListener("submit", async e => {
-    e.preventDefault();
-    const email = emailInput.value;
-    signMsg.textContent = "";
-    signMsg.className = "sign__msg";
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const email = emailInput.value;
+      signMsg.textContent = "";
+      signMsg.className = "sign__msg";
 
-    if (!Signatures.emailValid(email)) {
-      signMsg.textContent = I18nEngine.get("sign.invalid");
-      signMsg.classList.add("err");
-      return;
-    }
-
-    signBtn.classList.add("is-loading");
-    const label = signBtn.querySelector("span");
-    const prev = label.textContent;
-    label.textContent = I18nEngine.get("sign.sending");
-
-    try {
-      const res = await Signatures.sign(email);
-      if (res === "ok") {
-        signMsg.textContent = I18nEngine.get("sign.success");
-        signMsg.classList.add("ok");
-        emailInput.value = "";
-        refreshCount();
-        burstConfetti();
-      } else if (res === "already") {
-        signMsg.textContent = I18nEngine.get("sign.already");
-        signMsg.classList.add("ok");
-      } else if (res === "invalid") {
+      if (!Signatures.emailValid(email)) {
         signMsg.textContent = I18nEngine.get("sign.invalid");
         signMsg.classList.add("err");
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      signMsg.textContent = I18nEngine.get("sign.error");
-      signMsg.classList.add("err");
-    } finally {
-      signBtn.classList.remove("is-loading");
-      label.textContent = prev;
-    }
-  });
 
-  /* ---------- Petit "confetti" de feuilles à la signature ---------- */
+      signBtn.classList.add("is-loading");
+      const label = signBtn.querySelector("span");
+      const prev = label.textContent;
+      label.textContent = I18nEngine.get("sign.sending");
+
+      try {
+        const res = await Signatures.sign(email);
+        if (res === "ok") {
+          signMsg.textContent = I18nEngine.get("sign.success");
+          signMsg.classList.add("ok");
+          emailInput.value = "";
+          refreshCount();
+          burstConfetti();
+        } else if (res === "already") {
+          signMsg.textContent = I18nEngine.get("sign.already");
+          signMsg.classList.add("ok");
+        } else {
+          signMsg.textContent = I18nEngine.get("sign.invalid");
+          signMsg.classList.add("err");
+        }
+      } catch (err) {
+        console.error(err);
+        signMsg.textContent = I18nEngine.get("sign.error");
+        signMsg.classList.add("err");
+      } finally {
+        signBtn.classList.remove("is-loading");
+        label.textContent = prev;
+      }
+    });
+  }
+
   function burstConfetti() {
-    const card = document.querySelector(".sign__card");
-    if (!card) return;
-    for (let i = 0; i < 14; i++) {
+    const host = document.querySelector(".sign__card") || form;
+    if (!host) return;
+    host.style.position = "relative";
+    for (let i = 0; i < 16; i++) {
       const s = document.createElement("span");
       s.textContent = "🌿";
       s.style.cssText =
         `position:absolute;left:${50 + (Math.random() * 40 - 20)}%;top:40%;` +
-        `font-size:${12 + Math.random() * 14}px;pointer-events:none;z-index:5;`;
-      card.style.position = "relative";
-      card.appendChild(s);
-      const dx = (Math.random() * 2 - 1) * 160;
-      const dy = -(80 + Math.random() * 160);
+        `font-size:${12 + Math.random() * 16}px;pointer-events:none;z-index:5;`;
+      host.appendChild(s);
+      const dx = (Math.random() * 2 - 1) * 180;
+      const dy = -(90 + Math.random() * 180);
       const rot = Math.random() * 720 - 360;
       s.animate(
         [
           { transform: "translate(0,0) rotate(0)", opacity: 1 },
           { transform: `translate(${dx}px,${dy}px) rotate(${rot}deg)`, opacity: 0 }
         ],
-        { duration: 1200 + Math.random() * 600, easing: "cubic-bezier(.2,.7,.3,1)" }
+        { duration: 1300 + Math.random() * 700, easing: "cubic-bezier(.2,.7,.3,1)" }
       ).onfinish = () => s.remove();
     }
   }
 
+  /* ---------- Bouton de téléchargement de la charte (PDF) ---------- */
+  const downloadBtn = document.getElementById("downloadCharter");
+  function refreshDownload(code) {
+    if (!downloadBtn) return;
+    downloadBtn.setAttribute("href", `assets/charte/charte-${code}.pdf`);
+    downloadBtn.setAttribute("download", `charte-chemin-vert-${code}.pdf`);
+  }
+
   /* ---------- Reveal au scroll ---------- */
   const revealObserver = new IntersectionObserver(
-    entries => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          en.target.classList.add("in");
-          revealObserver.unobserve(en.target);
-        }
-      });
-    },
+    entries => entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add("in"); revealObserver.unobserve(en.target); }
+    }),
     { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
   );
   function observeReveals() {
@@ -208,14 +212,9 @@
   }
 
   const valuesObserver = new IntersectionObserver(
-    entries => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          en.target.classList.add("in");
-          valuesObserver.unobserve(en.target);
-        }
-      });
-    },
+    entries => entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add("in"); valuesObserver.unobserve(en.target); }
+    }),
     { threshold: 0.1 }
   );
   function observeValues() {
@@ -237,8 +236,7 @@
       leaf.style.left = Math.random() * 100 + "vw";
       leaf.style.animationDuration = 12 + Math.random() * 16 + "s";
       leaf.style.animationDelay = -(Math.random() * 20) + "s";
-      const sc = 0.5 + Math.random();
-      leaf.style.transform = `scale(${sc})`;
+      leaf.style.transform = `scale(${0.5 + Math.random()})`;
       leaf.style.opacity = 0.15 + Math.random() * 0.25;
       host.appendChild(leaf);
     }
@@ -246,45 +244,34 @@
 
   /* ---------- Parallaxe douce de l'emblème du hero ---------- */
   const heroEmblem = document.getElementById("heroEmblem");
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!heroEmblem) return;
+  if (heroEmblem) {
+    window.addEventListener("scroll", () => {
       const y = window.scrollY;
       if (y < window.innerHeight) heroEmblem.style.transform = `translateY(${y * 0.08}px)`;
-    },
-    { passive: true }
-  );
+    }, { passive: true });
+  }
 
   /* ---------- Réagit aux changements de langue ---------- */
   document.addEventListener("langchange", e => {
     const code = e.detail.lang;
     refreshLangButton(code);
     renderValues(code);
-    // Ré-affiche le compteur avec le bon format de nombre
-    if (currentCount !== null) {
-      [counterNum, signCounterNum].forEach(el => {
-        if (el) el.textContent = currentCount.toLocaleString(code);
-      });
-    }
+    refreshDownload(code);
+    if (currentCount !== null) paintCount(currentCount);
   });
 
   /* ---------- Démarrage ---------- */
   const startLang = I18nEngine.detect();
-  I18nEngine.apply(startLang);   // déclenche langchange → renderValues + bouton
+  I18nEngine.apply(startLang);
   refreshLangButton(startLang);
+  refreshDownload(startLang);
   spawnLeaves();
   observeReveals();
-  refreshCount();
-
-  // Ré-observe les nouveaux .reveal éventuels après le rendu des valeurs
-  setTimeout(observeReveals, 50);
+  if (hasCounter) refreshCount();
+  setTimeout(observeReveals, 60);
 
   if (!Signatures.configured) {
-    console.info(
-      "%cChemin Vert — mode DÉMO",
-      "color:#14713c;font-weight:bold",
-      "\nRenseignez config.js (clés Supabase) pour activer le compteur réel."
-    );
+    console.info("%cChemin Vert — mode DÉMO", "color:#14713c;font-weight:bold",
+      "\nRenseignez config.js (clés Supabase) pour activer le compteur réel.");
   }
 })();

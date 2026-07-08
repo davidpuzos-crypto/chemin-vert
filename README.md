@@ -17,17 +17,28 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 
 ```
 .
-├── index.html            Page unique (toutes les sections)
-├── config.js             ⚙️  Vos clés Supabase (à renseigner)
+├── index.html            Accueil (hero, bandeau compteur, cartes)
+├── charte.html           La Charte (préambule, 15 valeurs, téléchargement PDF)
+├── adherer.html          Adhérer (grand compteur + formulaire de signature)
+├── boutique.html         Boutique (vitrine)
+├── charte-print.html     Gabarit servant à générer les PDF de la charte
+├── config.js             ⚙️  Vos clés Supabase (déjà renseignées)
 ├── css/style.css         Styles, animations, RTL, responsive
 ├── js/
 │   ├── i18n.js           Traductions des 7 langues + moteur i18n
+│   ├── layout.js         En-tête + pied de page partagés (injectés)
 │   ├── signatures.js     Signatures + compteur (Supabase / mode démo)
-│   └── main.js           Interactions, sélecteur de langue, animations
-├── assets/logo.png       ⚠️  Pas encore ajouté — voir section « Logo » ci-dessous
+│   └── app.js            Interactions communes à toutes les pages
+├── assets/
+│   ├── logo.png          ⚠️  Pas encore ajouté — voir section « Logo »
+│   └── charte/           PDF de la charte, un par langue (A4)
 ├── supabase/schema.sql   Schéma à exécuter dans Supabase
 └── .github/workflows/    Déploiement automatique GitHub Pages
 ```
+
+> **Régénérer les PDF de la charte** (après modification du texte dans `i18n.js`) :
+> servir le dossier en local puis imprimer `charte-print.html?lang=xx` en PDF
+> pour chaque langue vers `assets/charte/charte-xx.pdf`.
 
 ---
 

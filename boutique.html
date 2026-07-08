@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Chemin Vert — Boutique</title>
+  <meta name="description" data-i18n="meta.desc" content="La boutique Chemin Vert : autocollants, badges et objets pour afficher votre engagement." />
+  <meta name="theme-color" content="#14713c" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2314713c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="shop">
+  <div class="bg-aurora" aria-hidden="true">
+    <span class="blob blob-1"></span><span class="blob blob-2"></span><span class="blob blob-3"></span>
+    <div class="bg-leaves" id="leaves"></div>
+  </div>
+
+  <div id="site-header"></div>
+
+  <main>
+    <header class="page-head">
+      <div class="container">
+        <p class="tag reveal" data-i18n="shop.tag">Boutique</p>
+        <h1 class="page-head__title reveal" data-i18n="shop.title">Affichez votre engagement</h1>
+        <p class="section__intro section__intro--center reveal" data-i18n="shop.text"></p>
+      </div>
+    </header>
+
+    <section class="section section--tight section--shop">
+      <div class="container">
+        <div class="shop__grid">
+          <article class="product reveal">
+            <div class="product__visual product__visual--1"></div>
+            <span class="product__soon" data-i18n="shop.soon">Bientôt disponible</span>
+            <h3 data-i18n="shop.product1">Autocollants</h3>
+            <p data-i18n="shop.product1_desc"></p>
+          </article>
+          <article class="product reveal">
+            <div class="product__visual product__visual--2"></div>
+            <span class="product__soon" data-i18n="shop.soon">Bientôt disponible</span>
+            <h3 data-i18n="shop.product2">Badges</h3>
+            <p data-i18n="shop.product2_desc"></p>
+          </article>
+          <article class="product reveal">
+            <div class="product__visual product__visual--3"></div>
+            <span class="product__soon" data-i18n="shop.soon">Bientôt disponible</span>
+            <h3 data-i18n="shop.product3">Tote bag</h3>
+            <p data-i18n="shop.product3_desc"></p>
+          </article>
+        </div>
+        <div class="shop__notify reveal">
+          <a href="adherer.html" class="btn btn--ghost btn--lg" data-i18n="shop.notify">Prévenez-moi du lancement</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/signatures.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

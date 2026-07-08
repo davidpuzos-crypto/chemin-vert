@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Charte — Chemin Vert</title>
+  <style>
+    @page { size: A4; margin: 20mm 18mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      color: #17251d; line-height: 1.6; background: #fff;
+    }
+    body[dir="rtl"] { font-family: "Tajawal", "Segoe UI", system-ui, sans-serif; }
+    .serif { font-family: "Fraunces", Georgia, "Times New Roman", serif; }
+
+    .doc { max-width: 700px; margin: 0 auto; }
+    .head { text-align: center; border-bottom: 2px solid #14713c; padding-bottom: 18px; margin-bottom: 26px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; }
+    .brand .dot { width: 30px; height: 30px; border-radius: 50%;
+      background: linear-gradient(135deg, #27a35c, #0f4f30); }
+    .brand .name { font-size: 22px; color: #0c3823; font-weight: 600; letter-spacing: .5px; }
+    .kicker { text-transform: uppercase; letter-spacing: .2em; font-size: 11px; color: #1c8a4b; font-weight: 700; margin-top: 16px; }
+    h1 { font-size: 34px; color: #0c3823; font-weight: 500; margin-top: 4px; }
+
+    .lead { font-size: 16px; color: #0c3823; margin: 22px 0 14px; }
+    .p { font-size: 13.5px; color: #33463b; margin-bottom: 12px; }
+
+    h2 { font-size: 18px; color: #0f4f30; font-weight: 600; margin: 26px 0 14px;
+      padding-bottom: 6px; border-bottom: 1px solid #d7f0e0; }
+
+    .values { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 22px; }
+    .v { display: flex; align-items: baseline; gap: 10px; padding: 5px 0; }
+    .v .n { font-size: 11px; color: #86d5a5; font-weight: 700; min-width: 20px; }
+    .v .t { font-size: 15px; color: #0c3823; }
+    .v .t.serif { font-weight: 500; }
+
+    .foot { margin-top: 30px; text-align: center; font-size: 11px; color: #566a5e;
+      border-top: 1px solid #d7f0e0; padding-top: 14px; }
+    .sign-line { margin-top: 26px; display: flex; justify-content: space-between; gap: 30px; font-size: 12px; color: #566a5e; }
+    .sign-line .box { flex: 1; }
+    .sign-line .rule { border-bottom: 1px solid #86d5a5; height: 34px; margin-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <div class="doc">
+    <div class="head">
+      <div class="brand"><span class="dot"></span><span class="name">Chemin Vert</span></div>
+      <div class="kicker" id="kicker">Préambule</div>
+      <h1 class="serif" id="title">Notre charte</h1>
+    </div>
+
+    <p class="lead serif" id="p1"></p>
+    <p class="p" id="p2"></p>
+
+    <h2 id="valuesTitle">Les quinze valeurs</h2>
+    <div class="values" id="values"></div>
+
+    <div class="sign-line">
+      <div class="box"><div class="rule"></div><span id="sigName">Nom</span></div>
+      <div class="box"><div class="rule"></div><span id="sigDate">Date</span></div>
+    </div>
+
+    <div class="foot" id="foot"></div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const lang = I18N.languages[params.get("lang")] ? params.get("lang") : "fr";
+      const meta = I18N.languages[lang];
+      const t = I18N.t[lang];
+      document.documentElement.setAttribute("lang", lang);
+      document.body.setAttribute("dir", meta.dir);
+
+      const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+      set("kicker", t["charter.preamble_tag"]);
+      set("title", t["charter.preamble_title"]);
+      set("p1", t["charter.preamble_p1"]);
+      set("p2", t["charter.preamble_p2"]);
+      set("valuesTitle", t["charter.values_title"]);
+
+      const grid = document.getElementById("values");
+      I18N.values[lang].forEach((name, i) => {
+        const row = document.createElement("div");
+        row.className = "v";
+        row.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t serif">${name}</span>`;
+        grid.appendChild(row);
+      });
+
+      // Étiquettes de signature (réutilise des libellés existants)
+      set("sigName", (t["sign.placeholder"] || "").includes("@") ? (lang === "ar" ? "الاسم / البريد" : "Nom / e-mail") : "Nom");
+      set("sigDate", lang === "ar" ? "التاريخ" : (lang === "en" ? "Date" : "Date"));
+
+      set("foot", "cheminvert — " + t["footer.tagline"]);
+      document.title = "Charte — Chemin Vert (" + lang + ")";
+      document.body.dataset.ready = "1";
+    })();
+  </script>
+</body>
+</html>

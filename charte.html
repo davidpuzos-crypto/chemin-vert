@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Chemin Vert — La charte</title>
+  <meta name="description" data-i18n="meta.desc" content="La charte de Chemin Vert : les valeurs humaines universelles qui nous rassemblent. À lire et à télécharger." />
+  <meta name="theme-color" content="#14713c" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2314713c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="charter">
+  <div class="bg-aurora" aria-hidden="true">
+    <span class="blob blob-1"></span><span class="blob blob-2"></span><span class="blob blob-3"></span>
+    <div class="bg-leaves" id="leaves"></div>
+  </div>
+
+  <div id="site-header"></div>
+
+  <main>
+    <!-- En-tête de page -->
+    <header class="page-head">
+      <div class="container">
+        <p class="tag reveal" data-i18n="charter.preamble_tag">Préambule</p>
+        <h1 class="page-head__title reveal" data-i18n="charter.preamble_title">Notre charte</h1>
+      </div>
+    </header>
+
+    <!-- Préambule -->
+    <section class="section section--tight">
+      <div class="container prose prose--center">
+        <p class="charter__lead reveal" data-i18n="charter.preamble_p1"></p>
+        <p class="reveal" data-i18n="charter.preamble_p2"></p>
+      </div>
+    </section>
+
+    <!-- Les 15 valeurs -->
+    <section class="section section--charter" id="charter">
+      <div class="container">
+        <h2 class="section__title section__title--center reveal" data-i18n="charter.values_title">Les quinze valeurs</h2>
+        <p class="section__intro section__intro--center reveal" data-i18n="charter.intro"></p>
+        <div class="values" id="valuesGrid"></div>
+        <p class="charter__note charter__note--center reveal" data-i18n="charter.note"></p>
+      </div>
+    </section>
+
+    <!-- Téléchargement -->
+    <section class="section section--tight">
+      <div class="container download reveal">
+        <div class="download__doc" aria-hidden="true">
+          <span class="download__lines"></span>
+        </div>
+        <div class="download__body">
+          <h2 class="section__title" data-i18n="charter.download">Télécharger la charte</h2>
+          <p class="section__intro" data-i18n="charter.download_note">PDF · format A4, prêt à imprimer</p>
+          <a id="downloadCharter" class="btn btn--primary btn--lg" href="assets/charte/charte-fr.pdf" download>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+            <span data-i18n="charter.download">Télécharger la charte</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Appel à adhérer -->
+    <section class="section section--cta">
+      <div class="container cta-band reveal">
+        <h2 class="section__title" data-i18n="charter.cta_title">Vous vous reconnaissez dans ces valeurs ?</h2>
+        <div class="cta-band__count"><span class="js-counter">—</span> <span data-i18n="join.hero_post">à avoir signé la charte</span></div>
+        <a href="adherer.html" class="btn btn--primary btn--lg" data-i18n="nav.join">Adhérer</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/signatures.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
