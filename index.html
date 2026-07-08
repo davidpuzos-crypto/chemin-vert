@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Chemin Vert — Un mouvement humaniste</title>
+  <meta name="description" data-i18n="meta.desc" content="Chemin Vert : un mouvement humaniste qui remet à l'honneur les valeurs humaines essentielles." />
+  <meta name="theme-color" content="#14713c" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Chemin Vert" />
+  <meta property="og:description" content="Un mouvement humaniste. Reprenons le chemin des valeurs qui nous unissent." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+
+  <!-- Polices -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Fond animé global -->
+  <div class="bg-aurora" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <div class="bg-leaves" id="leaves"></div>
+  </div>
+
+  <!-- ============ NAVIGATION ============ -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__brand" aria-label="Chemin Vert">
+      <span class="nav__logo" id="navLogo"></span>
+      <span class="nav__name">Chemin&nbsp;Vert</span>
+    </a>
+
+    <nav class="nav__links" id="navLinks">
+      <a href="#movement" data-i18n="nav.movement">Le mouvement</a>
+      <a href="#charter" data-i18n="nav.charter">La charte</a>
+      <a href="#sign" data-i18n="nav.sign">Signer</a>
+      <a href="#shop" data-i18n="nav.shop">Boutique</a>
+      <a href="#about" data-i18n="nav.about">À propos</a>
+    </nav>
+
+    <div class="nav__actions">
+      <!-- Sélecteur de langue -->
+      <div class="lang" id="lang">
+        <button class="lang__btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+          <span class="lang__flag" id="langFlag">🇫🇷</span>
+          <span class="lang__code" id="langCode">FR</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ul class="lang__menu" id="langMenu" role="listbox"></ul>
+      </div>
+
+      <a href="#sign" class="btn btn--sm btn--primary nav__cta" data-i18n="nav.sign">Signer</a>
+
+      <button class="nav__burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <div class="hero__inner reveal">
+        <span class="pill" data-i18n="hero.badge">Un mouvement humaniste, ouvert à toutes et à tous</span>
+        <h1 class="hero__title" data-i18n="hero.title">Reprenons le chemin des valeurs qui nous unissent</h1>
+        <p class="hero__subtitle" data-i18n="hero.subtitle">Chemin Vert remet à l'honneur des principes humains simples et universels.</p>
+
+        <div class="hero__cta">
+          <a href="#sign" class="btn btn--primary btn--lg" data-i18n="hero.cta_sign">Signer la charte</a>
+          <a href="#movement" class="btn btn--ghost btn--lg" data-i18n="hero.cta_discover">Découvrir</a>
+        </div>
+
+        <!-- Compteur -->
+        <div class="counter" id="counter">
+          <span class="counter__num" id="counterNum">—</span>
+          <span class="counter__label" data-i18n="hero.counter_label">personnes ont déjà signé</span>
+        </div>
+      </div>
+
+      <div class="hero__emblem reveal" id="heroEmblem" aria-hidden="true"></div>
+
+      <a href="#movement" class="hero__scroll" aria-label="scroll">
+        <span data-i18n="hero.scroll">Défiler</span>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </section>
+
+    <!-- ============ LE MOUVEMENT ============ -->
+    <section class="section" id="movement">
+      <div class="container">
+        <p class="tag reveal" data-i18n="movement.tag">Le mouvement</p>
+        <h2 class="section__title reveal" data-i18n="movement.title">Une idée simple, une ambition immense</h2>
+        <div class="prose">
+          <p class="reveal" data-i18n="movement.p1"></p>
+          <p class="reveal" data-i18n="movement.p2"></p>
+          <p class="reveal" data-i18n="movement.p3"></p>
+        </div>
+        <div class="badges reveal">
+          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge1">Sans ambition politique</span></span>
+          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge2">Sans appartenance religieuse</span></span>
+          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge3">Ouvert à tous</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LA CHARTE ============ -->
+    <section class="section section--charter" id="charter">
+      <div class="container">
+        <p class="tag reveal" data-i18n="charter.tag">La charte</p>
+        <h2 class="section__title reveal" data-i18n="charter.title">Les valeurs que nous portons</h2>
+        <p class="section__intro reveal" data-i18n="charter.intro"></p>
+
+        <div class="values" id="valuesGrid"><!-- rempli par JS --></div>
+
+        <p class="charter__note reveal" data-i18n="charter.note"></p>
+      </div>
+    </section>
+
+    <!-- ============ SIGNER ============ -->
+    <section class="section section--sign" id="sign">
+      <div class="container sign__card reveal">
+        <p class="tag" data-i18n="sign.tag">Rejoindre</p>
+        <h2 class="section__title" data-i18n="sign.title">Signez la charte</h2>
+        <p class="section__intro" data-i18n="sign.text"></p>
+
+        <form class="sign__form" id="signForm" novalidate>
+          <input type="email" id="signEmail" class="sign__input" required
+                 autocomplete="email"
+                 data-i18n-attr="placeholder:sign.placeholder" placeholder="votre@email.com" />
+          <button type="submit" class="btn btn--primary btn--lg" id="signBtn">
+            <span data-i18n="sign.button">Je signe</span>
+          </button>
+        </form>
+
+        <p class="sign__msg" id="signMsg" role="status" aria-live="polite"></p>
+        <p class="sign__privacy" data-i18n="sign.privacy"></p>
+
+        <div class="sign__counter">
+          <span data-i18n="sign.counter_pre">Déjà</span>
+          <strong id="signCounterNum">—</strong>
+          <span data-i18n="sign.counter_post">signataires</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BOUTIQUE ============ -->
+    <section class="section section--shop" id="shop">
+      <div class="container">
+        <p class="tag reveal" data-i18n="shop.tag">Boutique</p>
+        <h2 class="section__title reveal" data-i18n="shop.title">Affichez votre engagement</h2>
+        <p class="section__intro reveal" data-i18n="shop.text"></p>
+
+        <div class="shop__grid">
+          <article class="product reveal">
+            <div class="product__visual product__visual--1"><span class="product__emblem"></span></div>
+            <span class="product__soon" data-i18n="shop.soon">Bientôt disponible</span>
+            <h3 data-i18n="shop.product1">Autocollants</h3>
+            <p data-i18n="shop.product1_desc"></p>
+          </article>
+          <article class="product reveal">
+            <div class="product__visual product__visual--2"><span class="product__emblem"></span></div>
+            <span class="product__soon" data-i18n="shop.soon">Bientôt disponible</span>
+            <h3 data-i18n="shop.product2">Badges</h3>
+            <p data-i18n="shop.product2_desc"></p>
+          </article>
+          <article class="product reveal">
+            <div class="product__visual product__visual--3"><span class="product__emblem"></span></div>
+            <span class="product__soon" data-i18n="shop.soon">Bientôt disponible</span>
+            <h3 data-i18n="shop.product3">Tote bag</h3>
+            <p data-i18n="shop.product3_desc"></p>
+          </article>
+        </div>
+
+        <div class="shop__notify reveal">
+          <a href="#sign" class="btn btn--ghost btn--lg" data-i18n="shop.notify">Prévenez-moi du lancement</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ À PROPOS ============ -->
+    <section class="section section--about" id="about">
+      <div class="container about__grid">
+        <div class="about__emblem reveal" aria-hidden="true"></div>
+        <div>
+          <p class="tag reveal" data-i18n="about.tag">À propos</p>
+          <h2 class="section__title reveal" data-i18n="about.title">Un chemin, et vous au bout</h2>
+          <p class="section__intro reveal" data-i18n="about.text"></p>
+          <p class="reveal about__contact">
+            <span data-i18n="about.contact"></span>
+            <a href="mailto:contact@chemin-vert.org" class="link">contact@chemin-vert.org</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ PIED DE PAGE ============ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="footer__logo" id="footerLogo"></span>
+        <div>
+          <strong>Chemin Vert</strong>
+          <p data-i18n="footer.tagline">Reprenons le chemin des valeurs qui nous unissent.</p>
+        </div>
+      </div>
+      <div class="footer__meta">
+        <p data-i18n="footer.made">Fait avec soin, en partenariat avec la Zawia.</p>
+        <p class="footer__rights">© <span id="year"></span> Chemin Vert — <span data-i18n="footer.rights">Tous droits réservés.</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/signatures.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
