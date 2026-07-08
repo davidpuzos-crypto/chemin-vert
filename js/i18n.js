@@ -699,7 +699,9 @@ const I18N_EXT = {
     "charter.click_hint": "Cliquez sur une valeur pour la lire dans les 7 langues",
     "unsub.link": "Se désinscrire", "unsub.intro": "Entrez l'adresse utilisée pour signer.",
     "unsub.button": "Se désinscrire", "unsub.success": "C'est fait : vous avez été désinscrit. À bientôt, peut-être.",
-    "unsub.notfound": "Cette adresse ne figure pas parmi les signataires."
+    "unsub.notfound": "Cette adresse ne figure pas parmi les signataires.",
+    "shop.notready_t": "La boutique ouvre bientôt",
+    "shop.notready_d": "Les ventes ne sont pas encore actives. Découvrez les objets à venir, et soyez prévenu·e du lancement."
   },
   en: {
     "milestone.next": "Next goal", "value.all_title": "In all 7 languages", "value.close": "Close",
@@ -709,7 +711,9 @@ const I18N_EXT = {
     "charter.click_hint": "Tap a value to read it in all 7 languages",
     "unsub.link": "Unsubscribe", "unsub.intro": "Enter the address you signed with.",
     "unsub.button": "Unsubscribe", "unsub.success": "Done — you've been unsubscribed. See you soon, perhaps.",
-    "unsub.notfound": "This address isn't among the signatories."
+    "unsub.notfound": "This address isn't among the signatories.",
+    "shop.notready_t": "The shop is opening soon",
+    "shop.notready_d": "Sales aren't live yet. Discover the upcoming items and get notified at launch."
   },
   es: {
     "milestone.next": "Próximo objetivo", "value.all_title": "En los 7 idiomas", "value.close": "Cerrar",
@@ -719,7 +723,9 @@ const I18N_EXT = {
     "charter.click_hint": "Toca un valor para leerlo en los 7 idiomas",
     "unsub.link": "Darse de baja", "unsub.intro": "Introduce la dirección con la que firmaste.",
     "unsub.button": "Darse de baja", "unsub.success": "Hecho: te has dado de baja. Hasta pronto, quizás.",
-    "unsub.notfound": "Esta dirección no figura entre los firmantes."
+    "unsub.notfound": "Esta dirección no figura entre los firmantes.",
+    "shop.notready_t": "La tienda abre pronto",
+    "shop.notready_d": "Las ventas aún no están activas. Descubre los artículos y recibe aviso del lanzamiento."
   },
   it: {
     "milestone.next": "Prossimo obiettivo", "value.all_title": "Nelle 7 lingue", "value.close": "Chiudi",
@@ -729,7 +735,9 @@ const I18N_EXT = {
     "charter.click_hint": "Tocca un valore per leggerlo nelle 7 lingue",
     "unsub.link": "Disiscriviti", "unsub.intro": "Inserisci l'indirizzo con cui hai firmato.",
     "unsub.button": "Disiscriviti", "unsub.success": "Fatto: sei stato disiscritto. A presto, forse.",
-    "unsub.notfound": "Questo indirizzo non è tra i firmatari."
+    "unsub.notfound": "Questo indirizzo non è tra i firmatari.",
+    "shop.notready_t": "Il negozio apre presto",
+    "shop.notready_d": "Le vendite non sono ancora attive. Scopri gli articoli in arrivo e ricevi l'avviso al lancio."
   },
   de: {
     "milestone.next": "Nächstes Ziel", "value.all_title": "In allen 7 Sprachen", "value.close": "Schließen",
@@ -739,7 +747,9 @@ const I18N_EXT = {
     "charter.click_hint": "Tippe auf einen Wert, um ihn in allen 7 Sprachen zu lesen",
     "unsub.link": "Abmelden", "unsub.intro": "Gib die Adresse ein, mit der du unterzeichnet hast.",
     "unsub.button": "Abmelden", "unsub.success": "Erledigt — du wurdest abgemeldet. Vielleicht bis bald.",
-    "unsub.notfound": "Diese Adresse ist nicht unter den Unterzeichnenden."
+    "unsub.notfound": "Diese Adresse ist nicht unter den Unterzeichnenden.",
+    "shop.notready_t": "Der Shop öffnet bald",
+    "shop.notready_d": "Der Verkauf ist noch nicht aktiv. Entdecke die kommenden Artikel und lass dich zum Start benachrichtigen."
   },
   tr: {
     "milestone.next": "Sonraki hedef", "value.all_title": "7 dilde", "value.close": "Kapat",
@@ -749,7 +759,9 @@ const I18N_EXT = {
     "charter.click_hint": "Bir değere dokunarak 7 dilde oku",
     "unsub.link": "Kaydı sil", "unsub.intro": "İmzalarken kullandığın adresi gir.",
     "unsub.button": "Kaydı sil", "unsub.success": "Tamam — kaydın silindi. Belki yine görüşürüz.",
-    "unsub.notfound": "Bu adres imzacılar arasında değil."
+    "unsub.notfound": "Bu adres imzacılar arasında değil.",
+    "shop.notready_t": "Mağaza yakında açılıyor",
+    "shop.notready_d": "Satışlar henüz aktif değil. Yakında gelecek ürünleri keşfet ve lansmanda haberdar ol."
   },
   ar: {
     "milestone.next": "الهدف التالي", "value.all_title": "بجميع اللغات السبع", "value.close": "إغلاق",
@@ -759,7 +771,9 @@ const I18N_EXT = {
     "charter.click_hint": "انقر على قيمة لقراءتها بجميع اللغات السبع",
     "unsub.link": "إلغاء الاشتراك", "unsub.intro": "أدخل العنوان الذي وقّعت به.",
     "unsub.button": "إلغاء الاشتراك", "unsub.success": "تم إلغاء اشتراكك. إلى اللقاء ربما.",
-    "unsub.notfound": "هذا العنوان غير موجود بين الموقّعين."
+    "unsub.notfound": "هذا العنوان غير موجود بين الموقّعين.",
+    "shop.notready_t": "المتجر يفتح قريبًا",
+    "shop.notready_d": "المبيعات لم تبدأ بعد. اكتشف المنتجات القادمة واطلب إشعارك عند الإطلاق."
   }
 };
 Object.keys(I18N_EXT).forEach(l => Object.assign(I18N.t[l], I18N_EXT[l]));

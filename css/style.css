@@ -172,10 +172,15 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 0 0 4px rgba(39,163,92,.16);
 }
 .nav__logo { width: 34px; height: 34px; object-fit: contain; }
-.nav__name {
-  font-family: var(--font-ui); font-weight: 500; text-transform: uppercase;
-  font-size: .98rem; letter-spacing: .18em; color: var(--green-900);
+.nav__wm {
+  display: flex; flex-direction: column; gap: 1px; width: 92px;
+  font-family: var(--font-ui); text-transform: uppercase;
 }
+.nav__wm-line { display: flex; justify-content: space-between; line-height: 1; }
+.nav__wm-line i { font-style: normal; }
+.nav__wm-top { font-weight: 300; font-size: .62rem; color: var(--green-900); }
+.nav__wm-bot { font-weight: 700; font-size: .74rem; color: var(--green-700); }
+body.rtl .nav__wm { direction: ltr; }
 
 /* Liens en pastilles segmentées */
 .nav__links {
@@ -446,7 +451,23 @@ a { color: inherit; text-decoration: none; }
 /* -------------------------------------------------------------------------
    Boutique
    ------------------------------------------------------------------------- */
-.shop__grid { margin-top: 2.6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+/* Bandeau « boutique pas encore ouverte » */
+.shop-notice {
+  display: flex; align-items: center; gap: 1.1rem;
+  background: linear-gradient(135deg, var(--green-50), var(--green-100));
+  border: 1px solid var(--green-300); border-radius: var(--radius);
+  padding: 1.1rem 1.4rem; box-shadow: var(--shadow-sm);
+}
+.shop-notice__badge {
+  flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  box-shadow: 0 8px 18px -8px rgba(20,113,60,.6);
+}
+.shop-notice__text strong { display: block; font-family: var(--font-display); font-size: 1.2rem; color: var(--green-900); }
+.shop-notice__text p { color: #45564c; font-size: .95rem; margin-top: .15rem; }
+
+.shop__grid { margin-top: 1.8rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .product {
   background: rgba(255,255,255,.78); border: 1px solid var(--line);
   border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); contain: content;
