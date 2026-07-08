@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none"
+     stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+     role="img" aria-label="Chemin Vert">
+  <!-- Cercle emblème (ouvert en haut, à l'endroit de la pousse) -->
+  <path class="cv-draw" d="M132 26
+    A86 86 0 1 1 78 30" />
+
+  <!-- Main : paume + trois doigts qui s'élèvent, tracés nets -->
+  <path class="cv-draw" d="M58 132 C52 112 55 94 64 82" />
+  <path class="cv-draw" d="M72 132 C67 108 71 84 81 70" />
+  <path class="cv-draw" d="M86 130 C83 104 90 80 100 66" />
+  <path class="cv-draw" d="M58 132 C55 154 65 170 86 170 C98 170 108 164 114 154" />
+
+  <!-- Chemin sinueux qui monte vers la pousse -->
+  <path class="cv-draw" d="M92 172
+    C112 150 92 132 112 116
+    C128 105 120 94 132 86" />
+
+  <!-- Tige -->
+  <path class="cv-draw" d="M132 86 C136 74 143 66 152 60" />
+
+  <!-- Feuille droite -->
+  <path class="cv-draw" d="M152 60
+    C160 44 178 40 192 46
+    C190 62 178 74 162 72
+    C155 71 150 66 152 60 Z" />
+
+  <!-- Feuille gauche -->
+  <path class="cv-draw" d="M138 92
+    C124 88 108 94 100 108
+    C114 118 132 116 142 104
+    C147 98 146 94 138 92 Z" />
+</svg>
