@@ -234,10 +234,22 @@ a { color: inherit; text-decoration: none; }
 .counter__label { color: var(--muted); font-size: 1.02rem; }
 
 .hero__emblem {
-  aspect-ratio: 1; width: 100%; max-width: 440px; margin-inline: auto;
-  position: relative; display: grid; place-items: center;
+  width: 100%; max-width: 460px; margin-inline: auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.8rem;
 }
+.emblem-visual { position: relative; width: min(74%, 300px); aspect-ratio: 1; display: grid; place-items: center; }
 @keyframes floaty { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-16px) } }
+
+/* Mot-symbole « CHEMIN / VERT » */
+.wordmark {
+  text-align: center; line-height: .98; text-transform: uppercase;
+  font-family: "Jost", "Century Gothic", "Futura", var(--font-body);
+  font-weight: 300; letter-spacing: .34em;
+  color: var(--green-800);
+}
+.wordmark span { display: block; font-size: clamp(1.8rem, 4vw, 2.9rem); }
+.wordmark span:last-child { font-weight: 500; color: var(--green-700); }
+body.rtl .wordmark { letter-spacing: .2em; }
 
 .hero__scroll {
   position: absolute; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
@@ -251,7 +263,7 @@ a { color: inherit; text-decoration: none; }
    Forme organique abstraite (emblème provisoire, en attendant le logo)
    ------------------------------------------------------------------------- */
 .blob-shape {
-  display: block; width: 72%; aspect-ratio: 1;
+  display: block; width: 100%; aspect-ratio: 1;
   background: linear-gradient(135deg, var(--green-400), var(--green-700));
   border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
   box-shadow: var(--shadow);
@@ -263,8 +275,9 @@ a { color: inherit; text-decoration: none; }
   background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.45), transparent 60%);
 }
 .blob-shape--sm { width: 100%; max-width: 300px; }
+.about__emblem .blob-shape { width: min(80%, 300px); }
 .blob-ring {
-  position: absolute; inset: 0; margin: auto; width: 92%; aspect-ratio: 1;
+  position: absolute; inset: 0; margin: auto; width: 114%; aspect-ratio: 1;
   border: 1.5px dashed var(--green-300); border-radius: 50%;
   animation: spin 40s linear infinite;
 }
@@ -579,11 +592,141 @@ body.rtl .card__link::after { content: " ←"; }
 .footer__nav a { color: #a9c9b6; font-size: .95rem; transition: color .2s; }
 .footer__nav a:hover { color: #fff; }
 
+/* =========================================================================
+   FONCTIONNALITÉS 2027
+   ========================================================================= */
+
+/* -------- Barre de progression de défilement -------- */
+.scroll-progress {
+  position: fixed; top: 0; inset-inline: 0; height: 3px; z-index: 200;
+  background: linear-gradient(90deg, var(--green-400), var(--green-700));
+  transform: scaleX(0); transform-origin: left; will-change: transform;
+}
+body.rtl .scroll-progress { transform-origin: right; }
+
+/* -------- Barre d'objectif (milestone) -------- */
+.milestone { margin: 1.4rem 0; max-width: 460px; }
+.milestone--wide { margin: 2.4rem auto 0; max-width: 560px; }
+.milestone__head { display: flex; justify-content: space-between; font-size: .85rem; font-weight: 600; margin-bottom: .5rem; }
+.milestone__bar { height: 10px; border-radius: 999px; background: rgba(20,113,60,.14); overflow: hidden; }
+.milestone__fill {
+  display: block; height: 100%; width: 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--green-400), var(--green-600));
+  transition: width 1.2s cubic-bezier(.2,.8,.2,1);
+}
+.milestone--light .milestone__head { color: #eaf6ee; }
+.milestone--light .milestone__bar { background: rgba(255,255,255,.22); }
+.milestone--light .milestone__fill { background: linear-gradient(90deg, #a7e5c0, #fff); }
+.milestone--wide .milestone__head { color: var(--green-800); }
+
+/* Pulsation du compteur quand il atteint sa valeur */
+.pop { animation: countpop .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes countpop { 0%{ transform: scale(1) } 35%{ transform: scale(1.06) } 100%{ transform: scale(1) } }
+
+/* -------- Modale valeur (7 langues) -------- */
+.value { cursor: pointer; }
+.vmodal {
+  position: fixed; inset: 0; z-index: 300; display: grid; place-items: center;
+  background: rgba(12,56,35,.42); backdrop-filter: blur(6px);
+  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; padding: 1.2rem;
+}
+.vmodal.open { opacity: 1; visibility: visible; }
+.vmodal__box {
+  position: relative; width: min(460px, 100%); max-height: 88vh; overflow-y: auto;
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: clamp(1.6rem, 4vw, 2.4rem); transform: translateY(16px) scale(.98);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.vmodal.open .vmodal__box { transform: none; }
+.vmodal__close {
+  position: absolute; top: .8rem; inset-inline-end: .9rem; width: 34px; height: 34px;
+  border: 0; border-radius: 50%; background: var(--green-50); color: var(--green-800);
+  font-size: 1.4rem; line-height: 1; cursor: pointer; transition: background .2s;
+}
+.vmodal__close:hover { background: var(--green-100); }
+.vmodal__kicker { text-transform: uppercase; letter-spacing: .14em; font-size: .74rem; font-weight: 700; color: var(--green-600); }
+.vmodal__title { font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 2.6rem); color: var(--green-900); margin: .2rem 0 1.2rem; }
+.vmodal__list { list-style: none; display: flex; flex-direction: column; gap: .2rem; }
+.vmodal__list li {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .8rem;
+  padding: .7rem .8rem; border-radius: 10px;
+}
+.vmodal__list li.is-current { background: var(--green-50); }
+.vmodal__flag { font-size: 1.2rem; }
+.vmodal__lang { color: var(--muted); font-size: .92rem; }
+.vmodal__word { font-family: var(--font-display); font-size: 1.15rem; color: var(--green-800); font-weight: 500; text-align: end; }
+
+/* -------- Boutique : produits enrichis -------- */
+.product__visual { position: relative; }
+.product__price {
+  position: absolute; bottom: .9rem; inset-inline-end: .9rem; z-index: 1;
+  background: rgba(255,255,255,.95); color: var(--green-800); font-weight: 700;
+  padding: .3em .8em; border-radius: 999px; box-shadow: var(--shadow-sm); font-size: .95rem;
+}
+.product__body { padding: 1.2rem 1.3rem 0; }
+.product__body h3 { font-family: var(--font-display); font-size: 1.35rem; color: var(--green-900); }
+.product__body p { color: var(--muted); margin: .4rem 0 1.1rem; font-size: .96rem; }
+.product__add { width: 100%; justify-content: center; }
+.product__add.added { background: var(--green-500); }
+
+/* -------- Bouton panier flottant -------- */
+.cart-fab {
+  position: fixed; bottom: 1.4rem; inset-inline-end: 1.4rem; z-index: 150;
+  width: 60px; height: 60px; border-radius: 50%; border: 0; cursor: pointer; color: #fff;
+  background: linear-gradient(135deg, var(--green-600), var(--green-800));
+  box-shadow: 0 14px 30px -10px rgba(20,113,60,.7); display: grid; place-items: center;
+  transition: transform .25s;
+}
+.cart-fab:hover { transform: translateY(-3px) scale(1.04); }
+.cart-fab.bump { animation: countpop .45s; }
+.cart-fab__badge {
+  position: absolute; top: -4px; inset-inline-end: -4px; min-width: 22px; height: 22px; padding: 0 5px;
+  background: #fff; color: var(--green-800); border-radius: 999px; font-size: .78rem; font-weight: 700;
+  display: none; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);
+}
+.cart-fab__badge.show { display: flex; }
+
+/* -------- Tiroir panier -------- */
+.cart-overlay {
+  position: fixed; inset: 0; z-index: 160; background: rgba(12,56,35,.4); backdrop-filter: blur(4px);
+  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+}
+.cart-overlay.open { opacity: 1; visibility: visible; }
+.cart {
+  position: fixed; top: 0; inset-inline-end: 0; z-index: 170; height: 100%;
+  width: min(400px, 92vw); background: #fff; box-shadow: var(--shadow);
+  display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform .4s cubic-bezier(.2,.8,.2,1);
+}
+body.rtl .cart { transform: translateX(-100%); }
+.cart.open { transform: translateX(0); }
+.cart__head { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 1.5rem; border-bottom: 1px solid var(--line); }
+.cart__head h2 { font-family: var(--font-display); font-size: 1.4rem; color: var(--green-900); }
+.cart__close { border: 0; background: none; font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--muted); }
+.cart__items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+.cart__empty { color: var(--muted); text-align: center; padding: 2rem 0; }
+.cart__row { display: grid; grid-template-columns: 46px 1fr auto auto; align-items: center; gap: .8rem; padding: .8rem 0; border-bottom: 1px solid var(--green-50); }
+.cart__thumb { width: 46px; height: 46px; border-radius: 10px; }
+.cart__thumb--sticker { background: linear-gradient(135deg, var(--green-100), var(--green-300)); }
+.cart__thumb--badge { background: linear-gradient(135deg, var(--green-300), var(--green-500)); }
+.cart__thumb--tote { background: linear-gradient(135deg, var(--green-500), var(--green-700)); }
+.cart__info { display: flex; flex-direction: column; }
+.cart__info strong { color: var(--green-900); font-size: .98rem; }
+.cart__info span { color: var(--muted); font-size: .88rem; }
+.cart__qty { display: flex; align-items: center; gap: .5rem; }
+.cart__qty button { width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 1rem; color: var(--green-800); }
+.cart__rm { border: 0; background: none; font-size: 1.3rem; color: var(--muted); cursor: pointer; }
+.cart__foot { padding: 1.4rem 1.5rem; border-top: 1px solid var(--line); }
+.cart__total { display: flex; justify-content: space-between; font-size: 1.1rem; margin-bottom: 1rem; }
+.cart__total strong { font-family: var(--font-display); color: var(--green-800); }
+.cart__checkout { width: 100%; justify-content: center; }
+.cart__msg { margin-top: .8rem; font-size: .9rem; color: var(--green-700); font-weight: 600; text-align: center; min-height: 1.2em; }
+
 /* -------- Responsive multi-pages -------- */
 @media (max-width: 920px) {
   .cband__inner { grid-template-columns: 1fr; text-align: center; }
   .cband__num { margin-inline: auto; }
-  .cband__sub { margin-inline: auto; }
+  .cband__sub, .milestone--light { margin-inline: auto; }
   .cards, .why { grid-template-columns: 1fr; }
   .download { grid-template-columns: 1fr; text-align: center; justify-items: center; }
 }
