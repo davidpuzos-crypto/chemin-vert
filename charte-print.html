@@ -8,60 +8,83 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body {
-      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
       color: #17251d; line-height: 1.6; background: #fff;
     }
     body[dir="rtl"] { font-family: "Tajawal", "Segoe UI", system-ui, sans-serif; }
     .serif { font-family: "Fraunces", Georgia, "Times New Roman", serif; }
+    .ui { font-family: "Jost", "Century Gothic", "Futura", "Segoe UI", sans-serif; }
 
-    .doc { max-width: 700px; margin: 0 auto; }
-    .head { text-align: center; border-bottom: 2px solid #14713c; padding-bottom: 18px; margin-bottom: 26px; }
-    .brand { display: inline-flex; align-items: center; gap: 10px; }
-    .brand .dot { width: 30px; height: 30px; border-radius: 50%;
+    .doc { max-width: 720px; margin: 0 auto; }
+
+    /* En-tête */
+    .head { text-align: center; margin-bottom: 30px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; margin-bottom: 26px; }
+    .brand .dot { width: 26px; height: 26px; border-radius: 50%;
       background: linear-gradient(135deg, #27a35c, #0f4f30); }
-    .brand .name { font-size: 22px; color: #0c3823; font-weight: 600; letter-spacing: .5px; }
-    .kicker { text-transform: uppercase; letter-spacing: .2em; font-size: 11px; color: #1c8a4b; font-weight: 700; margin-top: 16px; }
-    h1 { font-size: 34px; color: #0c3823; font-weight: 500; margin-top: 4px; }
+    .brand .name { font-size: 17px; color: #0c3823; font-weight: 500;
+      letter-spacing: .28em; text-transform: uppercase; }
+    body[dir="rtl"] .brand .name { letter-spacing: .12em; }
+    .kicker { text-transform: uppercase; letter-spacing: .28em; font-size: 10.5px;
+      color: #1c8a4b; font-weight: 600; }
+    h1 { font-size: 38px; color: #0c3823; font-weight: 500; margin-top: 8px; letter-spacing: -.5px; }
+    .rule { width: 54px; height: 2px; background: #27a35c; margin: 20px auto 0; border-radius: 2px; }
 
-    .lead { font-size: 16px; color: #0c3823; margin: 22px 0 14px; }
-    .p { font-size: 13.5px; color: #33463b; margin-bottom: 12px; }
+    /* Préambule */
+    .preamble { margin: 6px 0 34px; }
+    .lead { font-size: 17px; line-height: 1.5; color: #0c3823; font-style: italic;
+      text-align: center; max-width: 60ch; margin: 0 auto 16px; }
+    .p { font-size: 13px; color: #45564c; text-align: center; max-width: 62ch; margin: 0 auto; }
 
-    h2 { font-size: 18px; color: #0f4f30; font-weight: 600; margin: 26px 0 14px;
-      padding-bottom: 6px; border-bottom: 1px solid #d7f0e0; }
+    /* Titre de section */
+    .section-title { text-align: center; margin-bottom: 18px; }
+    .section-title .st-kicker { text-transform: uppercase; letter-spacing: .24em; font-size: 10px;
+      color: #1c8a4b; font-weight: 600; }
+    .section-title h2 { font-size: 21px; color: #0f4f30; font-weight: 500; margin-top: 4px; }
 
-    .values { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 22px; }
-    .v { display: flex; align-items: baseline; gap: 10px; padding: 5px 0; }
-    .v .n { font-size: 11px; color: #86d5a5; font-weight: 700; min-width: 20px; }
-    .v .t { font-size: 15px; color: #0c3823; }
-    .v .t.serif { font-weight: 500; }
+    /* Tableau des valeurs */
+    table.values { width: 100%; border-collapse: collapse; }
+    table.values td { width: 50%; vertical-align: middle; padding: 0; }
+    .cell { display: flex; align-items: center; gap: 14px; padding: 11px 14px; }
+    .cell .n { font-family: "Fraunces", Georgia, serif; font-size: 17px; color: #4cbb7a;
+      font-weight: 500; min-width: 26px; text-align: center; }
+    .cell .t { font-family: "Fraunces", Georgia, serif; font-size: 16px; color: #0c3823; font-weight: 500; }
+    table.values tr { border-bottom: 1px solid #e6f3ec; }
+    table.values tr:last-child { border-bottom: 0; }
+    table.values td:first-child { border-right: 1px solid #e6f3ec; }
+    body[dir="rtl"] table.values td:first-child { border-right: 0; border-left: 1px solid #e6f3ec; }
+    table.values tr:nth-child(odd) .cell { background: #f4faf6; }
 
-    .foot { margin-top: 30px; text-align: center; font-size: 11px; color: #566a5e;
-      border-top: 1px solid #d7f0e0; padding-top: 14px; }
-    .sign-line { margin-top: 26px; display: flex; justify-content: space-between; gap: 30px; font-size: 12px; color: #566a5e; }
-    .sign-line .box { flex: 1; }
-    .sign-line .rule { border-bottom: 1px solid #86d5a5; height: 34px; margin-bottom: 5px; }
+    /* Pied de page */
+    .foot { margin-top: 34px; text-align: center; font-size: 10.5px; color: #6a7d71;
+      border-top: 1px solid #e6f3ec; padding-top: 16px; }
+    .foot .fbrand { font-family: "Jost","Century Gothic",sans-serif; text-transform: uppercase;
+      letter-spacing: .2em; color: #0f4f30; font-weight: 500; }
   </style>
 </head>
 <body>
   <div class="doc">
-    <div class="head">
+    <header class="head">
       <div class="brand"><span class="dot"></span><span class="name">Chemin Vert</span></div>
       <div class="kicker" id="kicker">Préambule</div>
       <h1 class="serif" id="title">Notre charte</h1>
+      <div class="rule"></div>
+    </header>
+
+    <section class="preamble">
+      <p class="lead serif" id="p1"></p>
+      <p class="p" id="p2"></p>
+    </section>
+
+    <div class="section-title">
+      <h2 id="valuesTitle" class="serif">Les quinze valeurs</h2>
     </div>
+    <table class="values"><tbody id="values"></tbody></table>
 
-    <p class="lead serif" id="p1"></p>
-    <p class="p" id="p2"></p>
-
-    <h2 id="valuesTitle">Les quinze valeurs</h2>
-    <div class="values" id="values"></div>
-
-    <div class="sign-line">
-      <div class="box"><div class="rule"></div><span id="sigName">Nom</span></div>
-      <div class="box"><div class="rule"></div><span id="sigDate">Date</span></div>
+    <div class="foot">
+      <span class="fbrand">Chemin Vert</span>
+      <span id="foot"></span>
     </div>
-
-    <div class="foot" id="foot"></div>
   </div>
 
   <script src="js/i18n.js"></script>
@@ -81,19 +104,22 @@
       set("p2", t["charter.preamble_p2"]);
       set("valuesTitle", t["charter.values_title"]);
 
-      const grid = document.getElementById("values");
-      I18N.values[lang].forEach((name, i) => {
-        const row = document.createElement("div");
-        row.className = "v";
-        row.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t serif">${name}</span>`;
-        grid.appendChild(row);
-      });
+      // Tableau : deux colonnes, une valeur par cellule
+      const values = I18N.values[lang];
+      const body = document.getElementById("values");
+      const rows = Math.ceil(values.length / 2);
+      const cellHtml = (i) => {
+        if (i >= values.length) return '<td></td>';
+        return '<td><div class="cell"><span class="n">' + String(i + 1).padStart(2, "0") +
+               '</span><span class="t">' + values[i] + '</span></div></td>';
+      };
+      for (let r = 0; r < rows; r++) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = cellHtml(r) + cellHtml(r + rows);
+        body.appendChild(tr);
+      }
 
-      // Étiquettes de signature (réutilise des libellés existants)
-      set("sigName", (t["sign.placeholder"] || "").includes("@") ? (lang === "ar" ? "الاسم / البريد" : "Nom / e-mail") : "Nom");
-      set("sigDate", lang === "ar" ? "التاريخ" : (lang === "en" ? "Date" : "Date"));
-
-      set("foot", "cheminvert — " + t["footer.tagline"]);
+      set("foot", " — " + t["footer.tagline"]);
       document.title = "Charte — Chemin Vert (" + lang + ")";
       document.body.dataset.ready = "1";
     })();
