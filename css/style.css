@@ -446,7 +446,23 @@ a { color: inherit; text-decoration: none; }
 /* -------------------------------------------------------------------------
    Boutique
    ------------------------------------------------------------------------- */
-.shop__grid { margin-top: 2.6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+/* Bandeau « boutique pas encore ouverte » */
+.shop-notice {
+  display: flex; align-items: center; gap: 1.1rem;
+  background: linear-gradient(135deg, var(--green-50), var(--green-100));
+  border: 1px solid var(--green-300); border-radius: var(--radius);
+  padding: 1.1rem 1.4rem; box-shadow: var(--shadow-sm);
+}
+.shop-notice__badge {
+  flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  box-shadow: 0 8px 18px -8px rgba(20,113,60,.6);
+}
+.shop-notice__text strong { display: block; font-family: var(--font-display); font-size: 1.2rem; color: var(--green-900); }
+.shop-notice__text p { color: #45564c; font-size: .95rem; margin-top: .15rem; }
+
+.shop__grid { margin-top: 1.8rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .product {
   background: rgba(255,255,255,.78); border: 1px solid var(--line);
   border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); contain: content;
@@ -553,8 +569,8 @@ body.rtl .value__alt span::after { content: " · "; }
    COMPOSANTS MULTI-PAGES
    ========================================================================= */
 
-/* Le hero n'occupe plus tout l'écran sur l'accueil multi-pages */
-.hero { min-height: 88vh; }
+/* Le hero laisse dépasser le bandeau des valeurs au chargement */
+.hero { min-height: 74vh; padding-bottom: 2rem; }
 
 /* Titres/paragraphes centrés (utilisés sur charte, adhérer) */
 .section__title--center { max-width: none; text-align: center; margin-inline: auto; }
@@ -570,6 +586,36 @@ body.rtl .value__alt span::after { content: " · "; }
   font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.06; letter-spacing: -.02em;
   color: var(--green-900); max-width: 18ch; margin: .6rem auto 0;
 }
+
+/* -------- Bandeau défilant des valeurs (accueil) -------- */
+.values-band {
+  display: block; overflow: hidden; cursor: pointer;
+  width: 104vw; margin-inline: -2vw; transform: rotate(-1.4deg);
+  padding: 1.6rem 0 1.8rem; position: relative; z-index: 1;
+  background: linear-gradient(90deg, rgba(215,240,224,0), rgba(215,240,224,.5), rgba(215,240,224,0));
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.values-band__row {
+  display: flex; align-items: center; gap: 2.4rem; width: max-content;
+  animation: vbscroll 55s linear infinite; will-change: transform;
+}
+.values-band__row--alt {
+  margin-top: 1.1rem; opacity: .5;
+  animation-direction: reverse; animation-duration: 75s;
+}
+.values-band:hover .values-band__row { animation-play-state: paused; }
+@keyframes vbscroll { to { transform: translateX(-50%); } }
+.vb__item {
+  font-family: var(--font-display); font-weight: 500; white-space: nowrap;
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem); line-height: 1.15; color: var(--green-800);
+}
+.vb__item--outline { color: var(--green-400); }
+@supports (-webkit-text-stroke: 1px #000) {
+  .vb__item--outline { color: transparent; -webkit-text-stroke: 1.3px var(--green-500); }
+}
+.vb__item--sm { font-size: clamp(1.05rem, 1.9vw, 1.5rem); font-style: italic; color: var(--green-700); }
+.vb__sep { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--green-400); }
 
 /* -------- Bandeau compteur (accueil) -------- */
 .cband { padding: clamp(2rem, 5vw, 4rem) 0; }
