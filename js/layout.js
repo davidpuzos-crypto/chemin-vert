@@ -30,7 +30,10 @@ const Layout = {
           <ul class="lang__menu" id="langMenu" role="listbox"></ul>
         </div>
 
-        <a href="adherer.html" class="btn btn--sm btn--primary nav__cta" data-i18n="nav.join">Adhérer</a>
+        <a href="adherer.html" class="btn btn--sm btn--primary nav__cta">
+          <span data-i18n="nav.join">Adhérer</span>
+          <span class="nav__cta-count js-counter" aria-hidden="true">—</span>
+        </a>
 
         <button class="nav__burger" id="burger" aria-label="Menu">
           <span></span><span></span><span></span>
@@ -69,11 +72,14 @@ const Layout = {
     const f = document.getElementById("site-footer");
     if (f) f.innerHTML = this.footer();
 
-    // Lien de navigation actif
+    // Lien de navigation actif (+ aria-current pour l'accessibilité)
     const page = document.body.dataset.page;
-    document.querySelectorAll("[data-nav]").forEach(a =>
-      a.classList.toggle("active", a.dataset.nav === page)
-    );
+    document.querySelectorAll("[data-nav]").forEach(a => {
+      const on = a.dataset.nav === page;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
 
     // Année du pied de page
     const y = document.getElementById("year");

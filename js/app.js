@@ -14,10 +14,30 @@
   const navLinks = document.getElementById("navLinks");
 
   if (nav) {
-    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 24);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      nav.classList.toggle("scrolled", y > 24);
+      // Se masque quand on descend, réapparaît quand on remonte
+      if (!nav.classList.contains("open")) {
+        if (y > 200 && y > lastY + 6) nav.classList.add("nav--hidden");
+        else if (y < lastY - 6) nav.classList.remove("nav--hidden");
+      }
+      lastY = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
   }
+
+  /* ---------- Bouton « retour en haut » ---------- */
+  const toTop = document.createElement("button");
+  toTop.className = "to-top";
+  toTop.setAttribute("aria-label", "Haut de page");
+  toTop.innerHTML =
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg>';
+  document.body.appendChild(toTop);
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  window.addEventListener("scroll", () => toTop.classList.toggle("show", window.scrollY > 620), { passive: true });
   if (burger) burger.addEventListener("click", () => nav.classList.toggle("open"));
   if (navLinks) {
     navLinks.addEventListener("click", e => {
