@@ -10,10 +10,7 @@ const Layout = {
     <header class="nav" id="nav">
       <a href="index.html" class="nav__brand" aria-label="Chemin Vert">
         <img class="nav__logo" id="navLogo" src="assets/logo.png" alt="" onerror="this.style.display='none'" />
-        <span class="nav__wm" aria-hidden="true">
-          <span class="nav__wm-line nav__wm-top"><i>C</i><i>H</i><i>E</i><i>M</i><i>I</i><i>N</i></span>
-          <span class="nav__wm-line nav__wm-bot"><i>V</i><i>E</i><i>R</i><i>T</i></span>
-        </span>
+        <span class="nav__name">Chemin&nbsp;Vert</span>
       </a>
 
       <nav class="nav__links" id="navLinks">

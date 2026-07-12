@@ -90,6 +90,26 @@
     observeValues();
   }
 
+  /* ---------- Bandeau défilant des valeurs (accueil) ---------- */
+  const valuesBand = document.getElementById("valuesBand");
+
+  function renderValuesBand(current) {
+    if (!valuesBand) return;
+    const sep = '<span class="vb__sep" aria-hidden="true"></span>';
+    // Ligne 1 : les valeurs dans la langue courante, pleines / contour en alternance
+    const seq1 = I18N.values[current]
+      .map((v, i) => `<span class="vb__item${i % 2 ? " vb__item--outline" : ""}">${v}</span>`)
+      .join(sep) + sep;
+    // Ligne 2 : les mêmes valeurs, piochées dans les autres langues (universalité)
+    const others = Object.keys(I18N.values).filter(l => l !== current);
+    const seq2 = I18N.values[current]
+      .map((_, i) => `<span class="vb__item vb__item--sm">${I18N.values[others[i % others.length]][i]}</span>`)
+      .join(sep) + sep;
+    // Contenu doublé pour un défilement en boucle parfaite (translateX -50 %)
+    document.getElementById("vbRow1").innerHTML = seq1 + seq1;
+    document.getElementById("vbRow2").innerHTML = seq2 + seq2;
+  }
+
   /* ---------- Compteur de signatures (générique : .js-counter) ---------- */
   const counterEls = () => document.querySelectorAll(".js-counter");
   const hasCounter = counterEls().length > 0;
@@ -487,6 +507,7 @@
     const code = e.detail.lang;
     refreshLangButton(code);
     renderValues(code);
+    renderValuesBand(code);
     refreshDownload(code);
     if (currentCount !== null) paintCount(currentCount);
   });
