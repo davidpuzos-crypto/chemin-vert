@@ -8,13 +8,13 @@ const Layout = {
   header() {
     return `
     <header class="nav" id="nav">
-      <a href="index.html" class="nav__brand" aria-label="Chemin Vert">
+      <a href="accueil.html" class="nav__brand" aria-label="Chemin Vert">
         <img class="nav__logo" id="navLogo" src="assets/logo.png" alt="" onerror="this.style.display='none'" />
         <span class="nav__name">Chemin&nbsp;Vert</span>
       </a>
 
       <nav class="nav__links" id="navLinks">
-        <a href="index.html"    data-nav="home"    data-i18n="nav.home">Accueil</a>
+        <a href="accueil.html"  data-nav="home"    data-i18n="nav.home">Accueil</a>
         <a href="charte.html"   data-nav="charter" data-i18n="nav.charter">La charte</a>
         <a href="adherer.html"  data-nav="join"    data-i18n="nav.join">Adhérer</a>
         <a href="boutique.html" data-nav="shop"    data-i18n="nav.shop">Boutique</a>
@@ -54,7 +54,7 @@ const Layout = {
           </div>
         </div>
         <nav class="footer__nav">
-          <a href="index.html"    data-i18n="nav.home">Accueil</a>
+          <a href="accueil.html"  data-i18n="nav.home">Accueil</a>
           <a href="charte.html"   data-i18n="nav.charter">La charte</a>
           <a href="adherer.html"  data-i18n="nav.join">Adhérer</a>
           <a href="boutique.html" data-i18n="nav.shop">Boutique</a>

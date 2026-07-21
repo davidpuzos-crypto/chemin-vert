@@ -3,143 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="meta.title">Chemin Vert — Un mouvement humaniste</title>
-  <meta name="description" data-i18n="meta.desc" content="Chemin Vert : un mouvement humaniste qui remet à l'honneur les valeurs humaines essentielles." />
+  <title>Chemin Vert</title>
+  <meta name="description" content="Chemin Vert — un mouvement humaniste. Choisissez votre langue." />
   <meta name="theme-color" content="#14713c" />
-  <meta property="og:title" content="Chemin Vert" />
-  <meta property="og:description" content="Un mouvement humaniste. Reprenons le chemin des valeurs qui nous unissent." />
-  <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2314713c'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body data-page="home">
+<body class="welcome">
   <div class="bg-aurora" aria-hidden="true">
     <span class="blob blob-1"></span><span class="blob blob-2"></span><span class="blob blob-3"></span>
-    <div class="bg-leaves" id="leaves"></div>
   </div>
 
-  <div id="site-header"></div>
+  <main class="welcome__stage">
+    <div class="wordmark welcome__brand" aria-label="Chemin Vert">
+      <span class="wm-line wm-line--top"><i>C</i><i>H</i><i>E</i><i>M</i><i>I</i><i>N</i></span>
+      <span class="wm-line wm-line--bottom"><i>V</i><i>E</i><i>R</i><i>T</i></span>
+    </div>
 
-  <main>
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="hero">
-      <div class="hero__inner reveal">
-        <h1 class="hero__title" data-i18n="hero.title">Reprenons le chemin des valeurs qui nous unissent</h1>
-        <p class="hero__subtitle" data-i18n="hero.subtitle">Chemin Vert remet à l'honneur des principes humains simples et universels.</p>
-        <div class="hero__cta">
-          <a href="adherer.html" class="btn btn--primary btn--lg" data-i18n="hero.cta_sign">Signer la charte</a>
-          <a href="charte.html" class="btn btn--ghost btn--lg" data-i18n="hero.cta_discover">Découvrir</a>
-        </div>
-      </div>
-      <div class="hero__emblem reveal" id="heroEmblem">
-        <div class="emblem-visual" aria-hidden="true">
-          <span class="blob-shape"></span>
-          <span class="blob-ring"></span>
-        </div>
-        <div class="wordmark" aria-label="Chemin Vert">
-          <span class="wm-line wm-line--top"><i>C</i><i>H</i><i>E</i><i>M</i><i>I</i><i>N</i></span>
-          <span class="wm-line wm-line--bottom"><i>V</i><i>E</i><i>R</i><i>T</i></span>
-        </div>
-      </div>
-    </section>
+    <p class="welcome__choose" id="wChoose">Choisissez votre langue</p>
 
-    <!-- ============ BANDEAU DÉFILANT DES VALEURS ============ -->
-    <a href="charte.html" class="values-band" id="valuesBand"
-       data-i18n-attr="aria-label:nav.charter" aria-label="La charte">
-      <div class="values-band__row" id="vbRow1"></div>
-      <div class="values-band__row values-band__row--alt" id="vbRow2"></div>
-    </a>
+    <div class="flower" id="flower">
+      <button class="bloom" id="bloom" aria-label="Entrer">
+        <span class="bloom__flag" id="bloomFlag">🇫🇷</span>
+        <span class="bloom__lang" id="bloomLang">Français</span>
+        <span class="bloom__enter" id="bloomEnter">Entrer</span>
+      </button>
+    </div>
 
-    <!-- ============ BANDEAU COMPTEUR ============ -->
-    <section class="cband">
-      <div class="container cband__inner reveal">
-        <div class="cband__num"><span class="js-counter">—</span></div>
-        <div class="cband__text">
-          <p class="cband__label" data-i18n="hero.counter_label">personnes ont déjà signé</p>
-          <h2 class="cband__title" data-i18n="band.title">Un mouvement qui grandit chaque jour</h2>
-          <p class="cband__sub" data-i18n="band.sub">Rejoignez celles et ceux qui ont déjà dit oui à ces valeurs.</p>
-          <div class="milestone milestone--light" data-milestone>
-            <div class="milestone__head">
-              <span data-i18n="milestone.next">Prochain objectif</span>
-              <span><span class="milestone__cur js-counter">—</span> / <span class="milestone__goal">—</span></span>
-            </div>
-            <div class="milestone__bar"><span class="milestone__fill"></span></div>
-          </div>
-          <a href="adherer.html" class="btn btn--primary btn--lg" data-i18n="band.cta">Adhérer maintenant</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ LE MOUVEMENT (teaser) ============ -->
-    <section class="section" id="movement">
-      <div class="container">
-        <p class="tag reveal" data-i18n="movement.tag">Le mouvement</p>
-        <h2 class="section__title reveal" data-i18n="movement.title">Une idée simple, une ambition immense</h2>
-        <div class="prose">
-          <p class="reveal" data-i18n="movement.p1"></p>
-          <p class="reveal" data-i18n="movement.p2"></p>
-        </div>
-        <div class="badges reveal">
-          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge1">Sans ambition politique</span></span>
-          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge2">Sans appartenance religieuse</span></span>
-          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge3">Ouvert à tous</span></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ EXPLORER (cartes vers les pages) ============ -->
-    <section class="section section--explore">
-      <div class="container">
-        <p class="tag reveal" data-i18n="home.explore">Explorer</p>
-        <h2 class="section__title reveal" data-i18n="home.explore_title">Par où commencer</h2>
-        <div class="cards">
-          <a href="charte.html" class="card reveal">
-            <span class="card__art card__art--1" aria-hidden="true">
-              <svg class="card__art-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4.5h4a3.3 3.3 0 0 1 3.3 3.3v12.2a2.6 2.6 0 0 0-2.6-2.6H4V4.5Z"/>
-                <path d="M20 4.5h-4a3.3 3.3 0 0 0-3.3 3.3v12.2a2.6 2.6 0 0 1 2.6-2.6H20V4.5Z"/>
-              </svg>
-            </span>
-            <h3 data-i18n="home.card_charter_t">La Charte</h3>
-            <p data-i18n="home.card_charter_d">Découvrez et téléchargez les valeurs qui nous rassemblent.</p>
-            <span class="card__link" data-i18n="home.card_link">Découvrir</span>
-          </a>
-          <a href="adherer.html" class="card reveal">
-            <span class="card__art card__art--2" aria-hidden="true">
-              <svg class="card__art-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 20.3C5.6 15.9 3.2 11.5 5.4 7.9c1.7-2.8 5.4-3 7-.1 1.6-2.9 5.3-2.7 7 .1 2.2 3.6-.2 8-6.6 12.4a1 1 0 0 1-.8 0Z"/>
-              </svg>
-            </span>
-            <h3 data-i18n="home.card_join_t">Adhérer</h3>
-            <p data-i18n="home.card_join_d">Signez la charte et faites grandir le compteur du mouvement.</p>
-            <span class="card__link" data-i18n="home.card_link">Découvrir</span>
-          </a>
-          <a href="boutique.html" class="card reveal">
-            <span class="card__art card__art--3" aria-hidden="true">
-              <svg class="card__art-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 8.2V6.4a3 3 0 0 1 6 0v1.8"/>
-                <path d="M6.6 8.2h10.8l-1 12.4a1.5 1.5 0 0 1-1.5 1.4H9.1a1.5 1.5 0 0 1-1.5-1.4l-1-12.4Z"/>
-              </svg>
-            </span>
-            <h3 data-i18n="home.card_shop_t">Boutique</h3>
-            <p data-i18n="home.card_shop_d">Affichez votre engagement avec nos objets.</p>
-            <span class="card__link" data-i18n="home.card_link">Découvrir</span>
-          </a>
-        </div>
-      </div>
-    </section>
+    <button class="welcome__skip" id="wSkip" type="button">Passer</button>
   </main>
 
-  <div id="site-footer"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js"></script>
   <script src="js/i18n.js"></script>
-  <script src="js/layout.js"></script>
-  <script src="js/signatures.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/welcome.js"></script>
 </body>
 </html>

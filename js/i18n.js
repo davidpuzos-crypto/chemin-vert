@@ -701,7 +701,8 @@ const I18N_EXT = {
     "unsub.button": "Se désinscrire", "unsub.success": "C'est fait : vous avez été désinscrit. À bientôt, peut-être.",
     "unsub.notfound": "Cette adresse ne figure pas parmi les signataires.",
     "shop.notready_t": "La boutique ouvre bientôt",
-    "shop.notready_d": "Les ventes ne sont pas encore actives. Découvrez les objets à venir, et soyez prévenu·e du lancement."
+    "shop.notready_d": "Les ventes ne sont pas encore actives. Découvrez les objets à venir, et soyez prévenu·e du lancement.",
+    "welcome.choose": "Choisissez votre langue", "welcome.enter": "Entrer", "welcome.skip": "Passer"
   },
   en: {
     "milestone.next": "Next goal", "value.all_title": "In all 7 languages", "value.close": "Close",
@@ -713,7 +714,8 @@ const I18N_EXT = {
     "unsub.button": "Unsubscribe", "unsub.success": "Done — you've been unsubscribed. See you soon, perhaps.",
     "unsub.notfound": "This address isn't among the signatories.",
     "shop.notready_t": "The shop is opening soon",
-    "shop.notready_d": "Sales aren't live yet. Discover the upcoming items and get notified at launch."
+    "shop.notready_d": "Sales aren't live yet. Discover the upcoming items and get notified at launch.",
+    "welcome.choose": "Choose your language", "welcome.enter": "Enter", "welcome.skip": "Skip"
   },
   es: {
     "milestone.next": "Próximo objetivo", "value.all_title": "En los 7 idiomas", "value.close": "Cerrar",
@@ -725,7 +727,8 @@ const I18N_EXT = {
     "unsub.button": "Darse de baja", "unsub.success": "Hecho: te has dado de baja. Hasta pronto, quizás.",
     "unsub.notfound": "Esta dirección no figura entre los firmantes.",
     "shop.notready_t": "La tienda abre pronto",
-    "shop.notready_d": "Las ventas aún no están activas. Descubre los artículos y recibe aviso del lanzamiento."
+    "shop.notready_d": "Las ventas aún no están activas. Descubre los artículos y recibe aviso del lanzamiento.",
+    "welcome.choose": "Elige tu idioma", "welcome.enter": "Entrar", "welcome.skip": "Saltar"
   },
   it: {
     "milestone.next": "Prossimo obiettivo", "value.all_title": "Nelle 7 lingue", "value.close": "Chiudi",
@@ -737,7 +740,8 @@ const I18N_EXT = {
     "unsub.button": "Disiscriviti", "unsub.success": "Fatto: sei stato disiscritto. A presto, forse.",
     "unsub.notfound": "Questo indirizzo non è tra i firmatari.",
     "shop.notready_t": "Il negozio apre presto",
-    "shop.notready_d": "Le vendite non sono ancora attive. Scopri gli articoli in arrivo e ricevi l'avviso al lancio."
+    "shop.notready_d": "Le vendite non sono ancora attive. Scopri gli articoli in arrivo e ricevi l'avviso al lancio.",
+    "welcome.choose": "Scegli la tua lingua", "welcome.enter": "Entra", "welcome.skip": "Salta"
   },
   de: {
     "milestone.next": "Nächstes Ziel", "value.all_title": "In allen 7 Sprachen", "value.close": "Schließen",
@@ -749,7 +753,8 @@ const I18N_EXT = {
     "unsub.button": "Abmelden", "unsub.success": "Erledigt — du wurdest abgemeldet. Vielleicht bis bald.",
     "unsub.notfound": "Diese Adresse ist nicht unter den Unterzeichnenden.",
     "shop.notready_t": "Der Shop öffnet bald",
-    "shop.notready_d": "Der Verkauf ist noch nicht aktiv. Entdecke die kommenden Artikel und lass dich zum Start benachrichtigen."
+    "shop.notready_d": "Der Verkauf ist noch nicht aktiv. Entdecke die kommenden Artikel und lass dich zum Start benachrichtigen.",
+    "welcome.choose": "Wähle deine Sprache", "welcome.enter": "Eintreten", "welcome.skip": "Überspringen"
   },
   tr: {
     "milestone.next": "Sonraki hedef", "value.all_title": "7 dilde", "value.close": "Kapat",
@@ -761,7 +766,8 @@ const I18N_EXT = {
     "unsub.button": "Kaydı sil", "unsub.success": "Tamam — kaydın silindi. Belki yine görüşürüz.",
     "unsub.notfound": "Bu adres imzacılar arasında değil.",
     "shop.notready_t": "Mağaza yakında açılıyor",
-    "shop.notready_d": "Satışlar henüz aktif değil. Yakında gelecek ürünleri keşfet ve lansmanda haberdar ol."
+    "shop.notready_d": "Satışlar henüz aktif değil. Yakında gelecek ürünleri keşfet ve lansmanda haberdar ol.",
+    "welcome.choose": "Dilini seç", "welcome.enter": "Gir", "welcome.skip": "Geç"
   },
   ar: {
     "milestone.next": "الهدف التالي", "value.all_title": "بجميع اللغات السبع", "value.close": "إغلاق",
@@ -773,7 +779,8 @@ const I18N_EXT = {
     "unsub.button": "إلغاء الاشتراك", "unsub.success": "تم إلغاء اشتراكك. إلى اللقاء ربما.",
     "unsub.notfound": "هذا العنوان غير موجود بين الموقّعين.",
     "shop.notready_t": "المتجر يفتح قريبًا",
-    "shop.notready_d": "المبيعات لم تبدأ بعد. اكتشف المنتجات القادمة واطلب إشعارك عند الإطلاق."
+    "shop.notready_d": "المبيعات لم تبدأ بعد. اكتشف المنتجات القادمة واطلب إشعارك عند الإطلاق.",
+    "welcome.choose": "اختر لغتك", "welcome.enter": "دخول", "welcome.skip": "تخطٍّ"
   }
 };
 Object.keys(I18N_EXT).forEach(l => Object.assign(I18N.t[l], I18N_EXT[l]));
