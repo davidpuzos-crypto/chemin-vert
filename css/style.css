@@ -962,20 +962,22 @@ body.rtl .cart { transform: translateX(-100%); }
 /* =========================================================================
    PRÉ-PAGE : sélection de la langue (la fleur)
    ========================================================================= */
+/* Pré-page : tient en un seul écran, sans défilement */
+body.welcome { overflow: hidden; }
 .welcome__stage {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 1.3rem;
-  padding: 2.5rem 1.2rem; text-align: center;
+  height: 100vh; height: 100dvh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: clamp(.5rem, 2.2vh, 1.3rem);
+  padding: clamp(.8rem, 3vh, 2.2rem) 1.2rem; text-align: center; overflow: hidden;
 }
-.welcome__brand { width: min(60vw, 240px); }
+.welcome__brand { width: min(50vw, 210px); flex: 0 0 auto; }
 .welcome__choose {
   font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .24em;
-  font-size: .8rem; font-weight: 500; color: var(--green-600);
+  font-size: clamp(.68rem, 1.6vh, .8rem); font-weight: 500; color: var(--green-600);
 }
 
 .flower {
-  position: relative; width: min(88vw, 440px); aspect-ratio: 1;
-  margin: .4rem auto;
+  position: relative; width: min(86vw, 62vh, 430px); aspect-ratio: 1;
+  margin: 0 auto; flex: 0 0 auto;
 }
 
 /* Pétales : base au centre, rayonnent vers l'extérieur */
