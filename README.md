@@ -17,7 +17,8 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 
 ```
 .
-├── index.html            Accueil (hero, bandeau compteur, cartes)
+├── index.html            Pré-page : choix de la langue (la « fleur »)
+├── accueil.html          Accueil (hero, ruban des valeurs, bandeau compteur, cartes)
 ├── charte.html           La Charte (préambule, 15 valeurs, téléchargement PDF)
 ├── adherer.html          Adhérer (grand compteur + formulaire de signature)
 ├── boutique.html         Boutique (vitrine)
@@ -26,6 +27,7 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 ├── css/style.css         Styles, animations, RTL, responsive
 ├── js/
 │   ├── i18n.js           Traductions des 7 langues + moteur i18n
+│   ├── welcome.js        Logique de la pré-page « fleur » (choix de langue)
 │   ├── layout.js         En-tête + pied de page partagés (injectés)
 │   ├── signatures.js     Signatures + compteur (Supabase / mode démo)
 │   └── app.js            Interactions communes à toutes les pages

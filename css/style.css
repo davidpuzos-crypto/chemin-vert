@@ -291,7 +291,7 @@ a { color: inherit; text-decoration: none; }
 
 /* Mot-symbole « CHEMIN / VERT » — lettres justifiées, deux lignes de même largeur */
 .wordmark {
-  width: min(74%, 300px); text-transform: uppercase;
+  width: min(74%, 300px); text-transform: uppercase; direction: ltr;
   font-family: "Jost", "Century Gothic", "Futura", var(--font-body);
   color: var(--green-800); line-height: 1;
 }
@@ -958,6 +958,106 @@ body.rtl .cart { transform: translateX(-100%); }
 }
 .to-top.show { opacity: 1; visibility: visible; transform: none; }
 .to-top:hover { background: #fff; transform: translateY(-2px); color: var(--green-800); }
+
+/* =========================================================================
+   PRÉ-PAGE : sélection de la langue (la fleur)
+   ========================================================================= */
+.welcome__stage {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.3rem;
+  padding: 2.5rem 1.2rem; text-align: center;
+}
+.welcome__brand { width: min(60vw, 240px); }
+.welcome__choose {
+  font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .24em;
+  font-size: .8rem; font-weight: 500; color: var(--green-600);
+}
+
+.flower {
+  position: relative; width: min(88vw, 440px); aspect-ratio: 1;
+  margin: .4rem auto;
+}
+
+/* Pétales : base au centre, rayonnent vers l'extérieur */
+.pet {
+  position: absolute; left: 50%; top: 50%;
+  width: 30%; height: 50%;
+  transform: translate(-50%, -100%) rotate(var(--a));
+  transform-origin: 50% 100%;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  animation: petbloom .7s cubic-bezier(.2,.9,.3,1) backwards;
+  animation-delay: calc(var(--i) * .07s);
+}
+@keyframes petbloom {
+  from { transform: translate(-50%, -100%) rotate(var(--a)) scale(.2); opacity: 0; }
+  to   { transform: translate(-50%, -100%) rotate(var(--a)) scale(1); opacity: 1; }
+}
+.pet__shape {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: linear-gradient(180deg, var(--green-300), var(--green-600));
+  box-shadow: inset 0 -10px 22px rgba(12,56,35,.18), 0 10px 22px -12px rgba(20,113,60,.5);
+  opacity: .82;
+  transition: transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s, filter .3s, box-shadow .3s;
+  transform-origin: 50% 100%;
+}
+.pet:hover .pet__shape { opacity: 1; transform: scale(1.05); }
+.pet.is-active .pet__shape {
+  opacity: 1; filter: saturate(1.12) brightness(1.05);
+  background: linear-gradient(180deg, var(--green-400), var(--green-700));
+  box-shadow: inset 0 -10px 22px rgba(12,56,35,.2), 0 14px 26px -10px rgba(20,113,60,.7),
+              0 0 0 2px rgba(255,255,255,.5);
+  transform: scaleY(1.07) scaleX(1.03);
+}
+.pet__label {
+  position: absolute; top: 15%; left: 50%;
+  transform: translateX(-50%) rotate(calc(-1 * var(--a)));
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: #fff; pointer-events: none; text-shadow: 0 1px 4px rgba(12,56,35,.45);
+}
+.pet__flag { font-size: 1.5rem; line-height: 1; }
+.pet__name {
+  font-family: var(--font-ui); font-weight: 500; font-size: .72rem;
+  letter-spacing: .04em; white-space: nowrap;
+}
+
+/* Cœur de la fleur : la langue choisie + Entrer */
+.bloom {
+  position: absolute; left: 50%; top: 50%; z-index: 3;
+  transform: translate(-50%, -50%);
+  width: 40%; aspect-ratio: 1; border-radius: 50%; cursor: pointer;
+  border: 0; background: radial-gradient(circle at 42% 34%, #fff, var(--green-50));
+  box-shadow: 0 20px 46px -18px rgba(12,56,35,.55), inset 0 0 0 7px rgba(255,255,255,.6);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  transition: transform .3s, box-shadow .3s;
+  animation: petbloom .7s cubic-bezier(.2,.9,.3,1) .5s backwards;
+}
+.bloom:hover { box-shadow: 0 26px 54px -18px rgba(12,56,35,.6), inset 0 0 0 7px rgba(255,255,255,.8); }
+.bloom.pulse { animation: bloompulse .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes bloompulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  40%     { transform: translate(-50%,-50%) scale(1.07); }
+}
+.bloom__flag { font-size: clamp(1.7rem, 4.5vw, 2.6rem); line-height: 1; }
+.bloom__lang { font-family: var(--font-display); font-weight: 500; font-size: clamp(1rem, 2.6vw, 1.45rem); color: var(--green-900); }
+.bloom__enter {
+  font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .16em;
+  font-size: .64rem; font-weight: 600; color: #fff; margin-top: .35rem;
+  background: linear-gradient(135deg, var(--green-600), var(--green-800));
+  padding: .4em 1em; border-radius: 999px; box-shadow: 0 8px 18px -8px rgba(20,113,60,.6);
+}
+
+.welcome__skip {
+  background: none; border: 0; cursor: pointer; margin-top: .6rem;
+  font-family: var(--font-ui); font-size: .82rem; color: var(--muted);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--green-300);
+  transition: color .2s;
+}
+.welcome__skip:hover { color: var(--green-700); }
+
+@media (max-width: 420px) {
+  .pet__name { font-size: .62rem; }
+  .pet__flag { font-size: 1.2rem; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
