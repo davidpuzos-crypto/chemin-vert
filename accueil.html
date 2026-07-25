@@ -24,11 +24,16 @@
   <div id="site-header"></div>
 
   <main>
-    <!-- ============ HERO ============ -->
+    <!-- ============ HERO MANIFESTE ============ -->
     <section class="hero" id="hero">
       <div class="hero__inner reveal">
-        <h1 class="hero__title" data-i18n="hero.title">Reprenons le chemin des valeurs qui nous unissent</h1>
-        <p class="hero__subtitle" data-i18n="hero.subtitle">Chemin Vert remet à l'honneur des principes humains simples et universels.</p>
+        <p class="hero__brandline">Le Chemin Vert</p>
+        <h1 class="hero__title" data-i18n="mf.kicker">Manifeste d'adhésion</h1>
+        <p class="hero__subtitle" data-i18n="mf.affiche">Affichez votre adhésion aux valeurs et principes suivants :</p>
+        <blockquote class="hero__quote">
+          <span class="hero__quote-mark" aria-hidden="true">«</span>
+          <span data-i18n="mf.quote">Il faut appliquer la loi et les règles de l'éthique, en y ajoutant l'amour et le respect de toute la création.</span>
+        </blockquote>
         <div class="hero__cta">
           <a href="adherer.html" class="btn btn--primary btn--lg" data-i18n="hero.cta_sign">Signer la charte</a>
           <a href="charte.html" class="btn btn--ghost btn--lg" data-i18n="hero.cta_discover">Découvrir</a>
@@ -36,8 +41,13 @@
       </div>
       <div class="hero__emblem reveal" id="heroEmblem">
         <div class="emblem-visual" aria-hidden="true">
+          <span class="emblem-shadow"></span>
           <span class="blob-shape"></span>
-          <span class="blob-ring"></span>
+          <svg class="emblem-sprout" viewBox="0 0 64 40" aria-hidden="true">
+            <path d="M32 40 C32 26 24 20 12 20 C12 32 20 40 32 40 Z" fill="#2f9e52"/>
+            <path d="M32 40 C32 26 40 20 52 20 C52 32 44 40 32 40 Z" fill="#1c8a4b"/>
+            <path d="M32 40 V22" stroke="#0f5132" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+          </svg>
         </div>
         <div class="wordmark" aria-label="Chemin Vert">
           <span class="wm-line wm-line--top"><i>C</i><i>H</i><i>E</i><i>M</i><i>I</i><i>N</i></span>
@@ -46,14 +56,75 @@
       </div>
     </section>
 
-    <!-- ============ BANDEAU DÉFILANT DES VALEURS ============ -->
-    <a href="charte.html" class="values-band" id="valuesBand"
-       data-i18n-attr="aria-label:nav.charter" aria-label="La charte">
-      <div class="values-band__row" id="vbRow1"></div>
-      <div class="values-band__row values-band__row--alt" id="vbRow2"></div>
-    </a>
+    <!-- ============ PILIERS FONDAMENTAUX ============ -->
+    <section class="section section--tight pillars">
+      <div class="container">
+        <h2 class="section__title section__title--center reveal" data-i18n="pil.title">Nos piliers fondamentaux</h2>
+        <div class="pillars__grid">
+          <div class="pillar reveal">
+            <span class="pillar__ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M6 7h12M6 7l-3 6a3 3 0 0 0 6 0L6 7Zm12 0l-3 6a3 3 0 0 0 6 0l-3-6ZM12 4.5 6 7m6-2.5L18 7"/></svg>
+            </span>
+            <p data-i18n="pil.1">Légalité et éthique</p>
+          </div>
+          <div class="pillar reveal">
+            <span class="pillar__ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.3C5.6 15.9 3.2 11.5 5.4 7.9c1.7-2.8 5.4-3 7-.1 1.6-2.9 5.3-2.7 7 .1 2.2 3.6-.2 8-6.6 12.4a1 1 0 0 1-.8 0Z"/></svg>
+            </span>
+            <p data-i18n="pil.2">Amour, respect et fraternité</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- ============ BANDEAU COMPTEUR ============ -->
+    <!-- ============ NOS VALEURS ET PRINCIPES (15) ============ -->
+    <section class="section section--charter" id="values">
+      <div class="container">
+        <h2 class="section__title section__title--center reveal" data-i18n="val.title">Nos valeurs et principes</h2>
+        <div class="vlist" id="valuesHome"></div>
+        <div class="vlist__cta reveal">
+          <a href="charte.html" class="link" data-i18n="nav.charter">La charte</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LE MANIFESTE (pourquoi / que faire / cet acte) ============ -->
+    <section class="section section--tight manifesto">
+      <div class="container">
+        <article class="mblock reveal">
+          <span class="mblock__ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>
+          </span>
+          <div class="mblock__body">
+            <h3 data-i18n="why.title">Pourquoi ce manifeste ?</h3>
+            <p data-i18n="why.body"></p>
+          </div>
+        </article>
+        <article class="mblock reveal">
+          <span class="mblock__ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+          </span>
+          <div class="mblock__body">
+            <h3 data-i18n="do.title">Que faire alors ?</h3>
+            <p data-i18n="do.body"></p>
+          </div>
+        </article>
+        <article class="mblock reveal">
+          <span class="mblock__ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2.2"/><path d="M5 11c4.6 2.2 9.4 2.2 14 0M12 10v5m0 0-3.5 6M12 15l3.5 6"/></svg>
+          </span>
+          <div class="mblock__body">
+            <h3 data-i18n="act.title">Cet acte :</h3>
+            <ul class="mblock__list">
+              <li data-i18n="act.1">Vous libère intérieurement ;</li>
+              <li data-i18n="act.2">Contribue à créer un tsunami de conscience qui, un jour, balayera le mal.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ BANDEAU COMPTEUR / ADHÉRER ============ -->
     <section class="cband">
       <div class="container cband__inner reveal">
         <div class="cband__num"><span class="js-counter">—</span></div>
@@ -69,23 +140,6 @@
             <div class="milestone__bar"><span class="milestone__fill"></span></div>
           </div>
           <a href="adherer.html" class="btn btn--primary btn--lg" data-i18n="band.cta">Adhérer maintenant</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ LE MOUVEMENT (teaser) ============ -->
-    <section class="section" id="movement">
-      <div class="container">
-        <p class="tag reveal" data-i18n="movement.tag">Le mouvement</p>
-        <h2 class="section__title reveal" data-i18n="movement.title">Une idée simple, une ambition immense</h2>
-        <div class="prose">
-          <p class="reveal" data-i18n="movement.p1"></p>
-          <p class="reveal" data-i18n="movement.p2"></p>
-        </div>
-        <div class="badges reveal">
-          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge1">Sans ambition politique</span></span>
-          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge2">Sans appartenance religieuse</span></span>
-          <span class="badge"><span class="badge__dot"></span><span data-i18n="movement.badge3">Ouvert à tous</span></span>
         </div>
       </div>
     </section>
@@ -131,6 +185,9 @@
         </div>
       </div>
     </section>
+
+    <!-- ============ SALUT ============ -->
+    <p class="salut reveal" data-i18n="salut">Salut et respect à tous.</p>
   </main>
 
   <div id="site-footer"></div>

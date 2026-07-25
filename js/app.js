@@ -110,24 +110,17 @@
     observeValues();
   }
 
-  /* ---------- Bandeau défilant des valeurs (accueil) ---------- */
-  const valuesBand = document.getElementById("valuesBand");
+  /* ---------- Liste des 15 valeurs sur l'accueil ---------- */
+  const valuesHome = document.getElementById("valuesHome");
+  const LEAF_BULLET =
+    '<svg class="vitem__leaf" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+    '<path d="M12 2C7 4 3 8 3 14c0 4 3 8 9 8 0-6-1-9-4-12 4 1 7 4 9 9 1-9-2-14-5-17z"/></svg>';
 
-  function renderValuesBand(current) {
-    if (!valuesBand) return;
-    const sep = '<span class="vb__sep" aria-hidden="true"></span>';
-    // Ligne 1 : les valeurs dans la langue courante, pleines / contour en alternance
-    const seq1 = I18N.values[current]
-      .map((v, i) => `<span class="vb__item${i % 2 ? " vb__item--outline" : ""}">${v}</span>`)
-      .join(sep) + sep;
-    // Ligne 2 : les mêmes valeurs, piochées dans les autres langues (universalité)
-    const others = Object.keys(I18N.values).filter(l => l !== current);
-    const seq2 = I18N.values[current]
-      .map((_, i) => `<span class="vb__item vb__item--sm">${I18N.values[others[i % others.length]][i]}</span>`)
-      .join(sep) + sep;
-    // Contenu doublé pour un défilement en boucle parfaite (translateX -50 %)
-    document.getElementById("vbRow1").innerHTML = seq1 + seq1;
-    document.getElementById("vbRow2").innerHTML = seq2 + seq2;
+  function renderValuesHome(current) {
+    if (!valuesHome) return;
+    valuesHome.innerHTML = I18N.values[current]
+      .map(v => `<span class="vitem">${LEAF_BULLET}<span>${v}</span></span>`)
+      .join("");
   }
 
   /* ---------- Compteur de signatures (générique : .js-counter) ---------- */
@@ -527,7 +520,7 @@
     const code = e.detail.lang;
     refreshLangButton(code);
     renderValues(code);
-    renderValuesBand(code);
+    renderValuesHome(code);
     refreshDownload(code);
     if (currentCount !== null) paintCount(currentCount);
   });
