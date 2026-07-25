@@ -976,8 +976,25 @@ body.rtl .cart { transform: translateX(-100%); }
 }
 .hero__quote-mark { color: var(--green-300); font-size: 1.5em; font-style: normal; margin-inline-end: .1em; vertical-align: -.15em; }
 
+/* Titre décoré (piliers) : icône + lignes latérales */
+.deco-title { display: flex; align-items: center; justify-content: center; gap: 1rem; max-width: 680px; margin: 0 auto; }
+.deco-title::before, .deco-title::after { content: ""; height: 1.5px; flex: 1; max-width: 90px; border-radius: 2px; }
+.deco-title::before { background: linear-gradient(90deg, transparent, var(--green-300)); }
+.deco-title::after { background: linear-gradient(90deg, var(--green-300), transparent); }
+.deco-title__ico { width: 40px; height: 40px; color: var(--green-600); flex: 0 0 auto; }
+.deco-title .section__title { font-size: clamp(1.5rem, 3.4vw, 2.2rem); max-width: none; white-space: nowrap; }
+
+/* Ruban (valeurs) */
+.ribbon-wrap { text-align: center; margin-bottom: .4rem; }
+.ribbon {
+  display: inline-block; font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: clamp(1.2rem, 2.6vw, 1.7rem); color: #fff;
+  background: linear-gradient(135deg, var(--green-600), var(--green-800));
+  padding: .45em 1.7em; border-radius: 999px; box-shadow: 0 12px 26px -12px rgba(20,113,60,.55);
+}
+
 /* Piliers fondamentaux */
-.pillars__grid { display: flex; justify-content: center; flex-wrap: wrap; gap: clamp(2rem, 6vw, 4rem); margin-top: 2.2rem; }
+.pillars__grid { display: flex; justify-content: center; align-items: stretch; flex-wrap: wrap; gap: clamp(2rem, 6vw, 3.5rem); margin-top: 2.2rem; }
 .pillar { display: flex; flex-direction: column; align-items: center; gap: .9rem; text-align: center; max-width: 15rem; }
 .pillar__ico {
   width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; color: #fff;
@@ -985,16 +1002,24 @@ body.rtl .cart { transform: translateX(-100%); }
 }
 .pillar__ico svg { width: 34px; height: 34px; }
 .pillar p { font-family: var(--font-display); font-size: 1.2rem; color: var(--green-900); }
+.pillar-sep { width: 1px; align-self: stretch; background: linear-gradient(var(--green-100), var(--green-300), var(--green-100)); }
 
-/* Nos valeurs et principes (liste 3 colonnes, style plaquette) */
+/* Nos valeurs et principes (3 colonnes verticales + séparateurs, style plaquette) */
 .vlist {
-  margin: 2.2rem auto 0; max-width: 780px;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem 2rem;
-  background: rgba(255,255,255,.6); border: 1px solid var(--line); border-radius: var(--radius);
-  box-shadow: var(--shadow-sm); padding: 1.6rem clamp(1.4rem, 3vw, 2.2rem);
+  position: relative; margin: 1.4rem auto 0; max-width: 800px;
+  display: grid; grid-auto-flow: column; grid-template-rows: repeat(5, auto); grid-template-columns: repeat(3, 1fr);
+  gap: .2rem clamp(1.4rem, 3vw, 2.6rem);
+  background: rgba(255,255,255,.66); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: 1.8rem clamp(1.6rem, 3.5vw, 2.6rem);
 }
-.vitem { display: flex; align-items: center; gap: .7rem; padding: .5rem 0; font-size: 1.06rem; color: var(--green-900); }
-.vitem__leaf { width: 17px; height: 17px; color: var(--green-500); flex: 0 0 auto; }
+.vlist::before, .vlist::after {
+  content: ""; position: absolute; top: 1.6rem; bottom: 1.6rem; width: 1px;
+  background: linear-gradient(var(--green-100), var(--green-300), var(--green-100));
+}
+.vlist::before { inset-inline-start: 33.33%; }
+.vlist::after { inset-inline-start: 66.66%; }
+.vitem { display: flex; align-items: center; gap: .7rem; padding: .52rem 0; font-size: 1.08rem; color: var(--green-900); }
+.vitem__leaf { width: 18px; height: 18px; color: var(--green-500); flex: 0 0 auto; }
 .vlist__cta { text-align: center; margin-top: 1.6rem; }
 
 /* Corps du manifeste : Pourquoi / Que faire / Cet acte — en cartes */
@@ -1039,10 +1064,17 @@ body.rtl .cart { transform: translateX(-100%); }
   padding: 2.5rem 1.2rem 3.5rem;
 }
 
+@media (max-width: 700px) { .pillar-sep { display: none; } }
 @media (max-width: 640px) {
-  .vlist { grid-template-columns: repeat(2, 1fr); }
+  .vlist {
+    grid-auto-flow: row; grid-template-rows: none; grid-template-columns: repeat(2, 1fr);
+    gap: .1rem 1.4rem;
+  }
+  .vlist::before, .vlist::after { display: none; }
   .mblock { gap: 1rem; }
   .mblock__ico { width: 48px; height: 48px; }
+  .deco-title::before, .deco-title::after { display: none; }
+  .deco-title .section__title { white-space: normal; }
 }
 @media (max-width: 380px) { .vlist { grid-template-columns: 1fr; } }
 
