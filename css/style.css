@@ -318,27 +318,34 @@ a { color: inherit; text-decoration: none; }
 .blob-shape {
   display: block; width: 100%; aspect-ratio: 1; border-radius: 50%;
   position: relative; overflow: hidden; z-index: 1;
-  background: radial-gradient(circle at 34% 27%, #d3f7e0 0%, #7ed79f 20%, #37a659 45%, #1a7d3c 70%, #0d5a28 100%);
-  box-shadow: inset -14px -18px 38px rgba(8,45,24,.55), inset 10px 12px 26px rgba(255,255,255,.22),
-              0 30px 52px -22px rgba(20,113,60,.55);
+  background: radial-gradient(circle at 37% 29%, #e6ffe9 0%, #a4ea5e 12%, #58c62c 34%, #2ea24a 62%, #147a34 84%, #0c5a26 100%);
+  box-shadow: inset -16px -20px 40px rgba(8,45,24,.5), inset 12px 14px 28px rgba(255,255,255,.28),
+              0 24px 44px -22px rgba(20,113,60,.5);
   animation: floaty 7s ease-in-out infinite;
 }
+/* Halo lumineux large */
 .blob-shape::before {
-  content: ""; position: absolute; top: 9%; left: 15%; width: 46%; height: 36%;
-  border-radius: 50%; filter: blur(3px);
-  background: radial-gradient(ellipse at center, rgba(255,255,255,.95), rgba(255,255,255,0) 68%);
+  content: ""; position: absolute; top: 8%; left: 18%; width: 42%; height: 32%;
+  border-radius: 50%; filter: blur(4px);
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.9), rgba(255,255,255,0) 70%);
+}
+/* Point spéculaire net */
+.blob-shape::after {
+  content: ""; position: absolute; top: 13%; left: 31%; width: 11%; height: 8.5%;
+  border-radius: 50%; filter: blur(.5px); background: #fff; opacity: .95;
 }
 .blob-shape--sm { width: 100%; max-width: 300px; }
 
+/* Ombre portée douce au sol (comme sur la plaquette) */
 .emblem-shadow {
-  position: absolute; z-index: 0; bottom: -7%; left: 50%; transform: translateX(-50%);
-  width: 62%; height: 9%; border-radius: 50%; filter: blur(6px);
-  background: radial-gradient(ellipse at center, rgba(10,50,28,.32), transparent 70%);
+  position: absolute; z-index: 0; bottom: -9%; left: 50%;
+  width: 60%; height: 11%; border-radius: 50%; filter: blur(9px);
+  background: radial-gradient(ellipse at center, rgba(10,50,28,.4), rgba(10,50,28,.12) 55%, transparent 72%);
+  animation: shadowfloat 7s ease-in-out infinite;
 }
-.emblem-sprout {
-  position: absolute; z-index: 2; bottom: -4%; left: 50%; transform: translateX(-50%);
-  width: 30%; height: auto; filter: drop-shadow(0 4px 6px rgba(12,56,35,.25));
-  animation: floaty 7s ease-in-out infinite;
+@keyframes shadowfloat {
+  0%, 100% { transform: translateX(-50%) scale(1);   opacity: .95; }
+  50%      { transform: translateX(-50%) scale(.84); opacity: .6; }
 }
 @keyframes morph {
   0%,100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
@@ -990,22 +997,39 @@ body.rtl .cart { transform: translateX(-100%); }
 .vitem__leaf { width: 17px; height: 17px; color: var(--green-500); flex: 0 0 auto; }
 .vlist__cta { text-align: center; margin-top: 1.6rem; }
 
-/* Corps du manifeste : Pourquoi / Que faire / Cet acte */
-.manifesto .container { max-width: 840px; }
-.mblock { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.6rem 0; }
-.mblock + .mblock { border-top: 1px solid var(--line); }
-.mblock__ico {
-  flex: 0 0 auto; width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; color: #fff;
-  background: linear-gradient(135deg, var(--green-400), var(--green-700)); box-shadow: var(--shadow-sm);
+/* Corps du manifeste : Pourquoi / Que faire / Cet acte — en cartes */
+.manifesto .container { max-width: 880px; display: flex; flex-direction: column; gap: 1.3rem; }
+.mblock {
+  position: relative; display: flex; gap: 1.5rem; align-items: flex-start; overflow: hidden;
+  background: rgba(255,255,255,.72); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: clamp(1.5rem, 3.2vw, 2.1rem) clamp(1.5rem, 3.5vw, 2.4rem);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s;
 }
-.mblock__ico svg { width: 30px; height: 30px; }
-.mblock__body h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.45rem; color: var(--green-900); margin-bottom: .4rem; }
-.mblock__body p { color: #33463b; line-height: 1.7; }
-.mblock__list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
-.mblock__list li { position: relative; padding-inline-start: 1.3rem; color: #33463b; line-height: 1.6; }
+.mblock::before {
+  content: ""; position: absolute; inset-inline-start: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(var(--green-400), var(--green-600));
+  transform: scaleY(0); transform-origin: top; transition: transform .4s;
+}
+.mblock:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green-300); }
+.mblock:hover::before { transform: scaleY(1); }
+.mblock__ico {
+  flex: 0 0 auto; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  box-shadow: 0 12px 22px -10px rgba(20,113,60,.65), inset 0 0 0 5px rgba(255,255,255,.16);
+}
+.mblock__ico svg { width: 28px; height: 28px; }
+.mblock__body h3 { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.35rem, 2.5vw, 1.6rem); color: var(--green-900); margin-bottom: .5rem; }
+.mblock__body p { color: #3a4d41; line-height: 1.72; font-size: 1.02rem; }
+.mblock__list { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+.mblock__list li { position: relative; padding-inline-start: 1.6rem; color: #3a4d41; line-height: 1.6; font-size: 1.02rem; }
 .mblock__list li::before {
-  content: ""; position: absolute; inset-inline-start: 0; top: .6em;
-  width: 8px; height: 8px; border-radius: 50%; background: var(--green-500);
+  content: ""; position: absolute; inset-inline-start: 0; top: .28em;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--green-100); box-shadow: inset 0 0 0 2px var(--green-400);
+}
+.mblock__list li::after {
+  content: ""; position: absolute; inset-inline-start: 6px; top: calc(.28em + 6px);
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green-600);
 }
 
 /* Salut final */
