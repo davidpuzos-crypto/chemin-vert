@@ -314,24 +314,31 @@ a { color: inherit; text-decoration: none; }
 /* -------------------------------------------------------------------------
    Forme organique abstraite (emblème provisoire, en attendant le logo)
    ------------------------------------------------------------------------- */
+/* Sphère verte « glossy » (logo intermédiaire, inspiré de la plaquette) */
 .blob-shape {
-  display: block; width: 100%; aspect-ratio: 1;
-  background: linear-gradient(135deg, var(--green-400), var(--green-700));
-  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-  box-shadow: var(--shadow);
-  position: relative; overflow: hidden;
-  animation: morph 11s ease-in-out infinite, floaty 7s ease-in-out infinite;
+  display: block; width: 100%; aspect-ratio: 1; border-radius: 50%;
+  position: relative; overflow: hidden; z-index: 1;
+  background: radial-gradient(circle at 34% 27%, #d3f7e0 0%, #7ed79f 20%, #37a659 45%, #1a7d3c 70%, #0d5a28 100%);
+  box-shadow: inset -14px -18px 38px rgba(8,45,24,.55), inset 10px 12px 26px rgba(255,255,255,.22),
+              0 30px 52px -22px rgba(20,113,60,.55);
+  animation: floaty 7s ease-in-out infinite;
 }
 .blob-shape::before {
-  content: ""; position: absolute; inset: 8%;
-  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.45), transparent 60%);
+  content: ""; position: absolute; top: 9%; left: 15%; width: 46%; height: 36%;
+  border-radius: 50%; filter: blur(3px);
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.95), rgba(255,255,255,0) 68%);
 }
 .blob-shape--sm { width: 100%; max-width: 300px; }
-.about__emblem .blob-shape { width: min(80%, 300px); }
-.blob-ring {
-  position: absolute; inset: 0; margin: auto; width: 114%; aspect-ratio: 1;
-  border: 1.5px dashed var(--green-300); border-radius: 50%;
-  animation: spin 40s linear infinite;
+
+.emblem-shadow {
+  position: absolute; z-index: 0; bottom: -7%; left: 50%; transform: translateX(-50%);
+  width: 62%; height: 9%; border-radius: 50%; filter: blur(6px);
+  background: radial-gradient(ellipse at center, rgba(10,50,28,.32), transparent 70%);
+}
+.emblem-sprout {
+  position: absolute; z-index: 2; bottom: -4%; left: 50%; transform: translateX(-50%);
+  width: 30%; height: auto; filter: drop-shadow(0 4px 6px rgba(12,56,35,.25));
+  animation: floaty 7s ease-in-out infinite;
 }
 @keyframes morph {
   0%,100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
@@ -946,6 +953,74 @@ body.rtl .cart { transform: translateX(-100%); }
   .cards, .why { grid-template-columns: 1fr; }
   .download { grid-template-columns: 1fr; text-align: center; justify-items: center; }
 }
+
+/* =========================================================================
+   ACCUEIL FAÇON MANIFESTE (plaquette)
+   ========================================================================= */
+.hero__brandline {
+  font-family: var(--font-ui); text-transform: uppercase; letter-spacing: .2em;
+  font-size: .82rem; font-weight: 500; color: var(--green-600); margin-bottom: .5rem;
+}
+.hero__quote {
+  margin-top: 1.5rem; padding: 1.2rem 1.5rem; border-radius: var(--radius); max-width: 46ch;
+  background: linear-gradient(135deg, var(--green-700), var(--green-900)); color: #eaf6ee;
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem); line-height: 1.5; box-shadow: var(--shadow-sm);
+}
+.hero__quote-mark { color: var(--green-300); font-size: 1.5em; font-style: normal; margin-inline-end: .1em; vertical-align: -.15em; }
+
+/* Piliers fondamentaux */
+.pillars__grid { display: flex; justify-content: center; flex-wrap: wrap; gap: clamp(2rem, 6vw, 4rem); margin-top: 2.2rem; }
+.pillar { display: flex; flex-direction: column; align-items: center; gap: .9rem; text-align: center; max-width: 15rem; }
+.pillar__ico {
+  width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700)); box-shadow: 0 12px 24px -12px rgba(20,113,60,.7);
+}
+.pillar__ico svg { width: 34px; height: 34px; }
+.pillar p { font-family: var(--font-display); font-size: 1.2rem; color: var(--green-900); }
+
+/* Nos valeurs et principes (liste 3 colonnes, style plaquette) */
+.vlist {
+  margin: 2.2rem auto 0; max-width: 780px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem 2rem;
+  background: rgba(255,255,255,.6); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: 1.6rem clamp(1.4rem, 3vw, 2.2rem);
+}
+.vitem { display: flex; align-items: center; gap: .7rem; padding: .5rem 0; font-size: 1.06rem; color: var(--green-900); }
+.vitem__leaf { width: 17px; height: 17px; color: var(--green-500); flex: 0 0 auto; }
+.vlist__cta { text-align: center; margin-top: 1.6rem; }
+
+/* Corps du manifeste : Pourquoi / Que faire / Cet acte */
+.manifesto .container { max-width: 840px; }
+.mblock { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.6rem 0; }
+.mblock + .mblock { border-top: 1px solid var(--line); }
+.mblock__ico {
+  flex: 0 0 auto; width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--green-400), var(--green-700)); box-shadow: var(--shadow-sm);
+}
+.mblock__ico svg { width: 30px; height: 30px; }
+.mblock__body h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.45rem; color: var(--green-900); margin-bottom: .4rem; }
+.mblock__body p { color: #33463b; line-height: 1.7; }
+.mblock__list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+.mblock__list li { position: relative; padding-inline-start: 1.3rem; color: #33463b; line-height: 1.6; }
+.mblock__list li::before {
+  content: ""; position: absolute; inset-inline-start: 0; top: .6em;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--green-500);
+}
+
+/* Salut final */
+.salut {
+  text-align: center; font-family: var(--font-display); font-style: italic;
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem); color: var(--green-700);
+  padding: 2.5rem 1.2rem 3.5rem;
+}
+
+@media (max-width: 640px) {
+  .vlist { grid-template-columns: repeat(2, 1fr); }
+  .mblock { gap: 1rem; }
+  .mblock__ico { width: 48px; height: 48px; }
+}
+@media (max-width: 380px) { .vlist { grid-template-columns: 1fr; } }
 
 /* -------- Bouton « retour en haut » -------- */
 .to-top {
