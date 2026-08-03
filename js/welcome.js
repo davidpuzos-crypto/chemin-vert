@@ -8,6 +8,10 @@
   const KEY = "cv_lang";
   const langs = Object.keys(I18N.languages);
 
+  // Libellé affiché sur la fleur : abréviation pour l'anglais et l'arabe
+  const SHORT = { en: "En", ar: "Ar" };
+  const petalLabel = (code, meta) => SHORT[code] || meta.label;
+
   function detect() {
     const saved = localStorage.getItem(KEY);
     if (saved && I18N.languages[saved]) return saved;
@@ -39,7 +43,7 @@
     pet.innerHTML =
       '<span class="pet__shape"></span>' +
       '<span class="pet__label"><span class="pet__flag">' + meta.flag + '</span>' +
-      '<span class="pet__name">' + meta.label + '</span></span>';
+      '<span class="pet__name">' + petalLabel(code, meta) + '</span></span>';
     pet.addEventListener("click", () => select(code));
     flower.appendChild(pet);
   });
@@ -54,7 +58,7 @@
     if (bloomEnter) bloomEnter.textContent = t["welcome.enter"];
     if (skipEl) skipEl.textContent = t["welcome.skip"];
     bloomFlag.textContent = meta.flag;
-    bloomLang.textContent = meta.label;
+    bloomLang.textContent = petalLabel(code, meta);
   }
 
   function select(code) {
