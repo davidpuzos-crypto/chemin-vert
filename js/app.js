@@ -540,6 +540,6 @@
 
   if (!Signatures.configured) {
     console.info("%cChemin Vert — mode DÉMO", "color:#14713c;font-weight:bold",
-      "\nRenseignez config.js (clés Supabase) pour activer le compteur réel.");
+      "\nRenseignez config.js (config Firebase) pour activer le compteur réel.");
   }
 })();

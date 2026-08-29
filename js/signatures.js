@@ -1,65 +1,68 @@
 /* ==========================================================================
-   Chemin Vert — Signatures & compteur
+   Chemin Vert — Signatures & compteur (Firebase / Firestore)
    --------------------------------------------------------------------------
-   - Enregistre l'e-mail d'un signataire dans la table `signatures` (Supabase)
-   - Lit le nombre total de signatures pour le compteur public
-   - Fonctionne en mode DÉMO tant que config.js n'est pas renseigné
+   - Adhésion  : crée signatures/{email} + incrémente stats/counter (atomique)
+   - Compteur  : lit stats/counter (public, sans exposer les e-mails)
+   - Désinscr. : supprime signatures/{email} + décrémente stats/counter
+   Fonctionne en mode DÉMO si Firebase n'est pas joignable.
    ========================================================================== */
 
 const Signatures = (() => {
   const cfg = window.CHEMIN_VERT_CONFIG || {};
-  const configured = !!(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY);
-  let supabase = null;
+  const fb = cfg.firebase || {};
+  const ready = !!(fb.projectId && window.firebase && firebase.firestore);
+  let db = null;
 
-  if (configured && window.supabase) {
-    supabase = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  if (ready) {
+    try { firebase.initializeApp(fb); } catch (e) { /* déjà initialisé */ }
+    db = firebase.firestore();
   }
+  const configured = !!db;
 
   const DEMO_KEY = "cv_demo_signatures";
-
   const emailValid = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim().toLowerCase());
+  const norm = (email) => String(email).trim().toLowerCase();
 
-  /* --- Lecture du compteur ---
-     Passe par la fonction SECURITY DEFINER `signatures_count` : cela permet
-     de connaître le total SANS exposer la liste des e-mails via l'API.   */
+  const counterRef = () => db.collection("stats").doc("counter");
+  const signRef = (email) => db.collection("signatures").doc(email);
+
+  /* --- Lecture du compteur --- */
   async function getCount() {
-    if (supabase) {
-      const { data, error } = await supabase.rpc("signatures_count");
-      if (error) throw error;
-      return Number(data) || 0;
+    if (db) {
+      const snap = await counterRef().get();
+      return snap.exists ? Number(snap.data().count) || 0 : (cfg.FALLBACK_COUNT || 0);
     }
-    // Mode démo
     const demo = JSON.parse(localStorage.getItem(DEMO_KEY) || "[]");
     return (cfg.FALLBACK_COUNT || 0) + demo.length;
   }
 
-  /* --- Enregistrement d'une signature ---
-     Retourne : "ok" | "already" | lève une erreur                    */
+  /* --- Adhésion : "ok" | "already" | "invalid" | lève une erreur --- */
   async function sign(rawEmail) {
-    const email = String(rawEmail).trim().toLowerCase();
+    const email = norm(rawEmail);
     if (!emailValid(email)) return "invalid";
 
-    if (supabase) {
+    if (db) {
       const lang = (typeof I18nEngine !== "undefined" && I18nEngine.current) || null;
-      let { error } = await supabase.from("signatures").insert({ email, lang });
-
-      // Si la colonne « lang » n'existe pas dans la table, on réessaie avec l'e-mail seul.
-      if (error && (error.code === "PGRST204" || /'lang'|column .*lang/i.test(error.message || ""))) {
-        ({ error } = await supabase.from("signatures").insert({ email }));
+      const inc = firebase.firestore.FieldValue.increment(1);
+      const batch = db.batch();
+      // set() sur un e-mail déjà présent devient une "update" → refusée par les
+      // règles → on l'interprète comme "déjà signé".
+      batch.set(signRef(email), {
+        email,
+        lang,
+        created: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      batch.update(counterRef(), { count: inc });
+      try {
+        await batch.commit();
+        return "ok";
+      } catch (err) {
+        if (err && err.code === "permission-denied") return "already";
+        throw err;
       }
-
-      if (error) {
-        // 23505 = violation de contrainte d'unicité (déjà signé)
-        if (error.code === "23505" || /duplicate|unique/i.test(error.message)) {
-          return "already";
-        }
-        throw error;
-      }
-      return "ok";
     }
 
-    // Mode démo (stockage local uniquement)
     const demo = JSON.parse(localStorage.getItem(DEMO_KEY) || "[]");
     if (demo.includes(email)) return "already";
     demo.push(email);
@@ -67,21 +70,20 @@ const Signatures = (() => {
     return "ok";
   }
 
-  /* --- Désinscription ---
-     Retourne : "ok" | "notfound" | "invalid" | lève une erreur           */
+  /* --- Désinscription : "ok" | "invalid" | lève une erreur --- */
   async function unsubscribe(rawEmail) {
-    const email = String(rawEmail).trim().toLowerCase();
+    const email = norm(rawEmail);
     if (!emailValid(email)) return "invalid";
 
-    if (supabase) {
-      // Passe par la fonction SECURITY DEFINER `unsubscribe` (aucune policy
-      // DELETE ouverte : la suppression est encadrée côté base).
-      const { data, error } = await supabase.rpc("unsubscribe", { p_email: email });
-      if (error) throw error;
-      return Number(data) > 0 ? "ok" : "notfound";
+    if (db) {
+      const dec = firebase.firestore.FieldValue.increment(-1);
+      const batch = db.batch();
+      batch.delete(signRef(email));
+      batch.update(counterRef(), { count: dec });
+      await batch.commit();
+      return "ok";
     }
 
-    // Mode démo
     const demo = JSON.parse(localStorage.getItem(DEMO_KEY) || "[]");
     const i = demo.indexOf(email);
     if (i === -1) return "notfound";
