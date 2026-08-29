@@ -9,7 +9,7 @@ automatique de la langue du navigateur, un design vert « nature » et des
 animations soignées (fonds animés, transparences, révélations au scroll).
 
 > Site 100 % statique (HTML / CSS / JavaScript, sans étape de build).
-> Les signatures sont stockées dans **Supabase** (offre gratuite).
+> Les signatures sont stockées dans **Firebase / Firestore** (offre gratuite).
 
 ---
 
@@ -23,18 +23,18 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 ├── adherer.html          Adhérer (grand compteur + formulaire de signature)
 ├── boutique.html         Boutique (vitrine)
 ├── charte-print.html     Gabarit servant à générer les PDF de la charte
-├── config.js             ⚙️  Vos clés Supabase (déjà renseignées)
+├── config.js             ⚙️  Votre config Firebase (déjà renseignée)
 ├── css/style.css         Styles, animations, RTL, responsive
 ├── js/
 │   ├── i18n.js           Traductions des 7 langues + moteur i18n
 │   ├── welcome.js        Logique de la pré-page « fleur » (choix de langue)
 │   ├── layout.js         En-tête + pied de page partagés (injectés)
-│   ├── signatures.js     Signatures + compteur (Supabase / mode démo)
+│   ├── signatures.js     Signatures + compteur (Firebase / mode démo)
 │   └── app.js            Interactions communes à toutes les pages
 ├── assets/
 │   ├── logo.png          ⚠️  Pas encore ajouté — voir section « Logo »
 │   └── charte/           PDF de la charte, un par langue (A4)
-├── supabase/schema.sql   Schéma à exécuter dans Supabase
+├── firebase/firestore.rules  Règles de sécurité Firestore
 └── .github/workflows/    Déploiement automatique GitHub Pages
 ```
 
@@ -56,40 +56,31 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 > **Settings → Pages → Custom domain**.
 
 Le site fonctionne **immédiatement en mode démo** (le formulaire et le compteur
-tournent en local) tant que Supabase n'est pas configuré.
+tournent en local) tant que Firebase n'est pas joignable.
 
 ---
 
-## 🔗 Activer les signatures réelles (Supabase — gratuit)
+## 🔗 Activer les signatures réelles (Firebase / Firestore — gratuit)
 
-1. Créez un compte sur **https://supabase.com** et un nouveau projet.
-2. **SQL Editor → New query** : collez le contenu de
-   [`supabase/schema.sql`](supabase/schema.sql) puis **Run**.
-   *(Crée la table `signatures`, la sécurité RLS et la fonction de comptage.)*
-3. **Project Settings → API**, récupérez :
-   - **Project URL**
-   - **Project API key** → la clé **`anon` / `public`** (⚠️ **jamais** `service_role`)
-4. Ouvrez [`config.js`](config.js) et renseignez :
-
-   ```js
-   window.CHEMIN_VERT_CONFIG = {
-     SUPABASE_URL: "https://xxxxxxxx.supabase.co",
-     SUPABASE_ANON_KEY: "eyJhbGciOi...",
-     FALLBACK_COUNT: 1
-   };
-   ```
-
-5. Poussez : le compteur devient réel et temps réel. ✅
+1. Créez un projet sur **https://console.firebase.google.com**.
+2. **Build → Firestore Database → Créer** (mode *Production*, région proche).
+3. **Firestore → onglet Règles** : collez le contenu de
+   [`firebase/firestore.rules`](firebase/firestore.rules) puis **Publier**.
+4. Créez le document du compteur : collection `stats`, document `counter`,
+   champ `count` de type **int64** = `0`.
+5. **Paramètres du projet → Vos applications → Web `</>`** : copiez l'objet
+   `firebaseConfig` et collez-le dans [`config.js`](config.js).
+6. Poussez : le compteur devient réel. ✅
 
 ### 🔒 Confidentialité (important)
 
-- La clé `anon` est **conçue** pour être publique ; la sécurité est assurée par
-  les règles **RLS** définies dans `schema.sql`.
-- Les visiteurs peuvent **signer** mais **personne ne peut lire la liste des
-  e-mails** via l'API : le total passe par une fonction sécurisée
-  (`signatures_count`).
-- Pour consulter/exporter les e-mails, utilisez le **dashboard Supabase**
-  (Table Editor), accessible à vous seul.
+- Les clés Firebase sont **conçues** pour être publiques ; la sécurité vient
+  des **règles Firestore** ([`firebase/firestore.rules`](firebase/firestore.rules)).
+- Les visiteurs peuvent **signer** (créer `signatures/{email}`) mais **personne
+  ne peut lire ni lister les e-mails** : le compteur passe par un document
+  public dédié `stats/counter` (uniquement +1 / -1).
+- Pour consulter/exporter les e-mails, utilisez la **console Firebase**
+  (Firestore Database), accessible à vous seul.
 
 ---
 

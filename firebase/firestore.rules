@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Compteur public : lisible par tous, modifiable de +1 / -1 uniquement.
+    match /stats/counter {
+      allow read: if true;
+      allow update: if request.resource.data.count is int
+                    && request.resource.data.count >= 0
+                    && (request.resource.data.count == resource.data.count + 1
+                        || request.resource.data.count == resource.data.count - 1);
+      allow create, delete: if false;
+    }
+
+    // Signatures : on peut ajouter / retirer la sienne (id = e-mail),
+    // mais PERSONNE ne peut lire ni lister les e-mails.
+    match /signatures/{email} {
+      allow read, list: if false;
+      allow create: if request.resource.data.email is string;
+      allow update: if false;
+      allow delete: if true;
+    }
+  }
+}
