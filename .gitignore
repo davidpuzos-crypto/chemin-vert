@@ -1,0 +1,9 @@
+# Secrets — NE JAMAIS committer
+.env
+.env.*
+!.env.example
+*serviceAccount*.json
+
+# Dépendances / build
+node_modules/
+.netlify/

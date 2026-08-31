@@ -414,98 +414,6 @@
     vmodal.classList.add("open");
   }
 
-  /* ---------- Boutique : panier ---------- */
-  const PRODUCTS = {
-    sticker: { key: "shop.product1", price: 3 },
-    badge:   { key: "shop.product2", price: 5 },
-    tote:    { key: "shop.product3", price: 15 }
-  };
-  const CART_KEY = "cv_cart";
-  const cartFab = document.getElementById("cartFab");
-  const hasCart = !!cartFab;
-
-  function getCart() { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } }
-  function saveCart(c) { localStorage.setItem(CART_KEY, JSON.stringify(c)); }
-  function fmt(n) { return n.toLocaleString(I18nEngine.current) + " €"; }
-
-  function initCart() {
-    const cart = document.getElementById("cart");
-    const overlay = document.getElementById("cartOverlay");
-    const badge = document.getElementById("cartBadge");
-    const itemsEl = document.getElementById("cartItems");
-    const totalEl = document.getElementById("cartTotal");
-    const msgEl = document.getElementById("cartMsg");
-
-    const open = () => { cart.classList.add("open"); overlay.classList.add("open"); cart.setAttribute("aria-hidden", "false"); };
-    const close = () => { cart.classList.remove("open"); overlay.classList.remove("open"); cart.setAttribute("aria-hidden", "true"); };
-    cartFab.addEventListener("click", open);
-    overlay.addEventListener("click", close);
-    document.getElementById("cartClose").addEventListener("click", close);
-
-    function render() {
-      const c = getCart();
-      const count = c.reduce((n, i) => n + i.qty, 0);
-      badge.textContent = count;
-      badge.classList.toggle("show", count > 0);
-      itemsEl.innerHTML = "";
-      if (!c.length) {
-        itemsEl.innerHTML = `<p class="cart__empty">${I18nEngine.get("shop.cart_empty")}</p>`;
-      } else {
-        c.forEach(item => {
-          const p = PRODUCTS[item.id];
-          const row = document.createElement("div");
-          row.className = "cart__row";
-          row.innerHTML =
-            `<div class="cart__thumb cart__thumb--${item.id}"></div>` +
-            `<div class="cart__info"><strong>${I18nEngine.get(p.key)}</strong><span>${fmt(p.price)}</span></div>` +
-            `<div class="cart__qty"><button data-act="dec" data-id="${item.id}">−</button>` +
-            `<span>${item.qty}</span><button data-act="inc" data-id="${item.id}">+</button></div>` +
-            `<button class="cart__rm" data-act="rm" data-id="${item.id}" aria-label="${I18nEngine.get("shop.remove")}">&times;</button>`;
-          itemsEl.appendChild(row);
-        });
-      }
-      totalEl.textContent = fmt(c.reduce((s, i) => s + i.qty * PRODUCTS[i.id].price, 0));
-    }
-
-    itemsEl.addEventListener("click", e => {
-      const btn = e.target.closest("[data-act]");
-      if (!btn) return;
-      let c = getCart();
-      const id = btn.dataset.id;
-      const it = c.find(x => x.id === id);
-      if (!it) return;
-      if (btn.dataset.act === "inc") it.qty++;
-      else if (btn.dataset.act === "dec") it.qty--;
-      else if (btn.dataset.act === "rm") it.qty = 0;
-      c = c.filter(x => x.qty > 0);
-      saveCart(c); render();
-    });
-
-    document.querySelectorAll(".product__add").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.product;
-        const c = getCart();
-        const it = c.find(x => x.id === id);
-        if (it) it.qty++; else c.push({ id, qty: 1 });
-        saveCart(c); render();
-        cartFab.classList.remove("bump"); void cartFab.offsetWidth; cartFab.classList.add("bump");
-        const span = btn.querySelector("span");
-        const prev = span.textContent;
-        span.textContent = I18nEngine.get("shop.added");
-        btn.classList.add("added");
-        setTimeout(() => { span.textContent = prev; btn.classList.remove("added"); }, 1200);
-      });
-    });
-
-    document.getElementById("cartCheckout").addEventListener("click", () => {
-      if (!getCart().length) { msgEl.textContent = I18nEngine.get("shop.cart_empty"); return; }
-      msgEl.textContent = I18nEngine.get("shop.checkout_soon");
-    });
-
-    document.addEventListener("langchange", render);
-    render();
-  }
-
   /* ---------- Barre de progression de défilement ---------- */
   const progress = document.createElement("div");
   progress.className = "scroll-progress";
@@ -527,7 +435,6 @@
 
   /* ---------- Démarrage ---------- */
   initValueModal();
-  if (hasCart) initCart();
 
   const startLang = I18nEngine.detect();
   I18nEngine.apply(startLang);

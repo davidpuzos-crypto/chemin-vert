@@ -31,7 +31,8 @@
 
     <section class="section section--tight section--shop">
       <div class="container">
-        <div class="shop-notice reveal">
+        <!-- Affiché uniquement si le catalogue Printful n'est pas joignable -->
+        <div class="shop-notice reveal" id="shopNotice" hidden>
           <span class="shop-notice__badge">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           </span>
@@ -40,37 +41,10 @@
             <p data-i18n="shop.notready_d">Les ventes ne sont pas encore actives.</p>
           </div>
         </div>
-        <div class="shop__grid">
-          <article class="product reveal">
-            <div class="product__visual product__visual--1"><span class="product__price">3&nbsp;€</span></div>
-            <div class="product__body">
-              <h3 data-i18n="shop.product1">Autocollants</h3>
-              <p data-i18n="shop.product1_desc"></p>
-              <button class="btn btn--primary product__add" data-product="sticker">
-                <span data-i18n="shop.add">Ajouter au panier</span>
-              </button>
-            </div>
-          </article>
-          <article class="product reveal">
-            <div class="product__visual product__visual--2"><span class="product__price">5&nbsp;€</span></div>
-            <div class="product__body">
-              <h3 data-i18n="shop.product2">Badges</h3>
-              <p data-i18n="shop.product2_desc"></p>
-              <button class="btn btn--primary product__add" data-product="badge">
-                <span data-i18n="shop.add">Ajouter au panier</span>
-              </button>
-            </div>
-          </article>
-          <article class="product reveal">
-            <div class="product__visual product__visual--3"><span class="product__price">15&nbsp;€</span></div>
-            <div class="product__body">
-              <h3 data-i18n="shop.product3">Tote bag</h3>
-              <p data-i18n="shop.product3_desc"></p>
-              <button class="btn btn--primary product__add" data-product="tote">
-                <span data-i18n="shop.add">Ajouter au panier</span>
-              </button>
-            </div>
-          </article>
+
+        <!-- Catalogue chargé automatiquement depuis Printful -->
+        <div class="shop__grid" id="shopGrid">
+          <p class="shop__loading" data-i18n="shop.loading">Chargement de la boutique…</p>
         </div>
       </div>
     </section>
@@ -109,5 +83,6 @@
   <script src="js/layout.js"></script>
   <script src="js/signatures.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/shop.js"></script>
 </body>
 </html>
