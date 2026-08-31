@@ -1,0 +1,27 @@
+# ============================================================================
+#  Chemin Vert — configuration Netlify
+#  Le site statique ET les fonctions serverless sont servis par la même
+#  origine : aucun problème de CORS, et la clé Printful reste côté serveur.
+# ============================================================================
+
+[build]
+  # Le site est du HTML/CSS/JS statique à la racine : rien à compiler.
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# URLs lisibles : /api/xxx  ->  /.netlify/functions/xxx
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

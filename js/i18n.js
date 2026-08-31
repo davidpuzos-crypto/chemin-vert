@@ -701,7 +701,7 @@ const I18N_EXT = {
     "unsub.button": "Se désinscrire", "unsub.success": "C'est fait : vous avez été désinscrit. À bientôt, peut-être.",
     "unsub.notfound": "Cette adresse ne figure pas parmi les signataires.",
     "shop.notready_t": "La boutique ouvre bientôt",
-    "shop.notready_d": "Les ventes ne sont pas encore actives. Découvrez les objets à venir, et soyez prévenu·e du lancement.",
+    "shop.notready_d": "Les ventes ne sont pas encore actives. Revenez très bientôt : la boutique arrive.",
     "welcome.choose": "Choisissez votre langue", "welcome.enter": "Entrer", "welcome.skip": "Passer",
     "mf.kicker": "Manifeste d'adhésion",
     "mf.affiche": "Affichez votre adhésion aux valeurs et principes suivants :",
@@ -717,7 +717,13 @@ const I18N_EXT = {
     "act.title": "Cet acte :",
     "act.1": "Vous libère intérieurement ;",
     "act.2": "Contribue à créer un tsunami de conscience qui, un jour, balayera le mal.",
-    "salut": "Salut et respect à tous."
+    "salut": "Salut et respect à tous.",
+    "shop.loading": "Chargement de la boutique…",
+    "shop.size": "Taille",
+    "shop.unavailable": "Cet article n'est plus disponible.",
+    "shop.checkout_error": "Impossible d'ouvrir le paiement. Réessayez dans un instant.",
+    "merci.title": "Merci pour votre commande !",
+    "merci.text": "Votre paiement a bien été reçu. Vous allez recevoir un e-mail de confirmation, et votre commande sera expédiée très vite."
   },
   en: {
     "milestone.next": "Next goal", "value.all_title": "In all 7 languages", "value.close": "Close",
@@ -729,7 +735,7 @@ const I18N_EXT = {
     "unsub.button": "Unsubscribe", "unsub.success": "Done — you've been unsubscribed. See you soon, perhaps.",
     "unsub.notfound": "This address isn't among the signatories.",
     "shop.notready_t": "The shop is opening soon",
-    "shop.notready_d": "Sales aren't live yet. Discover the upcoming items and get notified at launch.",
+    "shop.notready_d": "Sales aren't live yet. Come back very soon — the shop is on its way.",
     "welcome.choose": "Choose your language", "welcome.enter": "Enter", "welcome.skip": "Skip",
     "mf.kicker": "Membership Manifesto",
     "mf.affiche": "Show your commitment to the following values and principles:",
@@ -745,7 +751,13 @@ const I18N_EXT = {
     "act.title": "This act:",
     "act.1": "Frees you inwardly;",
     "act.2": "Helps create a tsunami of conscience that will one day sweep away evil.",
-    "salut": "Peace and respect to all."
+    "salut": "Peace and respect to all.",
+    "shop.loading": "Loading the shop…",
+    "shop.size": "Size",
+    "shop.unavailable": "This item is no longer available.",
+    "shop.checkout_error": "Could not open checkout. Please try again shortly.",
+    "merci.title": "Thank you for your order!",
+    "merci.text": "Your payment was received. You'll get a confirmation email, and your order will ship shortly."
   },
   es: {
     "milestone.next": "Próximo objetivo", "value.all_title": "En los 7 idiomas", "value.close": "Cerrar",
@@ -757,7 +769,7 @@ const I18N_EXT = {
     "unsub.button": "Darse de baja", "unsub.success": "Hecho: te has dado de baja. Hasta pronto, quizás.",
     "unsub.notfound": "Esta dirección no figura entre los firmantes.",
     "shop.notready_t": "La tienda abre pronto",
-    "shop.notready_d": "Las ventas aún no están activas. Descubre los artículos y recibe aviso del lanzamiento.",
+    "shop.notready_d": "Las ventas aún no están activas. Vuelve muy pronto: la tienda está en camino.",
     "welcome.choose": "Elige tu idioma", "welcome.enter": "Entrar", "welcome.skip": "Saltar",
     "mf.kicker": "Manifiesto de adhesión",
     "mf.affiche": "Muestra tu adhesión a los siguientes valores y principios:",
@@ -773,7 +785,13 @@ const I18N_EXT = {
     "act.title": "Este acto:",
     "act.1": "Te libera interiormente;",
     "act.2": "Contribuye a crear un tsunami de conciencia que un día barrerá el mal.",
-    "salut": "Paz y respeto para todos."
+    "salut": "Paz y respeto para todos.",
+    "shop.loading": "Cargando la tienda…",
+    "shop.size": "Talla",
+    "shop.unavailable": "Este artículo ya no está disponible.",
+    "shop.checkout_error": "No se pudo abrir el pago. Inténtalo de nuevo.",
+    "merci.title": "¡Gracias por tu pedido!",
+    "merci.text": "Hemos recibido tu pago. Recibirás un correo de confirmación y tu pedido se enviará muy pronto."
   },
   it: {
     "milestone.next": "Prossimo obiettivo", "value.all_title": "Nelle 7 lingue", "value.close": "Chiudi",
@@ -785,7 +803,7 @@ const I18N_EXT = {
     "unsub.button": "Disiscriviti", "unsub.success": "Fatto: sei stato disiscritto. A presto, forse.",
     "unsub.notfound": "Questo indirizzo non è tra i firmatari.",
     "shop.notready_t": "Il negozio apre presto",
-    "shop.notready_d": "Le vendite non sono ancora attive. Scopri gli articoli in arrivo e ricevi l'avviso al lancio.",
+    "shop.notready_d": "Le vendite non sono ancora attive. Torna presto: il negozio sta arrivando.",
     "welcome.choose": "Scegli la tua lingua", "welcome.enter": "Entra", "welcome.skip": "Salta",
     "mf.kicker": "Manifesto di adesione",
     "mf.affiche": "Mostra la tua adesione ai seguenti valori e principi:",
@@ -801,7 +819,13 @@ const I18N_EXT = {
     "act.title": "Questo atto:",
     "act.1": "Ti libera interiormente;",
     "act.2": "Contribuisce a creare uno tsunami di coscienza che un giorno spazzerà via il male.",
-    "salut": "Pace e rispetto a tutti."
+    "salut": "Pace e rispetto a tutti.",
+    "shop.loading": "Caricamento del negozio…",
+    "shop.size": "Taglia",
+    "shop.unavailable": "Questo articolo non è più disponibile.",
+    "shop.checkout_error": "Impossibile aprire il pagamento. Riprova tra poco.",
+    "merci.title": "Grazie per il tuo ordine!",
+    "merci.text": "Il pagamento è stato ricevuto. Riceverai un'email di conferma e il tuo ordine partirà a breve."
   },
   de: {
     "milestone.next": "Nächstes Ziel", "value.all_title": "In allen 7 Sprachen", "value.close": "Schließen",
@@ -813,7 +837,7 @@ const I18N_EXT = {
     "unsub.button": "Abmelden", "unsub.success": "Erledigt — du wurdest abgemeldet. Vielleicht bis bald.",
     "unsub.notfound": "Diese Adresse ist nicht unter den Unterzeichnenden.",
     "shop.notready_t": "Der Shop öffnet bald",
-    "shop.notready_d": "Der Verkauf ist noch nicht aktiv. Entdecke die kommenden Artikel und lass dich zum Start benachrichtigen.",
+    "shop.notready_d": "Der Verkauf ist noch nicht aktiv. Schau bald wieder vorbei – der Shop kommt.",
     "welcome.choose": "Wähle deine Sprache", "welcome.enter": "Eintreten", "welcome.skip": "Überspringen",
     "mf.kicker": "Beitritts-Manifest",
     "mf.affiche": "Zeige deine Zustimmung zu den folgenden Werten und Prinzipien:",
@@ -829,7 +853,13 @@ const I18N_EXT = {
     "act.title": "Dieser Akt:",
     "act.1": "befreit dich innerlich;",
     "act.2": "trägt dazu bei, einen Tsunami des Gewissens zu schaffen, der eines Tages das Böse hinwegfegt.",
-    "salut": "Gruß und Respekt an alle."
+    "salut": "Gruß und Respekt an alle.",
+    "shop.loading": "Shop wird geladen…",
+    "shop.size": "Größe",
+    "shop.unavailable": "Dieser Artikel ist nicht mehr verfügbar.",
+    "shop.checkout_error": "Bezahlvorgang konnte nicht geöffnet werden. Bitte gleich erneut versuchen.",
+    "merci.title": "Danke für deine Bestellung!",
+    "merci.text": "Deine Zahlung ist eingegangen. Du erhältst eine Bestätigungs-E-Mail, und deine Bestellung wird bald versandt."
   },
   tr: {
     "milestone.next": "Sonraki hedef", "value.all_title": "7 dilde", "value.close": "Kapat",
@@ -841,7 +871,7 @@ const I18N_EXT = {
     "unsub.button": "Kaydı sil", "unsub.success": "Tamam — kaydın silindi. Belki yine görüşürüz.",
     "unsub.notfound": "Bu adres imzacılar arasında değil.",
     "shop.notready_t": "Mağaza yakında açılıyor",
-    "shop.notready_d": "Satışlar henüz aktif değil. Yakında gelecek ürünleri keşfet ve lansmanda haberdar ol.",
+    "shop.notready_d": "Satışlar henüz aktif değil. Çok yakında tekrar uğrayın, mağaza yolda.",
     "welcome.choose": "Dilini seç", "welcome.enter": "Gir", "welcome.skip": "Geç",
     "mf.kicker": "Katılım Manifestosu",
     "mf.affiche": "Aşağıdaki değer ve ilkelere katılımını göster:",
@@ -857,7 +887,13 @@ const I18N_EXT = {
     "act.title": "Bu eylem:",
     "act.1": "Seni içten özgürleştirir;",
     "act.2": "Bir gün kötülüğü süpürüp atacak bir vicdan tsunamisi yaratmaya katkıda bulunur.",
-    "salut": "Herkese selam ve saygı."
+    "salut": "Herkese selam ve saygı.",
+    "shop.loading": "Mağaza yükleniyor…",
+    "shop.size": "Boyut",
+    "shop.unavailable": "Bu ürün artık mevcut değil.",
+    "shop.checkout_error": "Ödeme açılamadı. Lütfen birazdan tekrar deneyin.",
+    "merci.title": "Siparişin için teşekkürler!",
+    "merci.text": "Ödemen alındı. Onay e-postası alacaksın ve siparişin çok yakında gönderilecek."
   },
   ar: {
     "milestone.next": "الهدف التالي", "value.all_title": "بجميع اللغات السبع", "value.close": "إغلاق",
@@ -869,7 +905,7 @@ const I18N_EXT = {
     "unsub.button": "إلغاء الاشتراك", "unsub.success": "تم إلغاء اشتراكك. إلى اللقاء ربما.",
     "unsub.notfound": "هذا العنوان غير موجود بين الموقّعين.",
     "shop.notready_t": "المتجر يفتح قريبًا",
-    "shop.notready_d": "المبيعات لم تبدأ بعد. اكتشف المنتجات القادمة واطلب إشعارك عند الإطلاق.",
+    "shop.notready_d": "المبيعات لم تبدأ بعد. عُد قريبًا جدًّا، المتجر في الطريق.",
     "welcome.choose": "اختر لغتك", "welcome.enter": "دخول", "welcome.skip": "تخطٍّ",
     "mf.kicker": "بيان الانضمام",
     "mf.affiche": "أظهِر انضمامك إلى القيم والمبادئ التالية:",
@@ -885,7 +921,13 @@ const I18N_EXT = {
     "act.title": "هذا الفعل:",
     "act.1": "يحرّرك داخليًا؛",
     "act.2": "ويسهم في خلق تسونامي من الضمير سيجرف الشر يومًا ما.",
-    "salut": "سلام واحترام للجميع."
+    "salut": "سلام واحترام للجميع.",
+    "shop.loading": "جارٍ تحميل المتجر…",
+    "shop.size": "المقاس",
+    "shop.unavailable": "هذا المنتج لم يعد متوفرًا.",
+    "shop.checkout_error": "تعذّر فتح صفحة الدفع. يرجى المحاولة بعد قليل.",
+    "merci.title": "شكرًا على طلبك!",
+    "merci.text": "تم استلام دفعتك. ستصلك رسالة تأكيد، وسيُشحن طلبك قريبًا جدًا."
   }
 };
 Object.keys(I18N_EXT).forEach(l => Object.assign(I18N.t[l], I18N_EXT[l]));

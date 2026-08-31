@@ -1,0 +1,14 @@
+{
+  "name": "chemin-vert",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site du mouvement Chemin Vert — statique + fonctions Netlify (Printful & Stripe)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0",
+    "stripe": "^18.0.0"
+  }
+}
