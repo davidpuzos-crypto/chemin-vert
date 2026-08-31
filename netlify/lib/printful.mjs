@@ -90,23 +90,31 @@ function blobStore() {
 
 export async function getCatalog({ force = false } = {}) {
   const store = blobStore();
+  // Les Blobs survivent aux déploiements : on marque le cache avec l'identifiant
+  // du déploiement pour qu'un redéploiement Netlify force bien un rafraîchissement
+  // immédiat du catalogue (« Trigger deploy » = bouton d'actualisation manuelle).
+  const deploy = process.env.DEPLOY_ID || "local";
   let cached = null;
 
-  if (store && !force) {
+  if (store) {
     try { cached = await store.get("catalog", { type: "json" }); } catch { /* ignore */ }
-    if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
-      return { products: cached.products, stale: false };
-    }
+    const fresh =
+      !force &&
+      cached &&
+      cached.deploy === deploy &&
+      Date.now() - cached.fetchedAt < CACHE_TTL_MS;
+    if (fresh) return { products: cached.products, stale: false };
   }
 
   try {
     const products = await fetchCatalog();
     if (store) {
-      try { await store.setJSON("catalog", { fetchedAt: Date.now(), products }); } catch { /* ignore */ }
+      try { await store.setJSON("catalog", { fetchedAt: Date.now(), deploy, products }); } catch { /* ignore */ }
     }
     return { products, stale: false };
   } catch (err) {
-    // Printful KO : on sert la dernière version connue plutôt qu'une boutique vide.
+    // Printful KO : on sert la dernière version connue — même issue d'un
+    // déploiement précédent — plutôt qu'une boutique vide.
     if (cached?.products?.length) return { products: cached.products, stale: true };
     throw err;
   }
