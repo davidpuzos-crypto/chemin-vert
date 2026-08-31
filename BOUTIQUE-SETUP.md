@@ -259,21 +259,49 @@ Printful.
 
 ---
 
-## 8. Le catalogue s'affiche tout seul
+## 8. Le catalogue se met à jour tout seul
 
-Il n'y a **rien à modifier dans le code** pour ajouter un produit :
+Il n'y a **rien à modifier dans le code** pour ajouter ou changer un produit :
 
-1. Vous créez et synchronisez un nouveau produit dans Printful ;
-2. vous lui donnez un prix de vente ;
-3. il apparaît sur la boutique **dans les 10 minutes** (durée du cache).
+1. Vous créez / modifiez / synchronisez le produit dans Printful ;
+2. vous vérifiez qu'il a bien un prix de vente ;
+3. le site se met à jour **en 10 minutes maximum** (durée du cache serveur),
+   puis jusqu'à 1 minute de plus pour un visiteur qui a la page déjà ouverte.
 
-Le cache évite de saturer le quota Printful (120 requêtes/minute) et permet
-d'afficher la dernière version connue du catalogue si Printful est
-momentanément indisponible. Pour forcer un rafraîchissement immédiat :
-*Deploys → Trigger deploy*.
+Se met à jour automatiquement :
 
-Si le catalogue est vide ou injoignable, la page affiche le bandeau
-« La boutique ouvre bientôt » au lieu d'une page cassée.
+| Ce que vous changez dans Printful | Effet sur le site |
+|---|---|
+| Nouveau produit synchronisé | il apparaît dans la grille |
+| Prix de vente modifié | nouveau prix affiché **et facturé** |
+| Nouvelle taille / variante | elle apparaît dans le sélecteur |
+| Visuel du produit changé | nouvelle image |
+| Produit supprimé ou *ignored* | il disparaît de la boutique |
+| Variante en rupture (statut ≠ *active*) | elle disparaît du sélecteur |
+
+Le prix est relu chez Printful **au moment du paiement** aussi : il est donc
+impossible qu'un client paie un ancien prix resté affiché dans son navigateur.
+Si un article disparaît du catalogue, il est retiré silencieusement des paniers
+en cours.
+
+**Ne se met pas à jour automatiquement** : le **nom** du produit s'affiche tel
+qu'il est écrit dans Printful, dans cette langue-là, pour tous les visiteurs —
+il n'est pas traduit dans les 7 langues du site (seuls les textes du site le
+sont). Écrivez donc des noms courts et compréhensibles, ou dites-moi si vous
+voulez une table de traduction des noms de produits.
+
+**Forcer un rafraîchissement immédiat** : *Deploys → Trigger deploy* dans
+Netlify. Le cache est marqué avec l'identifiant du déploiement, donc chaque
+déploiement repart d'un catalogue neuf.
+
+Le cache existe pour deux raisons : ne pas saturer le quota Printful
+(120 requêtes/minute) et pouvoir continuer à afficher la dernière version
+connue si Printful est momentanément injoignable. Dans ce cas la boutique reste
+en ligne et vendable, simplement figée jusqu'au retour de Printful.
+
+Si le catalogue est vide ou injoignable et qu'aucune version connue n'existe,
+la page affiche le bandeau « La boutique ouvre bientôt » au lieu d'une page
+cassée.
 
 ---
 

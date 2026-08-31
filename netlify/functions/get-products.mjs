@@ -17,9 +17,10 @@ export default async (req) => {
       { products, stale },
       {
         headers: {
-          // Le CDN Netlify absorbe le trafic ; on tolère une version un peu
-          // ancienne le temps de rafraîchir en arrière-plan.
-          "Cache-Control": "public, max-age=300, stale-while-revalidate=86400"
+          // 60 s côté navigateur/CDN : c'est le cache serveur (10 min, dans
+          // printful.mjs) qui protège le quota Printful. Garder cette valeur
+          // basse évite qu'un visiteur voie un prix périmé après une mise à jour.
+          "Cache-Control": "public, max-age=60, stale-while-revalidate=86400"
         }
       }
     );
