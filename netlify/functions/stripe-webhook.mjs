@@ -8,6 +8,7 @@
    chez Printful → journaliser.
    ========================================================================== */
 
+import { createHash } from "node:crypto";
 import Stripe from "stripe";
 import { getStore } from "@netlify/blobs";
 import { pf, buildRecipient, getCatalog, indexVariants } from "../lib/printful.mjs";
@@ -16,6 +17,21 @@ const HANDLED = new Set([
   "checkout.session.completed",
   "checkout.session.async_payment_succeeded"
 ]);
+
+/* Espace de noms des marques « événement déjà traité » (Netlify Blobs).
+   L'incrémenter invalide les marques posées par une version antérieure du
+   code : c'est le moyen de rejouer depuis Stripe un événement qu'un bug avait
+   marqué traité à tort. */
+const IDEMPOTENCY_NS = "event3";
+
+/* Printful impose un external_id d'au plus 32 caractères (chiffres, lettres
+   latines, tirets, tirets bas). L'identifiant de session Stripe en fait 66 :
+   on en dérive une empreinte stable, donc toujours identique pour une même
+   session — c'est ce qui garantit qu'un renvoi du webhook ne crée pas une
+   seconde commande. */
+function printfulExternalId(sessionId) {
+  return "cv_" + createHash("sha256").update(sessionId).digest("hex").slice(0, 24);
+}
 
 export default async (req) => {
   if (req.method !== "POST") {
@@ -57,7 +73,7 @@ export default async (req) => {
   // Le préfixe est versionné : le changer invalide les marques posées par une
   // version antérieure du code, afin qu'un « Renvoyer » depuis Stripe rejoue
   // réellement l'événement au lieu d'être court-circuité.
-  const seenKey = `event2/${event.id}`;
+  const seenKey = `${IDEMPOTENCY_NS}/${event.id}`;
   if (store) {
     try {
       if (await store.get(seenKey)) {
@@ -123,11 +139,13 @@ export default async (req) => {
   // quand vous êtes prêt à automatiser complètement.
   const autoConfirm = String(process.env.PRINTFUL_AUTO_CONFIRM).toLowerCase() === "true";
 
+  const externalId = printfulExternalId(session.id);
+
   try {
     const order = await pf(`/orders${autoConfirm ? "?confirm=1" : ""}`, {
       method: "POST",
       body: {
-        external_id: session.id, // dédoublonnage côté Printful
+        external_id: externalId, // dédoublonnage côté Printful
         recipient,
         items,
         retail_costs: {
@@ -142,10 +160,15 @@ export default async (req) => {
     }
     await record(store, session, {
       status: autoConfirm ? "sent_to_printful" : "draft_created",
-      printfulOrderId: order?.id
+      printfulOrderId: order?.id,
+      externalId
     });
 
-    console.log("stripe-webhook: commande Printful", order?.id, "pour", session.id);
+    console.log(
+      "stripe-webhook: commande Printful", order?.id,
+      "| external_id:", externalId,
+      "| session:", session.id
+    );
     return new Response("ok", { status: 200 });
   } catch (err) {
     // Toute erreur Printful est journalisée, y compris celles traitées comme
@@ -159,13 +182,15 @@ export default async (req) => {
       "| réponse:", JSON.stringify(err.payload || {})
     );
 
-    // Un doublon, c'est UNIQUEMENT Printful qui refuse un external_id déjà
-    // utilisé : la commande existe donc réellement. Ne jamais élargir ce test
-    // (un simple `status === 409` avalait de vraies erreurs en les faisant
-    // passer pour des succès).
+    // Un doublon, c'est UNIQUEMENT Printful qui refuse un external_id DÉJÀ
+    // UTILISÉ : la commande existe donc réellement. Le message doit porter les
+    // deux idées à la fois — mentionner « external id » ne suffit pas, sans
+    // quoi un refus de format (identifiant trop long, par exemple) passerait
+    // pour un succès et le paiement resterait sans commande.
+    const msg = err.message || "";
     const duplicate =
       err.printfulCode === "EXTERNAL_ID_IN_USE" ||
-      /external[_ ]id/i.test(err.message || "");
+      (/external[_ ]id/i.test(msg) && /(already|exist|in use|duplicat|taken)/i.test(msg));
     if (duplicate) {
       if (store) { try { await store.setJSON(seenKey, { at: Date.now() }); } catch {} }
       await record(store, session, { status: "already_created" });
