@@ -54,9 +54,13 @@ export default async (req) => {
   const store = safeStore();
 
   // --- 2. Idempotence : Stripe peut livrer le même événement plusieurs fois -
+  // Le préfixe est versionné : le changer invalide les marques posées par une
+  // version antérieure du code, afin qu'un « Renvoyer » depuis Stripe rejoue
+  // réellement l'événement au lieu d'être court-circuité.
+  const seenKey = `event2/${event.id}`;
   if (store) {
     try {
-      if (await store.get(`event/${event.id}`)) {
+      if (await store.get(seenKey)) {
         return new Response("duplicate", { status: 200 });
       }
     } catch { /* on continue : Printful dédoublonne aussi via external_id */ }
@@ -134,7 +138,7 @@ export default async (req) => {
     });
 
     if (store) {
-      try { await store.setJSON(`event/${event.id}`, { at: Date.now() }); } catch {}
+      try { await store.setJSON(seenKey, { at: Date.now() }); } catch {}
     }
     await record(store, session, {
       status: autoConfirm ? "sent_to_printful" : "draft_created",
@@ -144,20 +148,37 @@ export default async (req) => {
     console.log("stripe-webhook: commande Printful", order?.id, "pour", session.id);
     return new Response("ok", { status: 200 });
   } catch (err) {
-    // Une commande déjà créée avec ce external_id = doublon : c'est un succès.
+    // Toute erreur Printful est journalisée, y compris celles traitées comme
+    // des doublons : un paiement encaissé sans commande ne doit jamais rester
+    // invisible.
+    console.error(
+      "stripe-webhook: Printful a refusé la commande —",
+      "status:", err.status,
+      "| code:", err.printfulCode,
+      "| message:", err.message,
+      "| réponse:", JSON.stringify(err.payload || {})
+    );
+
+    // Un doublon, c'est UNIQUEMENT Printful qui refuse un external_id déjà
+    // utilisé : la commande existe donc réellement. Ne jamais élargir ce test
+    // (un simple `status === 409` avalait de vraies erreurs en les faisant
+    // passer pour des succès).
     const duplicate =
-      err.status === 409 ||
-      /external id/i.test(err.message || "") ||
-      err.printfulCode === "EXTERNAL_ID_IN_USE";
+      err.printfulCode === "EXTERNAL_ID_IN_USE" ||
+      /external[_ ]id/i.test(err.message || "");
     if (duplicate) {
-      if (store) { try { await store.setJSON(`event/${event.id}`, { at: Date.now() }); } catch {} }
+      if (store) { try { await store.setJSON(seenKey, { at: Date.now() }); } catch {} }
+      await record(store, session, { status: "already_created" });
       return new Response("already_created", { status: 200 });
     }
 
-    console.error("stripe-webhook: échec Printful", err.status, err.message, JSON.stringify(err.payload || {}));
-    await record(store, session, { status: "failed", error: `${err.status} ${err.message}` });
+    await record(store, session, {
+      status: "failed",
+      error: `${err.status} ${err.printfulCode || ""} ${err.message}`.trim()
+    });
 
-    // 500 → Stripe réessaiera automatiquement (jusqu'à 3 jours).
+    // 500 → Stripe réessaiera automatiquement (jusqu'à 3 jours), et l'événement
+    // apparaît en rouge dans le tableau de bord Stripe : l'échec est visible.
     return new Response("printful_error", { status: 500 });
   }
 };

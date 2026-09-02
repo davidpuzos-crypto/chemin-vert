@@ -31,9 +31,13 @@ export async function pf(path, { method = "GET", body, token } = {}) {
   try { payload = await res.json(); } catch { /* réponse vide */ }
 
   if (!res.ok) {
-    const err = new Error(
-      payload?.error?.message || payload?.result || `Printful ${res.status}`
-    );
+    // `result` peut être une chaîne explicative comme un objet : on ne garde
+    // une chaîne que si c'en est une, sinon le message devient « [object Object] ».
+    const detail =
+      payload?.error?.message ||
+      (typeof payload?.result === "string" ? payload.result : null) ||
+      `Printful ${res.status}`;
+    const err = new Error(detail);
     err.status = res.status;
     err.printfulCode = payload?.error?.reason || payload?.code;
     err.payload = payload;
