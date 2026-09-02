@@ -124,10 +124,14 @@
 
       return `
       <article class="product reveal" data-product="${pi}">
-        <div class="product__visual product__visual--photo">
+        <button type="button" class="product__visual product__visual--photo js-open"
+                aria-label="${esc(t("shop.view"))} — ${esc(p.name)}">
           ${first.image ? `<img src="${esc(first.image)}" alt="${esc(p.name)}" loading="lazy" class="product__img">` : ""}
           <span class="product__price js-price">${money(parseFloat(first.price), first.currency)}</span>
-        </div>
+          <span class="product__zoom" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8v6M8 11h6"/></svg>
+          </span>
+        </button>
         <div class="product__body">
           <h3>${esc(p.name)}</h3>
           ${multi ? `
@@ -181,6 +185,12 @@
         addToCart(id, clamp(Number(qtyEl.value)));
         qtyEl.value = 1;
         flash(e.currentTarget);
+      });
+
+      // Clic sur le visuel : fiche agrandie, sur la taille déjà sélectionnée
+      card.querySelector(".js-open")?.addEventListener("click", () => {
+        const id = card.querySelector('input[type="radio"]:checked')?.value || product.variants[0].id;
+        openProduct(pi, id);
       });
     });
 
@@ -259,6 +269,118 @@
     totalEl.textContent = money(total);
   }
 
+  /* ---------------- Dialogues (tiroir + fiche agrandie) ----------------
+     Deux dialogues partagent les mêmes exigences : fermeture par Échap, focus
+     retenu à l'intérieur puis restitué, arrière-plan non défilable. */
+  function makeDialog(el, extra = []) {
+    let lastFocused = null;
+    const focusables = () =>
+      [...el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .filter(n => !n.disabled && n.offsetParent !== null);
+
+    function open() {
+      hideToast();
+      lastFocused = document.activeElement;
+      el.classList.add("open");
+      extra.forEach(n => n?.classList.add("open"));
+      el.setAttribute("aria-hidden", "false");
+      document.body.classList.add("no-scroll");
+      // Le dialogue est encore en `visibility: hidden` à cet instant, et un
+      // élément invisible refuse le focus : on attend le rendu suivant.
+      requestAnimationFrame(() => focusables()[0]?.focus());
+    }
+    function close() {
+      el.classList.remove("open");
+      extra.forEach(n => n?.classList.remove("open"));
+      el.setAttribute("aria-hidden", "true");
+      // Un autre dialogue peut rester ouvert : on ne relâche le fond qu'après.
+      if (!document.querySelector(".cart.open, .pmodal.open")) {
+        document.body.classList.remove("no-scroll");
+      }
+      lastFocused?.focus();
+    }
+
+    document.addEventListener("keydown", e => {
+      if (!el.classList.contains("open")) return;
+      if (e.key === "Escape") { close(); return; }
+      if (e.key !== "Tab") return;
+      const f = focusables();
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    return { open, close };
+  }
+
+  /* ---------------- Fiche produit agrandie ---------------- */
+  let productDialog = null;
+
+  function initProductModal() {
+    const modal = document.getElementById("pModal");
+    if (!modal) return;
+    productDialog = makeDialog(modal);
+
+    // Clic en dehors du panneau
+    modal.addEventListener("click", e => {
+      if (!e.target.closest(".pmodal__box")) productDialog.close();
+    });
+    document.getElementById("pmClose")?.addEventListener("click", () => productDialog.close());
+
+    const qtyEl = document.getElementById("pmQty");
+    document.getElementById("pmMinus")?.addEventListener("click", () => { qtyEl.value = clamp(Number(qtyEl.value) - 1); });
+    document.getElementById("pmPlus")?.addEventListener("click", () => { qtyEl.value = clamp(Number(qtyEl.value) + 1); });
+
+    document.getElementById("pmAdd")?.addEventListener("click", () => {
+      const id = modal.querySelector('input[name="pm-size"]:checked')?.value;
+      if (!id) return;
+      const qty = clamp(Number(qtyEl.value));
+      productDialog.close();          // fermer d'abord : le message reste visible
+      addToCart(id, qty);
+    });
+  }
+
+  function openProduct(productIndex, variantId) {
+    const modal = document.getElementById("pModal");
+    const product = CATALOG[productIndex];
+    if (!modal || !product || !productDialog) return;
+
+    const imgEl = document.getElementById("pmImg");
+    const priceEl = document.getElementById("pmPrice");
+    const sizesEl = document.getElementById("pmSizes");
+    const multi = product.variants.length > 1;
+
+    document.getElementById("pmTitle").textContent = product.name;
+    document.getElementById("pmQty").value = 1;
+    document.getElementById("pmSizeLabel").hidden = !multi;
+    sizesEl.hidden = !multi;
+
+    const paint = (v) => {
+      priceEl.textContent = money(parseFloat(v.price), v.currency);
+      if (v.image) { imgEl.src = v.image; imgEl.alt = `${product.name} — ${v.size}`; }
+      else { imgEl.removeAttribute("src"); imgEl.alt = ""; }
+    };
+
+    sizesEl.innerHTML = product.variants.map(v => `
+      <label class="size ${v.id === variantId ? "is-checked" : ""}">
+        <input type="radio" name="pm-size" value="${esc(v.id)}" ${v.id === variantId ? "checked" : ""}>
+        <span>${esc(v.size)}</span>
+      </label>`).join("");
+
+    sizesEl.querySelectorAll('input[name="pm-size"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        sizesEl.querySelectorAll(".size").forEach(l => l.classList.remove("is-checked"));
+        radio.closest(".size").classList.add("is-checked");
+        const v = variantById.get(radio.value);
+        if (v) paint(v);
+      });
+    });
+
+    paint(variantById.get(variantId) || product.variants[0]);
+    productDialog.open();
+  }
+
   /* ---------------- Tiroir + commande ---------------- */
   function initCartUI() {
     const drawer = document.getElementById("cart");
@@ -266,44 +388,13 @@
     const itemsEl = document.getElementById("cartItems");
     const msgEl = document.getElementById("cartMsg");
     const checkout = document.getElementById("cartCheckout");
-    const closeBtn = document.getElementById("cartClose");
     if (!drawer || !fab) return;
 
-    let lastFocused = null;
-
-    const open = () => {
-      hideToast();
-      lastFocused = document.activeElement;
-      drawer.classList.add("open");
-      overlay.classList.add("open");
-      drawer.setAttribute("aria-hidden", "false");
-      document.body.classList.add("no-scroll");
-      closeBtn?.focus();
-    };
-    const close = () => {
-      drawer.classList.remove("open");
-      overlay.classList.remove("open");
-      drawer.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("no-scroll");
-      lastFocused?.focus();
-    };
+    const { open, close } = makeDialog(drawer, [overlay]);
 
     fab.addEventListener("click", open);
     overlay.addEventListener("click", close);
-    closeBtn?.addEventListener("click", close);
-
-    document.addEventListener("keydown", e => {
-      if (!drawer.classList.contains("open")) return;
-      if (e.key === "Escape") { close(); return; }
-      if (e.key !== "Tab") return;
-      // Le focus reste dans le tiroir tant qu'il est ouvert
-      const f = [...drawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
-        .filter(el => !el.disabled && el.offsetParent !== null);
-      if (!f.length) return;
-      const first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    });
+    document.getElementById("cartClose")?.addEventListener("click", close);
 
     itemsEl?.addEventListener("click", e => {
       if (e.target.closest("#cartContinue")) { close(); return; }
@@ -349,6 +440,7 @@
   }
 
   /* ---------------- Démarrage ---------------- */
+  initProductModal();
   initCartUI();
   loadCatalog();
   document.addEventListener("langchange", () => { if (CATALOG.length) { renderProducts(); renderCart(); } });
