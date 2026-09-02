@@ -60,6 +60,9 @@ export async function fetchCatalog() {
       .filter(v => !v.is_ignored && v.availability_status === "active")
       .map(v => ({
         id: String(v.id),                       // sync_variant_id
+        // Identifiant catalogue : c'est celui qu'attend /shipping/rates,
+        // qui ne connaît pas les variantes synchronisées.
+        catalogVariantId: v.variant_id,
         name: v.name,
         // "chemin vert / 3″×3″" -> "3″×3″"
         size: v.size || (v.name.includes(" / ") ? v.name.split(" / ").pop() : v.name),
@@ -122,6 +125,40 @@ export async function getCatalog({ force = false } = {}) {
     if (cached?.products?.length) return { products: cached.products, stale: true };
     throw err;
   }
+}
+
+/**
+ * Frais de port réels calculés par Printful pour un panier et un pays donnés.
+ *
+ * Printful documente que ces tarifs doivent être demandés juste avant la
+ * commande : ils dépendent du contenu du panier et peuvent changer d'une heure
+ * à l'autre. On ne les met donc jamais en cache.
+ *
+ * Limite assumée : Stripe exige les frais de port AVANT que le client saisisse
+ * son adresse. On calcule donc au niveau du pays, ce qui est exact pour la
+ * France métropolitaine ; une adresse ultramarine peut coûter davantage à
+ * Printful que ce qui a été facturé.
+ *
+ * @returns {Promise<Array<{name:string, cents:number, minDays?:number, maxDays?:number}>>}
+ */
+export async function shippingRates({ countryCode, items, currency = "EUR" }) {
+  const result = await pf("/shipping/rates", {
+    method: "POST",
+    body: {
+      recipient: { country_code: countryCode },
+      items,
+      currency
+    }
+  });
+
+  return (result || [])
+    .map(r => ({
+      name: r.name,
+      cents: Math.round(parseFloat(r.rate) * 100),
+      minDays: r.minDeliveryDays,
+      maxDays: r.maxDeliveryDays
+    }))
+    .filter(r => Number.isFinite(r.cents) && r.cents >= 0);
 }
 
 /** Table { sync_variant_id -> variante } pour valider les paniers côté serveur. */
