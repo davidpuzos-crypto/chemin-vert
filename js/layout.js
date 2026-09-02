@@ -9,7 +9,7 @@ const Layout = {
     return `
     <header class="nav" id="nav">
       <a href="accueil.html" class="nav__brand" aria-label="Chemin Vert">
-        <img class="nav__logo" id="navLogo" src="assets/logo.png" alt="" onerror="this.style.display='none'" />
+        <img class="nav__logo" id="navLogo" src="assets/logo.png" alt="" />
         <span class="nav__name">Chemin&nbsp;Vert</span>
       </a>
 
@@ -47,7 +47,7 @@ const Layout = {
     <footer class="footer">
       <div class="container footer__inner">
         <div class="footer__brand">
-          <img class="footer__logo" id="footerLogo" src="assets/logo.png" alt="" onerror="this.style.display='none'" />
+          <img class="footer__logo" id="footerLogo" src="assets/logo.png" alt="" />
           <div>
             <strong>Chemin Vert</strong>
             <p data-i18n="footer.tagline">Reprenons le chemin des valeurs qui nous unissent.</p>
@@ -79,6 +79,14 @@ const Layout = {
       a.classList.toggle("active", on);
       if (on) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
+    });
+
+    // Logo absent : on masque l'image sans gestionnaire `onerror` en ligne,
+    // que la politique de sécurité du contenu (CSP) interdit à juste titre.
+    document.querySelectorAll(".nav__logo, .footer__logo").forEach(img => {
+      const hide = () => { img.style.display = "none"; };
+      if (img.complete && img.naturalWidth === 0) hide();   // échec déjà survenu
+      else img.addEventListener("error", hide, { once: true });
     });
 
     // Année du pied de page

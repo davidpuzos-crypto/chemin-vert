@@ -1,24 +1,73 @@
 rules_version = '2';
+
+/* ============================================================================
+   Chemin Vert — règles de sécurité Firestore
+   ----------------------------------------------------------------------------
+   Rappel : la clé Firebase du site est PUBLIQUE par conception. Ces règles
+   sont donc la seule et unique protection de la base. Tout ce qu'elles
+   autorisent, n'importe qui sur Internet peut le faire — pas seulement les
+   visiteurs du site.
+
+   ⚠️  LIMITE CONNUE, À COUVRIR PAR FIREBASE APP CHECK
+   Le site n'a pas de comptes utilisateurs : les écritures sont donc forcément
+   anonymes, et aucune règle ne peut distinguer un visiteur d'un script.
+   Concrètement, sans App Check :
+     - le compteur public peut être gonflé ou remis à zéro,
+     - la signature de quelqu'un peut être supprimée par un tiers qui connaît
+       son adresse.
+   Les règles ci-dessous réduisent la surface (format, champs, taille) mais ne
+   remplacent pas App Check, qui vérifie que l'appel vient bien du vrai site.
+   Voir la section « Compteur et signatures » de BOUTIQUE-SETUP.md.
+   ========================================================================= */
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
     // Compteur public : lisible par tous, modifiable de +1 / -1 uniquement.
     match /stats/counter {
       allow read: if true;
-      allow update: if request.resource.data.count is int
+      allow update: if request.resource.data.keys().hasOnly(['count'])
+                    && request.resource.data.count is int
                     && request.resource.data.count >= 0
                     && (request.resource.data.count == resource.data.count + 1
                         || request.resource.data.count == resource.data.count - 1);
       allow create, delete: if false;
     }
 
-    // Signatures : on peut ajouter / retirer la sienne (id = e-mail),
-    // mais PERSONNE ne peut lire ni lister les e-mails.
+    // Signatures : on peut ajouter la sienne (l'identifiant du document EST
+    // l'e-mail), mais PERSONNE ne peut lire ni lister les e-mails.
     match /signatures/{email} {
       allow read, list: if false;
-      allow create: if request.resource.data.email is string;
+
+      allow create: if
+        // Aucun champ inattendu : pas de dépôt de données arbitraires.
+        request.resource.data.keys().hasOnly(['email', 'lang', 'created'])
+        && request.resource.data.email is string
+        // L'identifiant du document et le champ doivent concorder : impossible
+        // de créer « signatures/n_importe_quoi ».
+        && request.resource.data.email == email
+        && request.resource.data.email == email.lower()
+        && request.resource.data.email.size() >= 6
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+[.][^@\\s]{2,}$')
+        && (!('lang' in request.resource.data)
+            || request.resource.data.lang == null
+            || (request.resource.data.lang is string && request.resource.data.lang.size() <= 5))
+        && (!('created' in request.resource.data)
+            || request.resource.data.created is timestamp);
+
+      // Une signature ne se modifie pas : on signe ou on se retire.
       allow update: if false;
+
+      // Désinscription. Reste ouverte faute de comptes utilisateurs : c'est
+      // la contrepartie d'un retrait en une seule étape, sans mot de passe.
       allow delete: if true;
+    }
+
+    // Tout le reste est fermé : une collection créée par erreur ou par un
+    // tiers n'est ni lisible ni inscriptible.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

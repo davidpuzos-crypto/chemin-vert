@@ -13,6 +13,9 @@ import { getCatalog, indexVariants, shippingRates } from "../lib/printful.mjs";
 
 const MAX_QTY_PER_LINE = 20;
 const MAX_LINES = 10;
+// 20 × 10 permettrait 200 articles, or Printful durcit fortement son quota de
+// frais de port au-delà de 100. On plafonne donc le total du panier.
+const MAX_TOTAL_ITEMS = 60;
 // Stripe n'accepte pas plus de 5 modes de livraison par session.
 const MAX_SHIPPING_OPTIONS = 5;
 
@@ -130,6 +133,15 @@ export default async (req) => {
       }
     });
     cart.push({ v: id, q: qty });
+  }
+
+  // Au-delà de 100 articles, Printful abaisse le quota de calcul des frais de
+  // port à 5 requêtes par minute, avec blocage de 60 s : quelques paniers
+  // volumineux suffiraient à priver les vrais clients du tarif réel. On refuse
+  // donc ces commandes, à traiter de la main à la main.
+  const totalItems = cart.reduce((n, l) => n + l.q, 0);
+  if (totalItems > MAX_TOTAL_ITEMS) {
+    return Response.json({ error: "cart_too_large", max: MAX_TOTAL_ITEMS }, { status: 400 });
   }
 
   // --- 3. Livraison --------------------------------------------------------
