@@ -174,7 +174,7 @@ Ajoutez ces variables, une par une :
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` (étape 6, à faire après) | **oui** |
 | `SITE_URL` | `https://cheminvert1.netlify.app` (sans `/` final) | **oui** |
 | `PRINTFUL_AUTO_CONFIRM` | `false` | recommandé |
-| `SHIPPING_FLAT_CENTS` | `450` (= 4,50 € de port) | optionnel |
+| `SHIPPING_FLAT_CENTS` | `450` — port de secours si Printful est injoignable | optionnel |
 | `ALLOWED_COUNTRIES` | `FR` (ou `FR,BE,CH,LU`) | optionnel |
 
 ⚠️ **Après avoir ajouté ou modifié une variable, il faut redéployer** :
@@ -255,7 +255,7 @@ Il n'envoie **aucun prix**. Côté serveur, `create-checkout.mjs` :
 1. rappelle Printful pour obtenir le vrai prix de chaque variante,
 2. refuse la commande si une variante n'existe plus (`variant_unavailable`),
 3. limite à 20 exemplaires par ligne et 10 lignes,
-4. ajoute les frais de port et les pays de livraison autorisés,
+4. demande à Printful ses **frais de port réels** pour ce panier,
 5. crée la session Stripe avec **les prix recalculés**.
 
 C'est la protection essentielle : même en modifiant la page dans son
@@ -264,6 +264,25 @@ navigateur, un visiteur ne peut pas s'offrir un sticker à 0,01 €.
 Après paiement, Stripe renvoie le client sur `merci.html` (`SITE_URL` +
 `/merci.html`) et prévient `stripe-webhook.mjs`, qui crée la commande
 Printful.
+
+### Les frais de port
+
+Ils ne sont pas forfaitaires : à chaque commande, le site demande à Printful
+ses tarifs pour le panier en cours, et propose au client les modes de livraison
+réels (économique, express…) avec leur prix et leur délai.
+
+Une limite technique subsiste, imposée par Stripe : il exige les frais de port
+**avant** que le client saisisse son adresse. Le calcul se fait donc au niveau
+du **pays**, ce qui est exact pour la France métropolitaine. Une livraison en
+outre-mer peut coûter un peu plus cher à Printful que ce qui a été facturé.
+
+Si plusieurs pays sont ouverts dans `ALLOWED_COUNTRIES`, le site retient le
+tarif **le plus élevé** de chaque service : mieux vaut surfacturer de quelques
+centimes que vendre à perte.
+
+Et si Printful est momentanément injoignable, le forfait
+`SHIPPING_FLAT_CENTS` prend le relais — une commande n'est jamais bloquée par
+le calcul du port.
 
 ---
 

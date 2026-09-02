@@ -9,10 +9,71 @@
 
 import Stripe from "stripe";
 import { getStore } from "@netlify/blobs";
-import { getCatalog, indexVariants } from "../lib/printful.mjs";
+import { getCatalog, indexVariants, shippingRates } from "../lib/printful.mjs";
 
 const MAX_QTY_PER_LINE = 20;
 const MAX_LINES = 10;
+// Stripe n'accepte pas plus de 5 modes de livraison par session.
+const MAX_SHIPPING_OPTIONS = 5;
+
+/**
+ * Modes de livraison proposés au client, au tarif réel de Printful.
+ *
+ * Si plusieurs pays sont ouverts à la vente, on retient le tarif le PLUS ÉLEVÉ
+ * de chaque service : le pays de destination n'est pas encore connu à ce stade,
+ * et mieux vaut surfacturer de quelques centimes que vendre à perte.
+ *
+ * Tout échec (Printful injoignable, catalogue sans identifiant catalogue,
+ * quota dépassé) retombe sur le forfait SHIPPING_FLAT_CENTS : une commande ne
+ * doit jamais être bloquée par le calcul des frais de port.
+ */
+async function buildShippingOptions({ countries, cart, variants, flatCents }) {
+  const flat = [{
+    shipping_rate_data: {
+      type: "fixed_amount",
+      display_name: "Livraison",
+      fixed_amount: { amount: flatCents, currency: "eur" }
+    }
+  }];
+
+  const items = cart.map(({ v, q }) => ({
+    variant_id: variants.get(v)?.catalogVariantId,
+    quantity: q
+  }));
+  // Catalogue mis en cache par une version antérieure : identifiants absents.
+  if (items.some(i => !i.variant_id)) return flat;
+
+  try {
+    const byName = new Map();
+    for (const country of countries.slice(0, 4)) {
+      for (const rate of await shippingRates({ countryCode: country, items })) {
+        const kept = byName.get(rate.name);
+        if (!kept || rate.cents > kept.cents) byName.set(rate.name, rate);
+      }
+    }
+    if (!byName.size) return flat;
+
+    return [...byName.values()]
+      .sort((a, b) => a.cents - b.cents)
+      .slice(0, MAX_SHIPPING_OPTIONS)
+      .map(rate => ({
+        shipping_rate_data: {
+          type: "fixed_amount",
+          display_name: rate.name,
+          fixed_amount: { amount: rate.cents, currency: "eur" },
+          ...(rate.minDays && rate.maxDays ? {
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: rate.minDays },
+              maximum: { unit: "business_day", value: rate.maxDays }
+            }
+          } : {})
+        }
+      }));
+  } catch (err) {
+    console.error("create-checkout: frais de port Printful indisponibles —", err.status, err.message);
+    return flat;
+  }
+}
 
 export default async (req) => {
   if (req.method !== "POST") {
@@ -71,13 +132,22 @@ export default async (req) => {
     cart.push({ v: id, q: qty });
   }
 
-  // --- 3. Livraison (tarif forfaitaire) -----------------------------------
-  // Printful calcule ses frais réels à partir de l'adresse, or Stripe exige
-  // le tarif AVANT que le client saisisse son adresse : on applique donc un
-  // forfait, ajustable via la variable SHIPPING_FLAT_CENTS.
-  const shippingCents = Math.max(0, parseInt(process.env.SHIPPING_FLAT_CENTS ?? "450", 10) || 0);
+  // --- 3. Livraison --------------------------------------------------------
+  // Stripe exige les frais de port AVANT que le client saisisse son adresse,
+  // alors que Printful les calcule à partir de cette adresse. On demande donc
+  // à Printful ses tarifs réels pour ce panier au niveau du PAYS : exact pour
+  // la France métropolitaine, et bien plus juste qu'un forfait puisque le
+  // tarif suit le nombre d'articles.
+  const flatCents = Math.max(0, parseInt(process.env.SHIPPING_FLAT_CENTS ?? "450", 10) || 0);
   const allowedCountries = (process.env.ALLOWED_COUNTRIES || "FR")
     .split(",").map(c => c.trim().toUpperCase()).filter(Boolean);
+
+  const shipping_options = await buildShippingOptions({
+    countries: allowedCountries,
+    cart,
+    variants,
+    flatCents
+  });
 
   const origin = process.env.SITE_URL?.replace(/\/$/, "") || new URL(req.url).origin;
 
@@ -87,13 +157,7 @@ export default async (req) => {
       mode: "payment",
       line_items,
       shipping_address_collection: { allowed_countries: allowedCountries },
-      shipping_options: [{
-        shipping_rate_data: {
-          type: "fixed_amount",
-          display_name: "Livraison",
-          fixed_amount: { amount: shippingCents, currency: "eur" }
-        }
-      }],
+      shipping_options,
       phone_number_collection: { enabled: false },
       success_url: `${origin}/merci.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/boutique.html`,
