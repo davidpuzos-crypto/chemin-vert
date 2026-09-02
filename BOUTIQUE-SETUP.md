@@ -146,8 +146,10 @@ gratuite suffisante).
    - *Functions directory* : `netlify/functions` (déjà dans `netlify.toml`)
 5. **Deploy**. Netlify vous donne une adresse type
    `https://chemin-vert-xyz.netlify.app`.
-6. *Site configuration → Site details → Change site name* pour la simplifier,
-   par ex. `chemin-vert.netlify.app`.
+6. *Site configuration → Site details → Change site name* pour la simplifier.
+
+> ✅ **Déjà fait** : le site existe et s'appelle **`cheminvert1.netlify.app`**.
+> C'est cette adresse qui est reprise partout dans la suite du guide.
 
 Plus tard, pour votre vrai nom de domaine : *Domain management → Add a
 domain*. Le HTTPS est automatique et gratuit.
@@ -170,7 +172,7 @@ Ajoutez ces variables, une par une :
 | `PRINTFUL_API_KEY` | le jeton `smk_...` de l'étape 2 | **oui** |
 | `STRIPE_SECRET_KEY` | `sk_test_...` puis `sk_live_...` | **oui** |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` (étape 6, à faire après) | **oui** |
-| `SITE_URL` | `https://chemin-vert.netlify.app` (sans `/` final) | **oui** |
+| `SITE_URL` | `https://cheminvert1.netlify.app` (sans `/` final) | **oui** |
 | `PRINTFUL_AUTO_CONFIRM` | `false` | recommandé |
 | `SHIPPING_FLAT_CENTS` | `450` (= 4,50 € de port) | optionnel |
 | `ALLOWED_COUNTRIES` | `FR` (ou `FR,BE,CH,LU`) | optionnel |
@@ -179,9 +181,15 @@ Ajoutez ces variables, une par une :
 *Deploys → Trigger deploy → **Clear cache and deploy site***.
 Les fonctions ne relisent pas les variables toutes seules.
 
+Dans le formulaire Netlify : cochez **« Contains secret values »** pour les
+trois clés (Printful, Stripe, webhook), laissez **All scopes**, et gardez
+**« Same value for all deploy contexts »**. La case « secret » ne change rien
+au fonctionnement : elle empêche seulement de relire la valeur ensuite dans
+l'interface.
+
 Ces valeurs restent chez Netlify. Elles ne sont **jamais** envoyées au
 navigateur, jamais écrites dans le dépôt Git. Le fichier `.env.example`
-présent dans le dépôt ne sert que de mémo : il ne contient que des `xxx`.
+présent dans le dépôt ne sert que de mémo : il ne contient aucune vraie clé.
 
 Pour tester en local (facultatif) : `npm i -g netlify-cli`, créez un fichier
 `.env` à la racine sur le modèle de `.env.example`, puis `netlify dev`.
@@ -197,7 +205,7 @@ C'est le mécanisme qui prévient votre site qu'un paiement a été encaissé.
 1. Stripe → **Developers → Webhooks → Add endpoint**
 2. **Endpoint URL** :
    ```
-   https://chemin-vert.netlify.app/api/stripe-webhook
+   https://cheminvert1.netlify.app/api/stripe-webhook
    ```
    (remplacez par votre adresse réelle)
 3. **Select events** → cochez exactement :
@@ -309,7 +317,7 @@ cassée.
 
 Avec les clés **de test** (`sk_test_`, webhook en mode test) :
 
-1. Ouvrez `https://chemin-vert.netlify.app/boutique.html` — les produits
+1. Ouvrez `https://cheminvert1.netlify.app/boutique.html` — les produits
    Printful doivent s'afficher avec leurs vraies photos et leurs vrais prix.
 2. Ajoutez un article, cliquez **Commander**.
 3. Sur Stripe, payez avec la carte de test :
