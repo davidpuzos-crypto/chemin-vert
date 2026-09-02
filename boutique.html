@@ -102,6 +102,33 @@
       </div>
     </aside>
 
+    <!-- Fiche produit agrandie (ouverte au clic sur le visuel) -->
+    <div class="pmodal" id="pModal" role="dialog" aria-modal="true" aria-labelledby="pmTitle" aria-hidden="true">
+      <div class="pmodal__box">
+        <button class="vmodal__close" id="pmClose" data-i18n-attr="aria-label:value.close" aria-label="Fermer">&times;</button>
+        <div class="pmodal__media">
+          <img id="pmImg" alt="" class="pmodal__img">
+        </div>
+        <div class="pmodal__info">
+          <h2 class="pmodal__title" id="pmTitle"></h2>
+          <p class="pmodal__price" id="pmPrice"></p>
+          <p class="product__sizelabel" id="pmSizeLabel" data-i18n="shop.size">Taille</p>
+          <div class="sizes" id="pmSizes" role="radiogroup" aria-labelledby="pmSizeLabel"></div>
+          <div class="product__buy">
+            <div class="qty" role="group" id="pmQtyGroup" data-i18n-attr="aria-label:shop.qty" aria-label="Quantité">
+              <button type="button" id="pmMinus" data-i18n-attr="aria-label:shop.decrease" aria-label="Diminuer la quantité">&minus;</button>
+              <output id="pmQty">1</output>
+              <button type="button" id="pmPlus" data-i18n-attr="aria-label:shop.increase" aria-label="Augmenter la quantité">+</button>
+            </div>
+            <button class="btn btn--primary product__add" id="pmAdd">
+              <span data-i18n="shop.add">Ajouter au panier</span>
+            </button>
+          </div>
+          <p class="pmodal__note" data-i18n="shop.trust3_d"></p>
+        </div>
+      </div>
+    </div>
+
     <div class="toast" id="shopToast" role="status" aria-live="polite" hidden></div>
   </main>
 
