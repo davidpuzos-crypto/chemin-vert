@@ -25,3 +25,16 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
+    # HTTPS obligatoire pendant 2 ans, sous-domaines compris.
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
+    # Le site n'a besoin d'aucune de ces capacités : on les refuse à la source.
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    # Liste blanche stricte. Aucun script en ligne n'est autorisé : c'est ce qui
+    # rend une injection inexploitable même si une faille d'échappement passait.
+    #   www.gstatic.com      : SDK Firebase
+    #   fonts.googleapis.com : feuille de style des polices
+    #   fonts.gstatic.com    : fichiers de polices
+    #   files.cdn.printful.com : visuels des produits
+    #   *.googleapis.com     : Firestore (lecture du compteur)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://files.cdn.printful.com; connect-src 'self' https://firestore.googleapis.com https://*.googleapis.com wss://*.firestore.googleapis.com; form-action 'self' https://checkout.stripe.com; frame-ancestors 'self'; base-uri 'none'; object-src 'none'"
