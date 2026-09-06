@@ -13,7 +13,7 @@ const I18N = {
     it: { label: "Italiano",  flag: "🇮🇹", dir: "ltr" },
     de: { label: "Deutsch",   flag: "🇩🇪", dir: "ltr" },
     tr: { label: "Türkçe",    flag: "🇹🇷", dir: "ltr" },
-    ar: { label: "العربية",   flag: "🇸🇦", dir: "rtl" }
+    ar: { label: "العربية",   flag: "🇸🇾", dir: "rtl" }
   },
 
   // Les 15 valeurs de la charte, dans chaque langue (ordre commun).
