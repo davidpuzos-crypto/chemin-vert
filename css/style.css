@@ -415,21 +415,19 @@ a { color: inherit; text-decoration: none; }
 .value:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--green-400); }
 /* Grand numéro filigrane */
 .value__idx {
-  position: absolute; top: .2rem; inset-inline-end: .7rem;
-  font-family: var(--font-display); font-weight: 500; font-size: 2.8rem; line-height: 1;
-  color: var(--green-600); opacity: 1; transition: color .35s, transform .35s; pointer-events: none;
+  /* Le numéro passe AU-DESSUS du nom plutôt qu'à côté : la fiche n'offre que
+     166 px utiles, et « die Wahrhaftigkeit » en réclame 178 à lui seul. Côte à
+     côte, le nom se coupait en plein mot. */
+  display: block; text-align: end;
+  font-family: var(--font-display); font-weight: 500; font-size: 2rem; line-height: 1;
+  color: var(--green-600); margin-bottom: .2rem;
+  transition: color .35s, transform .35s; pointer-events: none;
 }
-.value:hover .value__idx { color: var(--green-700); transform: scale(1.08); }
+.value:hover .value__idx { color: var(--green-700); }
 .value__name {
   position: relative; font-family: var(--font-display); font-weight: 500;
-  font-size: 1.5rem; color: var(--green-700); line-height: 1.12; margin-bottom: .5rem;
-  /* Réserve la place du numéro, posé en absolu à droite : sans cette marge,
-     les noms longs passaient dessous. Invisible tant que le numéro n'était
-     qu'un filigrane à 12 % d'opacité. */
-  padding-inline-end: 3.1rem;
-  /* « die Brüderlichkeit » et consorts : un mot seul peut dépasser la largeur
-     utile de la fiche, la césure évite qu'il passe sous le numéro. */
-  hyphens: auto; overflow-wrap: break-word;
+  font-size: 1.5rem; color: var(--green-700); line-height: 1.14; margin-bottom: .5rem;
+  hyphens: auto;
 }
 .value__alt { font-family: var(--font-ui); font-size: .8rem; color: var(--muted); }
 .value__alt span::after { content: " · "; color: var(--green-300); }
