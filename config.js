@@ -21,5 +21,14 @@ window.CHEMIN_VERT_CONFIG = {
   },
 
   // Chiffre affiché si le document stats/counter n'existe pas encore.
-  FALLBACK_COUNT: 0
+  FALLBACK_COUNT: 0,
+
+  /* Boutique. À false : le lien « Boutique » disparaît du menu et de pied de
+     page, et la page affiche « la boutique ouvre bientôt » sans charger le
+     catalogue Printful.
+     À passer à true le jour de l'ouverture, une fois réunies les trois
+     conditions : clés Stripe de production en place, SITE_URL réglée sur le
+     domaine définitif, et webhook Stripe pointant vers ce même domaine.
+     Voir BOUTIQUE-SETUP.md. */
+  SHOP_ENABLED: false
 };
