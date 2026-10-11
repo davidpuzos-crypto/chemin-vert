@@ -386,3 +386,118 @@ Dans les deux cas, pensez à enregistrer un moyen de paiement dans
 Les journaux d'exécution sont dans **Netlify → Logs → Functions** :
 choisissez la fonction concernée, l'erreur y est datée et lisible. Les
 messages techniques n'apparaissent jamais côté visiteur.
+
+---
+
+## 11. Compteur et signatures : sécuriser la base
+
+Cette section est celle que référence l'en-tête de `firebase/firestore.rules`.
+Elle concerne la base Firestore, pas la boutique, mais c'est elle qui protège
+l'argument public du mouvement : le nombre de signataires.
+
+### Le point de départ
+
+La clé Firebase du site est **publique par conception** : elle est lisible dans
+`config.js`, donc dans le code source de chaque page. Ce n'est pas une faille,
+c'est le modèle de Firebase. La conséquence, elle, est bien réelle : **tout ce
+que les règles autorisent, n'importe qui sur Internet peut le faire**, et pas
+seulement les visiteurs du site.
+
+Deux protections existent, et elles ne se remplacent pas.
+
+| | Ce que ça protège | Ce que ça ne protège pas |
+|---|---|---|
+| **Règles Firestore** | La forme et la portée : qui lit quoi, quels champs, quel format | Rien contre un script qui respecte la forme |
+| **App Check** | L'origine : l'appel vient-il du vrai site ou d'un programme ? | Rien contre un visiteur humain mal intentionné |
+
+Sans App Check, les règles laissent passer deux abus, assumés faute de comptes
+utilisateurs :
+
+- le compteur public peut être gonflé ou ramené à zéro, un incrément à la fois ;
+- la signature de quelqu'un peut être supprimée par un tiers qui connaît son
+  adresse e-mail.
+
+### Déployer les règles
+
+Les règles vivent dans `firebase/firestore.rules`, et c'est **la seule source
+de vérité**. Ne les modifiez jamais directement dans la console Firebase : le
+dépôt et la console dériveraient en silence, et c'est précisément ce qui s'est
+produit par le passé, la console portant une version nettement plus permissive.
+
+Le workflow `.github/workflows/firestore-rules.yml` joue les tests puis publie
+les règles à chaque fusion sur `main`. Pour qu'il publie, il lui faut un secret :
+
+1. Console Firebase → **Paramètres du projet** → **Comptes de service**
+   → **Générer une nouvelle clé privée**. Un fichier JSON est téléchargé.
+2. GitHub → dépôt → **Settings** → **Secrets and variables** → **Actions**
+   → **New repository secret**.
+3. Nom : `FIREBASE_SERVICE_ACCOUNT`. Valeur : le contenu intégral du fichier JSON.
+4. Supprimez le fichier téléchargé : il donne un accès total à la base.
+
+Sans ce secret, le workflow teste les règles mais ne les publie pas, et le
+signale par un avertissement dans l'exécution.
+
+Pour jouer les tests en local :
+
+```bash
+npm install --no-save firebase @firebase/rules-unit-testing firebase-tools
+npx firebase emulators:exec --only firestore --project demo-cv \
+  "node firebase/rules.test.mjs"
+```
+
+### Activer App Check
+
+1. Console Firebase → **App Check** → onglet **Applications** → votre
+   application web → fournisseur **reCAPTCHA v3**.
+2. Firebase renvoie vers `google.com/recaptcha/admin` pour créer la clé. Au
+   champ **Domaines**, saisissez les trois adresses depuis lesquelles le site
+   est servi :
+
+   ```
+   cheminvert.org
+   www.cheminvert.org
+   cheminvert1.netlify.app
+   ```
+
+3. Collez la **clé de site** (elle commence par `6L`, ce n'est pas la clé
+   secrète) dans Firebase, puis dans `config.js` :
+
+   ```js
+   APP_CHECK_SITE_KEY: "6L..."
+   ```
+
+4. Déployez, puis vérifiez que le compteur s'affiche toujours sur
+   `adherer.html`.
+5. **Laissez le mode « non appliqué » pendant deux ou trois jours.** Console
+   Firebase → App Check → onglet **API** → Cloud Firestore. Appliquer tout de
+   suite bloquerait le site avant que le code déployé n'envoie des jetons.
+6. Revenez consulter l'onglet **Requêtes**. Quand la quasi-totalité des appels
+   apparaît comme vérifiée, cliquez sur **Appliquer**.
+
+Tant que `APP_CHECK_SITE_KEY` est vide, App Check reste inactif et le site
+fonctionne normalement : l'activation est donc sans risque de coupure.
+
+> **Politique de sécurité du contenu.** reCAPTCHA charge un script et une
+> iframe depuis `www.google.com`. Les directives `script-src` et `frame-src`
+> de `netlify.toml` les autorisent déjà. Sans ces deux entrées, App Check
+> échouerait silencieusement, bloqué par le navigateur.
+
+### Sauvegarder les signatures
+
+Les signatures sont des données personnelles réelles, conservées en un seul
+exemplaire, dans une collection où la suppression reste ouverte. Une base vidée
+serait définitivement perdue, et vous ne sauriez même pas qui y figurait.
+
+```bash
+npm install --no-save firebase-admin
+GOOGLE_APPLICATION_CREDENTIALS=~/chemin-vert-serviceAccount.json \
+  node scripts/backup-signatures.mjs
+```
+
+Le script écrit un fichier daté dans `backups/`, ignoré par git. Il signale
+aussi tout **écart entre le compteur public et le nombre réel de signatures** :
+les deux bougent ensemble dans une opération atomique, donc un décalage
+trahit un incident ou une manipulation du compteur.
+
+Ce fichier contient des adresses e-mail. Il ne se commite pas, ne se partage
+pas, et se conserve en lieu sûr.

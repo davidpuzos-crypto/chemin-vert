@@ -4,6 +4,13 @@
 !.env.example
 *serviceAccount*.json
 
+# Sauvegardes de la base : contiennent de vraies adresses e-mail
+backups/
+
+# Traces laissées par l'émulateur Firestore
+firestore-debug.log
+firebase-debug.log
+
 # Dépendances / build
 node_modules/
 .netlify/

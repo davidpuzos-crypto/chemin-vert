@@ -23,6 +23,15 @@ window.CHEMIN_VERT_CONFIG = {
   // Chiffre affiché si le document stats/counter n'existe pas encore.
   FALLBACK_COUNT: 0,
 
+  /* App Check (reCAPTCHA v3) : atteste qu'un appel vient bien de ce site et
+     non d'un script. C'est la seule protection possible ici, faute de comptes
+     utilisateurs — les règles Firestore ne peuvent pas distinguer un visiteur
+     d'une boucle automatisée.
+     Laisser vide tant que la clé n'a pas été créée : App Check reste alors
+     inactif et le site fonctionne normalement.
+     Marche à suivre : section « Compteur et signatures » de BOUTIQUE-SETUP.md. */
+  APP_CHECK_SITE_KEY: "",
+
   /* Boutique. À false : le lien « Boutique » disparaît du menu et de pied de
      page, et la page affiche « la boutique ouvre bientôt » sans charger le
      catalogue Printful.
