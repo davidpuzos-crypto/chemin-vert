@@ -4,6 +4,11 @@
    La page active est indiquée par <body data-page="home|charter|join|shop">.
    ========================================================================== */
 
+/* Boutique ouverte ? Piloté par SHOP_ENABLED dans config.js. Tant qu'elle est
+   fermée, ses liens ne sont pas rendus du tout, plutôt que masqués en CSS. */
+const shopEnabled = () =>
+  !(window.CHEMIN_VERT_CONFIG && window.CHEMIN_VERT_CONFIG.SHOP_ENABLED === false);
+
 const Layout = {
   header() {
     return `
@@ -17,7 +22,7 @@ const Layout = {
         <a href="accueil.html"  data-nav="home"    data-i18n="nav.home">Accueil</a>
         <a href="charte.html"   data-nav="charter" data-i18n="nav.charter">La charte</a>
         <a href="adherer.html"  data-nav="join"    data-i18n="nav.join">Adhérer</a>
-        <a href="boutique.html" data-nav="shop"    data-i18n="nav.shop">Boutique</a>
+        ${shopEnabled() ? `<a href="boutique.html" data-nav="shop"    data-i18n="nav.shop">Boutique</a>` : ""}
       </nav>
 
       <div class="nav__actions">
@@ -57,7 +62,7 @@ const Layout = {
           <a href="accueil.html"  data-i18n="nav.home">Accueil</a>
           <a href="charte.html"   data-i18n="nav.charter">La charte</a>
           <a href="adherer.html"  data-i18n="nav.join">Adhérer</a>
-          <a href="boutique.html" data-i18n="nav.shop">Boutique</a>
+          ${shopEnabled() ? `<a href="boutique.html" data-i18n="nav.shop">Boutique</a>` : ""}
         </nav>
         <div class="footer__meta">
           <p class="footer__rights">© <span id="year"></span> Chemin Vert — <span data-i18n="footer.rights">Tous droits réservés.</span></p>

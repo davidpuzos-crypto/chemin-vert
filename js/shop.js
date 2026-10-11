@@ -75,7 +75,24 @@
       </article>`).join("");
   }
 
+  /* Boutique fermée, ou catalogue injoignable : même rendu dans les deux cas.
+     « La boutique ouvre bientôt », ni grille, ni arguments de confiance, ni
+     bouton panier — donc aucun chemin vers le paiement. */
+  function showClosed() {
+    grid.innerHTML = "";
+    grid.hidden = true;
+    if (notice) notice.hidden = false;
+    if (trust) trust.hidden = true;
+    if (fab) fab.style.display = "none";
+  }
+
   async function loadCatalog() {
+    // Fermée : on n'appelle même pas Printful.
+    if (window.CHEMIN_VERT_CONFIG && window.CHEMIN_VERT_CONFIG.SHOP_ENABLED === false) {
+      showClosed();
+      return;
+    }
+
     skeletons(3);
     grid.setAttribute("aria-busy", "true");
 
@@ -94,11 +111,7 @@
     CATALOG.forEach(p => p.variants.forEach(v => variantById.set(v.id, { ...v, productName: p.name })));
 
     if (!CATALOG.length) {
-      grid.innerHTML = "";
-      grid.hidden = true;
-      if (notice) notice.hidden = false;      // « la boutique ouvre bientôt »
-      if (trust) trust.hidden = true;
-      if (fab) fab.style.display = "none";
+      showClosed();
       return;
     }
 
