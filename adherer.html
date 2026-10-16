@@ -49,6 +49,17 @@
           <button type="submit" class="btn btn--primary btn--lg" id="signBtn">
             <span data-i18n="sign.button">Je signe</span>
           </button>
+
+          <!-- Consentement explicite : le RGPD demande un acte positif, donc
+               une case NON cochée par défaut. Le libellé et le lien sont deux
+               chaînes distinctes : le moteur i18n écrit du texte, pas du HTML. -->
+          <label class="sign__consent" for="signConsent">
+            <input type="checkbox" id="signConsent" />
+            <span>
+              <span data-i18n="sign.consent">J'accepte que mon adresse e-mail soit conservée pour comptabiliser ma signature.</span>
+              <a href="confidentialite.html" data-i18n="legal.privacy">Politique de confidentialité</a>
+            </span>
+          </label>
         </form>
         <p class="sign__msg" id="signMsg" role="status" aria-live="polite"></p>
         <p class="sign__privacy" data-i18n="sign.privacy"></p>
