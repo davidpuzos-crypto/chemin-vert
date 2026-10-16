@@ -15,14 +15,38 @@ const Signatures = (() => {
 
   if (ready) {
     try { firebase.initializeApp(fb); } catch (e) { /* déjà initialisé */ }
+
+    /* App Check, avant toute requête : le jeton doit accompagner les appels
+       dès le premier. Sans clé configurée, on ne l'active pas — le site
+       continue de fonctionner, simplement sans cette protection. */
+    const siteKey = cfg.APP_CHECK_SITE_KEY;
+    if (siteKey && firebase.appCheck) {
+      try {
+        // true : renouvellement automatique du jeton.
+        firebase.appCheck().activate(siteKey, true);
+      } catch (e) {
+        console.warn("App Check non activé :", e.message);
+      }
+    }
+
     db = firebase.firestore();
   }
   const configured = !!db;
 
   const DEMO_KEY = "cv_demo_signatures";
-  const emailValid = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim().toLowerCase());
+
+  /* Cette règle doit rester IDENTIQUE à celle de firebase/firestore.rules.
+     Sans cet alignement, une adresse acceptée ici mais refusée par la base
+     revient en « permission-denied », que sign() interprète comme « déjà
+     signé » : l'utilisateur lit un message faux et ne comprend pas pourquoi.
+     Côté base : 6 à 254 caractères, et au moins deux caractères après le
+     dernier point. */
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const norm = (email) => String(email).trim().toLowerCase();
+  const emailValid = (email) => {
+    const e = norm(email);
+    return e.length >= 6 && e.length <= 254 && EMAIL_RE.test(e);
+  };
 
   const counterRef = () => db.collection("stats").doc("counter");
   const signRef = (email) => db.collection("signatures").doc(email);
