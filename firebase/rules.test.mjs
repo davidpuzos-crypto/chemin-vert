@@ -1,18 +1,22 @@
 /* ==========================================================================
    Chemin Vert — tests des règles de sécurité Firestore
    --------------------------------------------------------------------------
-   Ces règles sont la SEULE protection de la base (la clé Firebase du site est
-   publique par conception). Elles doivent donc être testées, pas relues.
+   Les règles ferment toute écriture venant d'un navigateur : ces tests
+   vérifient que la porte est bien close, y compris pour les opérations que
+   le site lui-même effectuait auparavant.
+
+   Ce qui n'est PAS testé ici : la validation du format des adresses. Elle a
+   quitté les règles pour netlify/lib/guard.mjs, puisque les écritures
+   clientes sont refusées avant d'être examinées, et que le SDK Admin des
+   fonctions serverless n'évalue pas ces règles.
 
    Pour les exécuter :
-     npm install -g firebase-tools
-     npm install --no-save firebase @firebase/rules-unit-testing
-     firebase emulators:start --only firestore --project demo-cv   # port 8181
-     node firebase/rules.test.mjs
+     npm install --no-save firebase@12 @firebase/rules-unit-testing@5 firebase-tools@15
+     npx firebase emulators:exec --only firestore --project demo-cv \
+       "node firebase/rules.test.mjs"
 
-   Le dernier test vérifie une limite ASSUMÉE, pas un bug : faute de comptes
-   utilisateurs, la suppression d'une signature reste ouverte. Voir l'en-tête
-   de firestore.rules.
+   firebase@12 n'est pas un caprice : @firebase/rules-unit-testing@5 exige
+   cette version en dépendance de pair, et npm refuse l'installation avec la 13.
    ========================================================================== */
 
 import fs from "node:fs";
@@ -34,9 +38,9 @@ async function check(label, promise, expected /* 'ok' | 'refus' */) {
   }
 }
 
-await env.clearFirestore();   // repartir d'une base vide à chaque exécution
+await env.clearFirestore();
 
-// État initial, écrit en contournant les règles
+// État initial, écrit en contournant les règles (comme le font les fonctions).
 await env.withSecurityRulesDisabled(async ctx => {
   const d = ctx.firestore();
   await setDoc(doc(d, "stats/counter"), { count: 42 });
@@ -45,44 +49,40 @@ await env.withSecurityRulesDisabled(async ctx => {
 
 const db = env.unauthenticatedContext().firestore();
 
-console.log("\n— Compteur —");
+console.log("\n— Compteur : lecture publique, écriture fermée —");
 await check("lecture du compteur autorisée", getDoc(doc(db, "stats/counter")), "ok");
-await check("+1 autorisé", updateDoc(doc(db, "stats/counter"), { count: increment(1) }), "ok");
+await check("+1 refusé", updateDoc(doc(db, "stats/counter"), { count: increment(1) }), "refus");
+await check("-1 refusé (c'était la dérive du compteur)", updateDoc(doc(db, "stats/counter"), { count: increment(-1) }), "refus");
 await check("saut à 99999 refusé", updateDoc(doc(db, "stats/counter"), { count: 99999 }), "refus");
-await check("valeur négative refusée", updateDoc(doc(db, "stats/counter"), { count: -1 }), "refus");
-await check("champ parasite refusé", updateDoc(doc(db, "stats/counter"), { count: 44, pirate: true }), "refus");
+await check("champ parasite refusé", updateDoc(doc(db, "stats/counter"), { count: 43, charge: "A".repeat(5000) }), "refus");
 await check("suppression du compteur refusée", deleteDoc(doc(db, "stats/counter")), "refus");
 
-console.log("\n— Confidentialité des e-mails —");
+console.log("\n— Confidentialité des signatures —");
 await check("lecture d'une signature refusée", getDoc(doc(db, "signatures/victime@exemple.fr")), "refus");
 await check("listage des signatures refusé", getDocs(collection(db, "signatures")), "refus");
 
-console.log("\n— Adhésion (le cas réel du site) —");
-const signer = (email, extra = {}) => {
+console.log("\n— Écritures sur les signatures : toutes fermées —");
+await check("création refusée, même bien formée", setDoc(doc(db, "signatures/neuf@exemple.fr"), { email: "neuf@exemple.fr", lang: "fr", created: serverTimestamp() }), "refus");
+await check("modification refusée", updateDoc(doc(db, "signatures/victime@exemple.fr"), { lang: "en" }), "refus");
+await check("⚠ suppression de la signature d'autrui désormais REFUSÉE", deleteDoc(doc(db, "signatures/victime@exemple.fr")), "refus");
+await check("champ arbitraire refusé", setDoc(doc(db, "signatures/x@y.fr"), { email: "x@y.fr", charge: "A".repeat(5000) }), "refus");
+
+console.log("\n— L'ancien parcours du site ne passe plus —");
+await check("lot signature + incrément refusé", (() => {
   const b = writeBatch(db);
-  b.set(doc(db, "signatures/" + email), { email, lang: "fr", created: serverTimestamp(), ...extra });
+  b.set(doc(db, "signatures/lot@exemple.fr"), { email: "lot@exemple.fr", lang: "fr", created: serverTimestamp() });
   b.update(doc(db, "stats/counter"), { count: increment(1) });
   return b.commit();
-};
-await check("signature normale acceptée", signer("david.puzos@tisselia.com"), "ok");
-await check("signature déjà présente refusée (→ « déjà signé »)", signer("victime@exemple.fr"), "refus");
-await check("lang absent accepté", setDoc(doc(db, "signatures/sans.lang@exemple.fr"), { email: "sans.lang@exemple.fr", created: serverTimestamp() }), "ok");
-await check("lang null accepté", setDoc(doc(db, "signatures/lang.null@exemple.fr"), { email: "lang.null@exemple.fr", lang: null, created: serverTimestamp() }), "ok");
-
-console.log("\n— Tentatives d'abus sur les signatures —");
-await check("identifiant sans arobase refusé", setDoc(doc(db, "signatures/pasunemail"), { email: "pasunemail" }), "refus");
-await check("identifiant ≠ champ email refusé", setDoc(doc(db, "signatures/a@b.fr"), { email: "autre@c.fr" }), "refus");
-await check("majuscules refusées (doublons de comptage)", setDoc(doc(db, "signatures/David@Exemple.FR"), { email: "David@Exemple.FR" }), "refus");
-await check("champ arbitraire refusé", setDoc(doc(db, "signatures/x@y.fr"), { email: "x@y.fr", charge: "A".repeat(5000) }), "refus");
-await check("lang surdimensionné refusé", setDoc(doc(db, "signatures/z@y.fr"), { email: "z@y.fr", lang: "A".repeat(400) }), "refus");
-await check("modification d'une signature refusée", updateDoc(doc(db, "signatures/victime@exemple.fr"), { email: "pirate@x.fr" }), "refus");
+})(), "refus");
 
 console.log("\n— Collections hors périmètre —");
 await check("création d'une collection inconnue refusée", setDoc(doc(db, "pirate/doc"), { x: 1 }), "refus");
 await check("lecture d'une collection inconnue refusée", getDoc(doc(db, "pirate/doc")), "refus");
 
-console.log("\n— Limite connue et assumée —");
-await check("⚠ suppression de la signature d'autrui POSSIBLE", deleteDoc(doc(db, "signatures/victime@exemple.fr")), "ok");
+console.log("\n— Le serveur, lui, garde la main —");
+await check("écriture autorisée en contournant les règles (SDK Admin)", env.withSecurityRulesDisabled(async ctx => {
+  await setDoc(doc(ctx.firestore(), "signatures/serveur@exemple.fr"), { email: "serveur@exemple.fr", lang: "fr" });
+}), "ok");
 
 await env.cleanup();
 console.log(`\n${pass} réussis, ${fail} échoués`);

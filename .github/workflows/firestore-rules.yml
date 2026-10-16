@@ -1,4 +1,4 @@
-name: Règles Firestore
+name: Règles Firestore et fonctions de signature
 
 # Les règles sont la SEULE protection de la base : la clé Firebase du site est
 # publique par conception. Ce workflow garantit deux choses :
@@ -14,12 +14,20 @@ on:
       - "firebase/firestore.rules"
       - "firebase/rules.test.mjs"
       - "firebase.json"
+      - "netlify/lib/**"
+      - "netlify/functions/sign.mjs"
+      - "netlify/functions/unsubscribe.mjs"
+      - "netlify/functions.test.mjs"
       - ".github/workflows/firestore-rules.yml"
   pull_request:
     paths:
       - "firebase/firestore.rules"
       - "firebase/rules.test.mjs"
       - "firebase.json"
+      - "netlify/lib/**"
+      - "netlify/functions/sign.mjs"
+      - "netlify/functions/unsubscribe.mjs"
+      - "netlify/functions.test.mjs"
       # Le workflow lui-même : une modification de son environnement doit être
       # éprouvée par une pull request, pas découverte après la fusion.
       - ".github/workflows/firestore-rules.yml"
@@ -52,7 +60,8 @@ jobs:
       - name: Installer les outils de test
         run: |
           npm install --no-save --no-audit --no-fund \
-            firebase@13 @firebase/rules-unit-testing@5 firebase-tools@15
+            firebase@12 @firebase/rules-unit-testing@5 firebase-tools@15 \
+            firebase-admin@14 @netlify/blobs@8
 
       # Tracé dans le journal : en cas de dérive d'une image de runner, la
       # cause saute aux yeux sans avoir à rejouer le workflow à l'aveugle.
@@ -62,11 +71,15 @@ jobs:
           echo "java     : $(java -version 2>&1 | head -1)"
           echo "firebase : $(npx firebase --version)"
 
-      - name: Jouer les tests des règles sur l'émulateur
+      # Les deux suites tournent sur le même émulateur : les règles ferment la
+      # porte, les fonctions sont le seul chemin d'écriture qui reste. Vérifier
+      # l'une sans l'autre ne dirait rien de l'ensemble.
+      - name: Jouer les tests sur l'émulateur
         run: |
           set -o pipefail
           if ! npx firebase emulators:exec --only firestore --project demo-cv \
-                 "node firebase/rules.test.mjs" 2>&1 | tee "$RUNNER_TEMP/emulateur.log"; then
+                 "node firebase/rules.test.mjs && node netlify/functions.test.mjs" \
+                 2>&1 | tee "$RUNNER_TEMP/emulateur.log"; then
             # Remonté en annotations : les journaux bruts ne sont pas toujours
             # consultables, les annotations le sont toujours.
             echo "::error::Échec des tests de règles. Dernières lignes :"

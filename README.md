@@ -9,7 +9,9 @@ automatique de la langue du navigateur, un design vert « nature » et des
 animations soignées (fonds animés, transparences, révélations au scroll).
 
 > Site 100 % statique (HTML / CSS / JavaScript, sans étape de build).
-> Les signatures sont stockées dans **Firebase / Firestore** (offre gratuite).
+> Les signatures sont stockées dans **Firebase / Firestore** (offre gratuite),
+> et **écrites uniquement depuis le serveur** : les règles refusent toute
+> écriture venant d'un navigateur → voir [`BOUTIQUE-SETUP.md`](BOUTIQUE-SETUP.md) § 11.
 > La boutique est alimentée par **Printful** et encaissée par **Stripe**, via
 > des fonctions serverless **Netlify** → voir [`BOUTIQUE-SETUP.md`](BOUTIQUE-SETUP.md).
 
@@ -32,7 +34,7 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 │   ├── i18n.js           Traductions des 7 langues + moteur i18n
 │   ├── welcome.js        Logique de la pré-page « fleur » (choix de langue)
 │   ├── layout.js         En-tête + pied de page partagés (injectés)
-│   ├── signatures.js     Signatures + compteur (Firebase / mode démo)
+│   ├── signatures.js     Lit le compteur ; signature/désinscription via /api
 │   ├── shop.js           Boutique : catalogue, panier, redirection Stripe
 │   └── app.js            Interactions communes à toutes les pages
 ├── netlify/
@@ -40,7 +42,9 @@ animations soignées (fonds animés, transparences, révélations au scroll).
 │   └── functions/
 │       ├── get-products.mjs    GET  /api/get-products
 │       ├── create-checkout.mjs POST /api/create-checkout
-│       └── stripe-webhook.mjs  POST /api/stripe-webhook
+│       ├── stripe-webhook.mjs  POST /api/stripe-webhook
+│       ├── sign.mjs            POST /api/sign         (signer)
+│       └── unsubscribe.mjs     POST /api/unsubscribe  (se retirer)
 ├── netlify.toml          Configuration Netlify (redirections /api/*)
 ├── .env.example          Modèle des variables d'environnement (sans secret)
 ├── BOUTIQUE-SETUP.md     📖 Guide pas à pas Printful + Stripe + Netlify
@@ -94,15 +98,25 @@ tournent en local) tant que Firebase n'est pas joignable.
    champ `count` de type **int64** = `0`.
 5. **Paramètres du projet → Vos applications → Web `</>`** : copiez l'objet
    `firebaseConfig` et collez-le dans [`config.js`](config.js).
-6. Poussez : le compteur devient réel. ✅
+6. **Paramètres du projet → Comptes de service → Générer une nouvelle clé
+   privée**, puis collez le JSON intégral dans la variable d'environnement
+   Netlify `FIREBASE_SERVICE_ACCOUNT`. Sans elle, les signatures restent
+   simulées. Voir [`BOUTIQUE-SETUP.md`](BOUTIQUE-SETUP.md) § 11.
+7. Redéployez : le compteur devient réel. ✅
 
 ### 🔒 Confidentialité (important)
 
-- Les clés Firebase sont **conçues** pour être publiques ; la sécurité vient
-  des **règles Firestore** ([`firebase/firestore.rules`](firebase/firestore.rules)).
-- Les visiteurs peuvent **signer** (créer `signatures/{email}`) mais **personne
-  ne peut lire ni lister les e-mails** : le compteur passe par un document
-  public dédié `stats/counter` (uniquement +1 / -1).
+- Les clés Firebase sont **conçues** pour être publiques. La sécurité ne vient
+  donc pas du secret de la clé, mais de deux choses : les **règles Firestore**
+  ([`firebase/firestore.rules`](firebase/firestore.rules)) et le fait que les
+  écritures passent par le serveur.
+- **Aucune écriture n'est possible depuis un navigateur.** Signature et
+  désinscription passent par `/api/sign` et `/api/unsubscribe`, qui
+  s'authentifient avec une clé de service. Un script qui s'adresserait
+  directement à la base est refusé.
+- **Personne ne peut lire ni lister les e-mails.** Seule reste publique la
+  lecture de `stats/counter` : un document, un entier, aucune donnée
+  personnelle.
 - Pour consulter/exporter les e-mails, utilisez la **console Firebase**
   (Firestore Database), accessible à vous seul.
 
