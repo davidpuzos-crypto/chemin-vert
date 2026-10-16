@@ -20,6 +20,9 @@ on:
       - "firebase/firestore.rules"
       - "firebase/rules.test.mjs"
       - "firebase.json"
+      # Le workflow lui-même : une modification de son environnement doit être
+      # éprouvée par une pull request, pas découverte après la fusion.
+      - ".github/workflows/firestore-rules.yml"
   workflow_dispatch:
 
 jobs:
@@ -34,15 +37,43 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
+
+      # L'émulateur Firestore est un programme Java : sans JDK explicite, il
+      # dépend de ce que l'image du runner embarque, qui change sans préavis.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
 
       # Pas de npm ci : ces outils ne servent qu'ici, on ne les fige pas dans
-      # les dépendances du site (qui n'a aucune étape de build).
+      # les dépendances du site (qui n'a aucune étape de build). Les majeures
+      # sont épinglées : ce sont celles sur lesquelles les tests sont vérifiés.
       - name: Installer les outils de test
-        run: npm install --no-save firebase @firebase/rules-unit-testing firebase-tools
+        run: |
+          npm install --no-save --no-audit --no-fund \
+            firebase@13 @firebase/rules-unit-testing@5 firebase-tools@15
+
+      # Tracé dans le journal : en cas de dérive d'une image de runner, la
+      # cause saute aux yeux sans avoir à rejouer le workflow à l'aveugle.
+      - name: Environnement
+        run: |
+          echo "node     : $(node -v)"
+          echo "java     : $(java -version 2>&1 | head -1)"
+          echo "firebase : $(npx firebase --version)"
 
       - name: Jouer les tests des règles sur l'émulateur
-        run: npx firebase emulators:exec --only firestore --project demo-cv "node firebase/rules.test.mjs"
+        run: |
+          set -o pipefail
+          if ! npx firebase emulators:exec --only firestore --project demo-cv \
+                 "node firebase/rules.test.mjs" 2>&1 | tee "$RUNNER_TEMP/emulateur.log"; then
+            # Remonté en annotations : les journaux bruts ne sont pas toujours
+            # consultables, les annotations le sont toujours.
+            echo "::error::Échec des tests de règles. Dernières lignes :"
+            tail -n 12 "$RUNNER_TEMP/emulateur.log" \
+              | while IFS= read -r ligne; do echo "::error::$ligne"; done
+            exit 1
+          fi
 
       - name: Publier les règles sur Firebase
         if: github.event_name != 'pull_request' && env.SA != ''
