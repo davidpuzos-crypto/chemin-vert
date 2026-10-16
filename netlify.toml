@@ -36,6 +36,5 @@
     #   fonts.googleapis.com : feuille de style des polices
     #   fonts.gstatic.com    : fichiers de polices
     #   files.cdn.printful.com : visuels des produits
-    #   *.googleapis.com     : Firestore (lecture du compteur) et App Check
-    #   www.google.com       : reCAPTCHA, exigé par App Check (script + iframe)
-    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://files.cdn.printful.com; connect-src 'self' https://firestore.googleapis.com https://*.googleapis.com wss://*.firestore.googleapis.com; form-action 'self' https://checkout.stripe.com; frame-src https://www.google.com; frame-ancestors 'self'; base-uri 'none'; object-src 'none'"
+    #   *.googleapis.com     : Firestore (lecture du compteur)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://files.cdn.printful.com; connect-src 'self' https://firestore.googleapis.com https://*.googleapis.com wss://*.firestore.googleapis.com; form-action 'self' https://checkout.stripe.com; frame-ancestors 'self'; base-uri 'none'; object-src 'none'"

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@netlify/blobs": "^8.1.0",
+    "firebase-admin": "^14.5.0",
     "stripe": "^18.0.0"
   }
 }

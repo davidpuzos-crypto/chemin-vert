@@ -389,33 +389,96 @@ messages techniques n'apparaissent jamais côté visiteur.
 
 ---
 
-## 11. Compteur et signatures : sécuriser la base
+## 11. Compteur et signatures : comment la base est protégée
 
 Cette section est celle que référence l'en-tête de `firebase/firestore.rules`.
 Elle concerne la base Firestore, pas la boutique, mais c'est elle qui protège
 l'argument public du mouvement : le nombre de signataires.
 
-### Le point de départ
+### Le problème de départ
 
 La clé Firebase du site est **publique par conception** : elle est lisible dans
 `config.js`, donc dans le code source de chaque page. Ce n'est pas une faille,
-c'est le modèle de Firebase. La conséquence, elle, est bien réelle : **tout ce
-que les règles autorisent, n'importe qui sur Internet peut le faire**, et pas
-seulement les visiteurs du site.
+c'est le modèle de Firebase.
 
-Deux protections existent, et elles ne se remplacent pas.
+Mais tant que le navigateur écrivait directement dans la base, **aucune règle
+ne pouvait distinguer un visiteur d'un script**. Les règles vérifient la forme
+d'une écriture, jamais son origine. Un programme respectant la forme passait
+donc aussi bien qu'un signataire. Concrètement, n'importe qui pouvait gonfler
+le compteur, le ramener à zéro, créer de fausses signatures, ou supprimer la
+signature d'autrui.
 
-| | Ce que ça protège | Ce que ça ne protège pas |
-|---|---|---|
-| **Règles Firestore** | La forme et la portée : qui lit quoi, quels champs, quel format | Rien contre un script qui respecte la forme |
-| **App Check** | L'origine : l'appel vient-il du vrai site ou d'un programme ? | Rien contre un visiteur humain mal intentionné |
+La parade prévue par Firebase est **App Check**. Elle s'est révélée
+inaccessible : Google a fermé l'enregistrement en reCAPTCHA classique, et son
+remplaçant, Fraud Defense, exige d'associer un compte de facturation, même
+pour son quota gratuit.
 
-Sans App Check, les règles laissent passer deux abus, assumés faute de comptes
-utilisateurs :
+### La solution retenue : écrire côté serveur
 
-- le compteur public peut être gonflé ou ramené à zéro, un incrément à la fois ;
-- la signature de quelqu'un peut être supprimée par un tiers qui connaît son
-  adresse e-mail.
+Les écritures ne partent plus du navigateur. Elles passent par deux fonctions
+serverless, sur la même infrastructure Netlify que la boutique :
+
+| Fonction | Rôle |
+|---|---|
+| `POST /api/sign` | Enregistre une signature et incrémente le compteur |
+| `POST /api/unsubscribe` | Retire une signature et décrémente le compteur |
+
+Ces fonctions s'authentifient avec une **clé de service**, qui ne quitte jamais
+le serveur. Les règles Firestore, elles, refusent désormais toute écriture : le
+SDK Admin les ignore, donc les fonctions travaillent, et tout le reste est
+refusé.
+
+C'est **plus protecteur qu'App Check** : App Check vérifiait que l'appel venait
+du bon navigateur ; ici, plus aucun navigateur n'est autorisé à écrire.
+
+### Ce que cela règle
+
+- Le compteur ne peut plus être gonflé ni vidé.
+- Aucune fausse signature ne peut être créée en masse.
+- La signature d'autrui ne peut plus être supprimée depuis le web.
+- **La dérive du compteur disparaît.** Auparavant, Firestore acceptait la
+  suppression d'un document inexistant : une adresse jamais inscrite faisait
+  baisser le compteur sans rien supprimer. L'écart d'une unité constaté le
+  16 octobre 2026 venait très probablement de là. L'existence est maintenant
+  vérifiée dans la transaction.
+- Signature et compteur bougent dans une **seule transaction** : les deux
+  aboutissent, ou aucun des deux.
+
+### Ce qui reste ouvert, et pourquoi
+
+**Connaître une adresse suffit encore pour retirer la signature
+correspondante.** La fermer demande un lien de confirmation envoyé par e-mail,
+donc un service d'envoi que le projet n'a pas : l'offre MX Plan d'OVH ne
+fournit que des redirections, pas de boîte permettant d'émettre.
+
+En attendant, un **quota par adresse IP** empêche de le faire en série : huit
+appels par tranche de cinq minutes, volontairement tolérant parce que plusieurs
+personnes peuvent partager une même connexion. Un signataire légitime ne le
+rencontre jamais.
+
+### Mise en place
+
+**1. Créer la clé de service**
+
+Console Firebase → **Paramètres du projet** → **Comptes de service**
+→ **Générer une nouvelle clé privée**. Un fichier JSON est téléchargé.
+
+Cette clé donne un accès total à la base. Elle ne se commite pas, ne s'envoie
+pas par e-mail, ne se partage pas.
+
+**2. La déclarer à Netlify**
+
+Netlify → **Variables environnementales** → nom `FIREBASE_SERVICE_ACCOUNT`,
+valeur le **contenu JSON intégral** du fichier, sur une seule ligne.
+
+Puis **redéployer** : une variable d'environnement ne prend effet qu'au
+déploiement suivant.
+
+**3. Supprimer le fichier téléchargé**, une fois la valeur collée.
+
+Sans cette variable, les deux fonctions répondent `not_configured` et le site
+bascule en mode démonstration : les signatures sont simulées en mémoire locale,
+rien n'est perdu mais rien n'est enregistré non plus.
 
 ### Déployer les règles
 
@@ -427,66 +490,37 @@ produit par le passé, la console portant une version nettement plus permissive.
 Le workflow `.github/workflows/firestore-rules.yml` joue les tests puis publie
 les règles à chaque fusion sur `main`. Pour qu'il publie, il lui faut un secret :
 
-1. Console Firebase → **Paramètres du projet** → **Comptes de service**
-   → **Générer une nouvelle clé privée**. Un fichier JSON est téléchargé.
+1. Même clé de service qu'à l'étape 1, ou une nouvelle.
 2. GitHub → dépôt → **Settings** → **Secrets and variables** → **Actions**
    → **New repository secret**.
-3. Nom : `FIREBASE_SERVICE_ACCOUNT`. Valeur : le contenu intégral du fichier JSON.
-4. Supprimez le fichier téléchargé : il donne un accès total à la base.
+3. Nom : `FIREBASE_SERVICE_ACCOUNT`. Valeur : le contenu JSON intégral.
 
-Sans ce secret, le workflow teste les règles mais ne les publie pas, et le
-signale par un avertissement dans l'exécution.
+Sans ce secret, le workflow teste sans publier, et le signale par un
+avertissement.
 
-Pour jouer les tests en local :
+### Jouer les tests en local
 
 ```bash
-npm install --no-save firebase @firebase/rules-unit-testing firebase-tools
+npm install --no-save firebase@12 @firebase/rules-unit-testing@5 \
+  firebase-tools@15 firebase-admin@14 @netlify/blobs@8
 npx firebase emulators:exec --only firestore --project demo-cv \
-  "node firebase/rules.test.mjs"
+  "node firebase/rules.test.mjs && node netlify/functions.test.mjs"
 ```
 
-### Activer App Check
+`firebase@12` n'est pas un caprice : `@firebase/rules-unit-testing@5` exige
+cette version en dépendance de pair, et npm refuse l'installation avec la 13.
+C'est ce détail qui faisait échouer le workflow sans message explicite.
 
-1. Console Firebase → **App Check** → onglet **Applications** → votre
-   application web → fournisseur **reCAPTCHA v3**.
-2. Firebase renvoie vers `google.com/recaptcha/admin` pour créer la clé. Au
-   champ **Domaines**, saisissez les trois adresses depuis lesquelles le site
-   est servi :
-
-   ```
-   cheminvert.org
-   www.cheminvert.org
-   cheminvert1.netlify.app
-   ```
-
-3. Collez la **clé de site** (elle commence par `6L`, ce n'est pas la clé
-   secrète) dans Firebase, puis dans `config.js` :
-
-   ```js
-   APP_CHECK_SITE_KEY: "6L..."
-   ```
-
-4. Déployez, puis vérifiez que le compteur s'affiche toujours sur
-   `adherer.html`.
-5. **Laissez le mode « non appliqué » pendant deux ou trois jours.** Console
-   Firebase → App Check → onglet **API** → Cloud Firestore. Appliquer tout de
-   suite bloquerait le site avant que le code déployé n'envoie des jetons.
-6. Revenez consulter l'onglet **Requêtes**. Quand la quasi-totalité des appels
-   apparaît comme vérifiée, cliquez sur **Appliquer**.
-
-Tant que `APP_CHECK_SITE_KEY` est vide, App Check reste inactif et le site
-fonctionne normalement : l'activation est donc sans risque de coupure.
-
-> **Politique de sécurité du contenu.** reCAPTCHA charge un script et une
-> iframe depuis `www.google.com`. Les directives `script-src` et `frame-src`
-> de `netlify.toml` les autorisent déjà. Sans ces deux entrées, App Check
-> échouerait silencieusement, bloqué par le navigateur.
+Les deux suites tournent sur le même émulateur et jamais contre la vraie base.
+`firebase/rules.test.mjs` vérifie que la porte est close ; `netlify/functions.test.mjs`
+vérifie le seul chemin qui reste, y compris les cas de bord : doublons,
+majuscules, adresses malformées, champs arbitraires, et l'absence de dérive du
+compteur.
 
 ### Sauvegarder les signatures
 
 Les signatures sont des données personnelles réelles, conservées en un seul
-exemplaire, dans une collection où la suppression reste ouverte. Une base vidée
-serait définitivement perdue, et vous ne sauriez même pas qui y figurait.
+exemplaire.
 
 ```bash
 npm install --no-save firebase-admin
@@ -495,9 +529,18 @@ GOOGLE_APPLICATION_CREDENTIALS=~/chemin-vert-serviceAccount.json \
 ```
 
 Le script écrit un fichier daté dans `backups/`, ignoré par git. Il signale
-aussi tout **écart entre le compteur public et le nombre réel de signatures** :
-les deux bougent ensemble dans une opération atomique, donc un décalage
-trahit un incident ou une manipulation du compteur.
+aussi tout écart entre le compteur public et le nombre réel de signatures.
+
+Pour cette sauvegarde, préférez une clé **en lecture seule** : Console Google
+Cloud → **IAM et administration** → **Comptes de service** → créer un compte
+avec le seul rôle **Lecteur Cloud Datastore**. Elle ne pourra rien modifier.
 
 Ce fichier contient des adresses e-mail. Il ne se commite pas, ne se partage
 pas, et se conserve en lieu sûr.
+
+### Si un jour la facturation est activée
+
+App Check redeviendrait disponible via Fraud Defense. Il ne remplacerait pas
+cette architecture, il s'y ajouterait, et permettrait surtout de rouvrir la
+lecture du compteur à moindre risque. Ce n'est pas une priorité : la base est
+déjà fermée en écriture.
