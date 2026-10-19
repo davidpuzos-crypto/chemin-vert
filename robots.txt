@@ -1,0 +1,12 @@
+# Chemin Vert — https://cheminvert.org
+# Tout est public et indexable, sauf les pages de service qui portent déjà
+# leur propre balise noindex (merci.html, charte-print.html).
+
+User-agent: *
+Allow: /
+
+# Fonctions serverless : ni du contenu, ni destinées aux visiteurs.
+Disallow: /api/
+Disallow: /.netlify/
+
+Sitemap: https://cheminvert.org/sitemap.xml

@@ -1476,3 +1476,21 @@ body.welcome { overflow: hidden; }
   .reveal, .value { opacity: 1 !important; transform: none !important; }
   html { scroll-behavior: auto; }
 }
+
+/* --- Consentement du formulaire d'adhésion et liens légaux ---------------- */
+/* La case occupe une ligne entière : .sign__form est en flex-wrap, donc une
+   base de 100 % la pousse sous le champ et le bouton. */
+.sign__consent {
+  flex: 1 1 100%; display: flex; gap: .6rem; align-items: flex-start;
+  margin-top: .2rem; font-size: .9rem; color: var(--muted);
+  text-align: start; cursor: pointer;
+}
+.sign__consent input { margin-top: .15em; flex: 0 0 auto; accent-color: var(--green-500); }
+.sign__consent a { color: var(--green-700); text-decoration: underline; }
+.footer__legal { margin-top: .5rem; font-size: .86rem; display: flex; gap: .5rem;
+  flex-wrap: wrap; justify-content: center; }
+.footer__legal a { color: inherit; opacity: .85; }
+.footer__legal a:hover { opacity: 1; }
+
+/* Repères à compléter dans les pages légales : visibles sans être criards. */
+.prose mark { background: #fff3bf; padding: 0 .25em; border-radius: 3px; font-weight: 600; }

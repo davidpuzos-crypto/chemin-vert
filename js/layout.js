@@ -66,6 +66,11 @@ const Layout = {
         </nav>
         <div class="footer__meta">
           <p class="footer__rights">© <span id="year"></span> Chemin Vert — <span data-i18n="footer.rights">Tous droits réservés.</span></p>
+          <p class="footer__legal">
+            <a href="mentions-legales.html" data-i18n="legal.mentions">Mentions légales</a>
+            <span aria-hidden="true">·</span>
+            <a href="confidentialite.html" data-i18n="legal.privacy">Politique de confidentialité</a>
+          </p>
         </div>
       </div>
     </footer>`;

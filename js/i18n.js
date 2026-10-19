@@ -692,6 +692,18 @@ const I18N = {
 /* -------------------- Extension : fonctionnalités 2027 -------------------- */
 const I18N_EXT = {
   fr: {
+    /* Pages légales et consentement */
+    "legal.tag": "Informations légales",
+    "legal.mentions": "Mentions légales",
+    "legal.privacy": "Politique de confidentialité",
+    "legal.fr_only": "Ce document est publié en français : il répond à une obligation du droit français, et la traduction approximative d'un texte juridique vaudrait moins que l'original.",
+    "priv.sum_title": "L'essentiel",
+    "priv.sum_1": "Nous conservons uniquement votre adresse e-mail, la langue du site et la date de votre signature. Rien d'autre.",
+    "priv.sum_2": "Elle sert uniquement à compter votre signature une seule fois. Aucune lettre d'information, aucune publicité, aucun message ne vous sera envoyé.",
+    "priv.sum_3": "Les adresses sont stockées en Europe, illisibles depuis le web, et ne sont jamais vendues ni transmises à des tiers.",
+    "priv.sum_withdraw": "Retirer ma signature et effacer mon adresse",
+    "sign.consent": "J'accepte que mon adresse e-mail soit conservée pour comptabiliser ma signature.",
+    "sign.consent_required": "Merci de cocher la case pour confirmer votre accord.",
     "milestone.next": "Prochain objectif", "value.all_title": "Dans les 7 langues", "value.close": "Fermer",
     "shop.add": "Ajouter au panier", "shop.added": "Ajouté ✓", "shop.cart": "Panier",
     "shop.cart_empty": "Votre panier est vide.", "shop.total": "Total", "shop.checkout": "Commander",
@@ -742,6 +754,18 @@ const I18N_EXT = {
     "merci.text": "Votre paiement a bien été reçu. Vous allez recevoir un e-mail de confirmation, et votre commande sera expédiée très vite."
   },
   en: {
+    /* Pages légales et consentement */
+    "legal.tag": "Legal information",
+    "legal.mentions": "Legal notice",
+    "legal.privacy": "Privacy policy",
+    "legal.fr_only": "This document is published in French: it fulfils an obligation under French law, and an approximate translation of a legal text would be worth less than the original.",
+    "priv.sum_title": "The essentials",
+    "priv.sum_1": "We keep only your email address, the site language and the date of your signature. Nothing else.",
+    "priv.sum_2": "It is used solely to count your signature once. No newsletter, no advertising, no message will ever be sent to you.",
+    "priv.sum_3": "Addresses are stored in Europe, cannot be read from the web, and are never sold or passed on to third parties.",
+    "priv.sum_withdraw": "Withdraw my signature and erase my address",
+    "sign.consent": "I agree that my email address may be kept in order to count my signature.",
+    "sign.consent_required": "Please tick the box to confirm your agreement.",
     "milestone.next": "Next goal", "value.all_title": "In all 7 languages", "value.close": "Close",
     "shop.add": "Add to cart", "shop.added": "Added ✓", "shop.cart": "Cart",
     "shop.cart_empty": "Your cart is empty.", "shop.total": "Total", "shop.checkout": "Checkout",
@@ -792,6 +816,18 @@ const I18N_EXT = {
     "merci.text": "Your payment was received. You'll get a confirmation email, and your order will ship shortly."
   },
   es: {
+    /* Pages légales et consentement */
+    "legal.tag": "Información legal",
+    "legal.mentions": "Aviso legal",
+    "legal.privacy": "Política de privacidad",
+    "legal.fr_only": "Este documento se publica en francés: responde a una obligación del derecho francés, y la traducción aproximada de un texto jurídico valdría menos que el original.",
+    "priv.sum_title": "Lo esencial",
+    "priv.sum_1": "Solo conservamos su dirección de correo electrónico, el idioma del sitio y la fecha de su firma. Nada más.",
+    "priv.sum_2": "Sirve únicamente para contar su firma una sola vez. No se le enviará ningún boletín, ninguna publicidad, ningún mensaje.",
+    "priv.sum_3": "Las direcciones se almacenan en Europa, no pueden leerse desde la web y nunca se venden ni se ceden a terceros.",
+    "priv.sum_withdraw": "Retirar mi firma y borrar mi dirección",
+    "sign.consent": "Acepto que se conserve mi dirección de correo electrónico para contabilizar mi firma.",
+    "sign.consent_required": "Por favor, marque la casilla para confirmar su acuerdo.",
     "milestone.next": "Próximo objetivo", "value.all_title": "En los 7 idiomas", "value.close": "Cerrar",
     "shop.add": "Añadir al carrito", "shop.added": "Añadido ✓", "shop.cart": "Carrito",
     "shop.cart_empty": "Tu carrito está vacío.", "shop.total": "Total", "shop.checkout": "Pagar",
@@ -842,6 +878,18 @@ const I18N_EXT = {
     "merci.text": "Hemos recibido tu pago. Recibirás un correo de confirmación y tu pedido se enviará muy pronto."
   },
   it: {
+    /* Pages légales et consentement */
+    "legal.tag": "Informazioni legali",
+    "legal.mentions": "Note legali",
+    "legal.privacy": "Informativa sulla privacy",
+    "legal.fr_only": "Questo documento è pubblicato in francese: risponde a un obbligo del diritto francese, e la traduzione approssimativa di un testo giuridico varrebbe meno dell'originale.",
+    "priv.sum_title": "L'essenziale",
+    "priv.sum_1": "Conserviamo solo il suo indirizzo e-mail, la lingua del sito e la data della sua firma. Nient'altro.",
+    "priv.sum_2": "Serve unicamente a contare la sua firma una sola volta. Non le sarà inviata alcuna newsletter, alcuna pubblicità, alcun messaggio.",
+    "priv.sum_3": "Gli indirizzi sono conservati in Europa, non possono essere letti dal web e non vengono mai venduti né ceduti a terzi.",
+    "priv.sum_withdraw": "Ritirare la mia firma e cancellare il mio indirizzo",
+    "sign.consent": "Acconsento alla conservazione del mio indirizzo e-mail per conteggiare la mia firma.",
+    "sign.consent_required": "La preghiamo di spuntare la casella per confermare il suo consenso.",
     "milestone.next": "Prossimo obiettivo", "value.all_title": "Nelle 7 lingue", "value.close": "Chiudi",
     "shop.add": "Aggiungi al carrello", "shop.added": "Aggiunto ✓", "shop.cart": "Carrello",
     "shop.cart_empty": "Il tuo carrello è vuoto.", "shop.total": "Totale", "shop.checkout": "Ordina",
@@ -892,6 +940,18 @@ const I18N_EXT = {
     "merci.text": "Il pagamento è stato ricevuto. Riceverai un'email di conferma e il tuo ordine partirà a breve."
   },
   de: {
+    /* Pages légales et consentement */
+    "legal.tag": "Rechtliche Hinweise",
+    "legal.mentions": "Impressum",
+    "legal.privacy": "Datenschutzerklärung",
+    "legal.fr_only": "Dieses Dokument wird auf Französisch veröffentlicht: Es erfüllt eine Pflicht des französischen Rechts, und eine ungefähre Übersetzung eines Rechtstextes wäre weniger wert als das Original.",
+    "priv.sum_title": "Das Wesentliche",
+    "priv.sum_1": "Wir speichern nur Ihre E-Mail-Adresse, die Sprache der Website und das Datum Ihrer Unterschrift. Sonst nichts.",
+    "priv.sum_2": "Sie dient ausschließlich dazu, Ihre Unterschrift einmal zu zählen. Es werden Ihnen weder Newsletter noch Werbung noch sonstige Nachrichten zugesandt.",
+    "priv.sum_3": "Die Adressen werden in Europa gespeichert, sind aus dem Web nicht lesbar und werden niemals verkauft oder an Dritte weitergegeben.",
+    "priv.sum_withdraw": "Meine Unterschrift zurückziehen und meine Adresse löschen",
+    "sign.consent": "Ich bin damit einverstanden, dass meine E-Mail-Adresse zur Zählung meiner Unterschrift gespeichert wird.",
+    "sign.consent_required": "Bitte kreuzen Sie das Kästchen an, um Ihr Einverständnis zu bestätigen.",
     "milestone.next": "Nächstes Ziel", "value.all_title": "In allen 7 Sprachen", "value.close": "Schließen",
     "shop.add": "In den Warenkorb", "shop.added": "Hinzugefügt ✓", "shop.cart": "Warenkorb",
     "shop.cart_empty": "Dein Warenkorb ist leer.", "shop.total": "Summe", "shop.checkout": "Zur Kasse",
@@ -942,6 +1002,18 @@ const I18N_EXT = {
     "merci.text": "Deine Zahlung ist eingegangen. Du erhältst eine Bestätigungs-E-Mail, und deine Bestellung wird bald versandt."
   },
   tr: {
+    /* Pages légales et consentement */
+    "legal.tag": "Yasal bilgiler",
+    "legal.mentions": "Yasal bildirim",
+    "legal.privacy": "Gizlilik politikası",
+    "legal.fr_only": "Bu belge Fransızca olarak yayımlanmıştır: Fransız hukukunun bir yükümlülüğünü yerine getirir ve hukuki bir metnin yaklaşık çevirisi aslından daha az değer taşır.",
+    "priv.sum_title": "Özet",
+    "priv.sum_1": "Yalnızca e-posta adresinizi, sitenin dilini ve imza tarihinizi saklıyoruz. Başka hiçbir şey.",
+    "priv.sum_2": "Yalnızca imzanızı bir kez saymak için kullanılır. Size hiçbir bülten, reklam ya da mesaj gönderilmeyecektir.",
+    "priv.sum_3": "Adresler Avrupa'da saklanır, web üzerinden okunamaz ve asla satılmaz veya üçüncü taraflara verilmez.",
+    "priv.sum_withdraw": "İmzamı geri çek ve adresimi sil",
+    "sign.consent": "İmzamın sayılabilmesi için e-posta adresimin saklanmasını kabul ediyorum.",
+    "sign.consent_required": "Lütfen onayınızı doğrulamak için kutuyu işaretleyin.",
     "milestone.next": "Sonraki hedef", "value.all_title": "7 dilde", "value.close": "Kapat",
     "shop.add": "Sepete ekle", "shop.added": "Eklendi ✓", "shop.cart": "Sepet",
     "shop.cart_empty": "Sepetin boş.", "shop.total": "Toplam", "shop.checkout": "Sipariş ver",
@@ -992,6 +1064,18 @@ const I18N_EXT = {
     "merci.text": "Ödemen alındı. Onay e-postası alacaksın ve siparişin çok yakında gönderilecek."
   },
   ar: {
+    /* Pages légales et consentement */
+    "legal.tag": "معلومات قانونية",
+    "legal.mentions": "البيانات القانونية",
+    "legal.privacy": "سياسة الخصوصية",
+    "legal.fr_only": "هذه الوثيقة منشورة بالفرنسية: فهي تستجيب لالتزام في القانون الفرنسي، والترجمة التقريبية لنص قانوني تساوي أقل من الأصل.",
+    "priv.sum_title": "الأساسي",
+    "priv.sum_1": "نحتفظ فقط بعنوان بريدك الإلكتروني، ولغة الموقع، وتاريخ توقيعك. لا شيء غير ذلك.",
+    "priv.sum_2": "يُستخدم فقط لإحصاء توقيعك مرة واحدة. لن تصلك أي نشرة إخبارية ولا أي إعلان ولا أي رسالة.",
+    "priv.sum_3": "تُحفظ العناوين في أوروبا، ولا يمكن قراءتها من الويب، ولا تُباع أو تُنقل إلى أطراف أخرى أبداً.",
+    "priv.sum_withdraw": "سحب توقيعي ومحو عنواني",
+    "sign.consent": "أوافق على حفظ عنوان بريدي الإلكتروني لإحصاء توقيعي.",
+    "sign.consent_required": "يرجى تحديد المربع لتأكيد موافقتك.",
     "milestone.next": "الهدف التالي", "value.all_title": "بجميع اللغات السبع", "value.close": "إغلاق",
     "shop.add": "أضف إلى السلة", "shop.added": "أُضيف ✓", "shop.cart": "السلة",
     "shop.cart_empty": "سلتك فارغة.", "shop.total": "الإجمالي", "shop.checkout": "إتمام الطلب",
@@ -1081,10 +1165,25 @@ const I18nEngine = {
         if (dict[key] !== undefined) el.setAttribute(attr, dict[key]);
       });
     });
-    // <title> et meta description
-    if (dict["meta.title"]) document.title = dict["meta.title"];
-    const md = document.querySelector('meta[name="description"]');
-    if (md && dict["meta.desc"]) md.setAttribute("content", dict["meta.desc"]);
+    /* <title> : composé par page.
+       "meta.title" est une valeur unique pour tout le site. L'appliquer
+       partout donnait le même titre à toutes les pages — mauvais pour le
+       référencement, puisque Google exécute le JavaScript, et déroutant dans
+       les onglets du navigateur. Une page peut donc déclarer
+       <body data-title-key="nav.charter"> : le libellé traduit est alors
+       composé avec le nom du mouvement. Sans cet attribut, on retombe sur
+       le titre générique, qui reste juste pour l'accueil. */
+    const cleTitre = document.body && document.body.dataset.titleKey;
+    if (cleTitre && dict[cleTitre]) {
+      document.title = `${dict[cleTitre]} — Chemin Vert`;
+    } else if (dict["meta.title"]) {
+      document.title = dict["meta.title"];
+    }
+
+    /* La description n'est jamais réécrite : celle servie dans le HTML est
+       propre à chaque page, alors que "meta.desc" est générique. Un visiteur
+       ne la voit pas ; seuls les moteurs la lisent, et une description
+       précise vaut mieux qu'une description traduite mais vague. */
 
     // Notifie les autres modules (valeurs de la charte, sélecteur…)
     document.dispatchEvent(new CustomEvent("langchange", { detail: { lang } }));

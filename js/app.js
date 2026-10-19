@@ -173,7 +173,13 @@
     requestAnimationFrame(tick);
   }
 
+  /* Toutes les pages ne chargent pas signatures.js : les pages légales, par
+     exemple, n'ont aucune raison d'ouvrir une connexion à la base. On ne
+     suppose donc jamais que Signatures existe. */
+  const signaturesDispo = () => typeof Signatures !== "undefined";
+
   async function refreshCount() {
+    if (!signaturesDispo()) return;
     try {
       animateCount(await Signatures.getCount());
     } catch (err) {
@@ -188,12 +194,23 @@
     const emailInput = document.getElementById("signEmail");
     const signBtn = document.getElementById("signBtn");
     const signMsg = document.getElementById("signMsg");
+    const consent = document.getElementById("signConsent");
 
     form.addEventListener("submit", async e => {
       e.preventDefault();
       const email = emailInput.value;
       signMsg.textContent = "";
       signMsg.className = "sign__msg";
+
+      /* Consentement vérifié AVANT l'adresse : le RGPD demande un acte positif,
+         et rien ne doit partir vers le serveur tant qu'il n'est pas donné.
+         Le `consent &&` couvre le cas d'une page sans la case. */
+      if (consent && !consent.checked) {
+        signMsg.textContent = I18nEngine.get("sign.consent_required");
+        signMsg.classList.add("err");
+        consent.focus();
+        return;
+      }
 
       if (!Signatures.emailValid(email)) {
         signMsg.textContent = I18nEngine.get("sign.invalid");
@@ -212,6 +229,7 @@
           signMsg.textContent = I18nEngine.get("sign.success");
           signMsg.classList.add("ok");
           emailInput.value = "";
+          if (consent) consent.checked = false;
           refreshCount();
           burstConfetti();
         } else if (res === "already") {
@@ -445,7 +463,7 @@
   if (hasCounter) refreshCount();
   setTimeout(observeReveals, 60);
 
-  if (!Signatures.configured) {
+  if (signaturesDispo() && !Signatures.configured) {
     console.info("%cChemin Vert — mode DÉMO", "color:#14713c;font-weight:bold",
       "\nRenseignez config.js (config Firebase) pour activer le compteur réel.");
   }
