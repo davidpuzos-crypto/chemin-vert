@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="meta.title">Chemin Vert — Un mouvement humaniste</title>
-  <meta name="description" data-i18n="meta.desc" content="Chemin Vert : un mouvement humaniste qui remet à l'honneur les valeurs humaines essentielles." />
+  <title>Chemin Vert — Un mouvement humaniste</title>
+  <meta name="description" content="Une charte de quinze valeurs humaines universelles, que chacun peut signer d'une simple adresse e-mail. Un compteur public, sept langues, aucune publicité." />
   <meta name="theme-color" content="#14713c" />
   <meta property="og:title" content="Chemin Vert" />
   <meta property="og:description" content="Un mouvement humaniste. Reprenons le chemin des valeurs qui nous unissent." />
@@ -13,6 +13,66 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+<!-- Partage social et indexation -->
+  <!-- Ces valeurs sont celles que lisent Google et les robots des réseaux
+       sociaux : ils n'exécutent pas le JavaScript, donc le moteur i18n ne les
+       remplace que pour le visiteur, sans effet sur l'indexation. -->
+  <link rel="canonical" href="https://cheminvert.org/accueil.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Chemin Vert" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:url" content="https://cheminvert.org/accueil.html" />
+  <meta property="og:title" content="Chemin Vert — Reprenons le chemin des valeurs qui nous unissent" />
+  <meta property="og:description" content="Une charte de quinze valeurs humaines universelles, que chacun peut signer d'une simple adresse e-mail. Un compteur public, sept langues, aucune publicité." />
+  <meta property="og:image" content="https://cheminvert.org/assets/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Chemin Vert — Reprenons le chemin des valeurs qui nous unissent" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Chemin Vert — Reprenons le chemin des valeurs qui nous unissent" />
+  <meta name="twitter:description" content="Une charte de quinze valeurs humaines universelles, que chacun peut signer d'une simple adresse e-mail. Un compteur public, sept langues, aucune publicité." />
+  <meta name="twitter:image" content="https://cheminvert.org/assets/og-image.png" />
+  <!-- Données structurées : décrivent le site à Google en termes qu'il
+       comprend. Le type « application/ld+json » n'est pas du script
+       exécutable, la politique de sécurité du site le laisse donc passer. -->
+  <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cheminvert.org/#site",
+        "url": "https://cheminvert.org/",
+        "name": "Chemin Vert",
+        "description": "Une charte de quinze valeurs humaines universelles, que chacun peut signer.",
+        "inLanguage": [
+          "fr",
+          "en",
+          "es",
+          "it",
+          "de",
+          "tr",
+          "ar"
+        ],
+        "publisher": {
+          "@id": "https://cheminvert.org/#org"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://cheminvert.org/#org",
+        "name": "Chemin Vert",
+        "alternateName": "Mouvement Chemin Vert",
+        "url": "https://cheminvert.org/",
+        "logo": "https://cheminvert.org/assets/og-image.png",
+        "image": "https://cheminvert.org/assets/og-image.png",
+        "email": "contact@cheminvert.org",
+        "description": "Un mouvement humaniste réuni autour d'une charte de quinze valeurs universelles : légalité et éthique, amour, respect et fraternité."
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body data-page="home">

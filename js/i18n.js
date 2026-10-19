@@ -1165,10 +1165,25 @@ const I18nEngine = {
         if (dict[key] !== undefined) el.setAttribute(attr, dict[key]);
       });
     });
-    // <title> et meta description
-    if (dict["meta.title"]) document.title = dict["meta.title"];
-    const md = document.querySelector('meta[name="description"]');
-    if (md && dict["meta.desc"]) md.setAttribute("content", dict["meta.desc"]);
+    /* <title> : composé par page.
+       "meta.title" est une valeur unique pour tout le site. L'appliquer
+       partout donnait le même titre à toutes les pages — mauvais pour le
+       référencement, puisque Google exécute le JavaScript, et déroutant dans
+       les onglets du navigateur. Une page peut donc déclarer
+       <body data-title-key="nav.charter"> : le libellé traduit est alors
+       composé avec le nom du mouvement. Sans cet attribut, on retombe sur
+       le titre générique, qui reste juste pour l'accueil. */
+    const cleTitre = document.body && document.body.dataset.titleKey;
+    if (cleTitre && dict[cleTitre]) {
+      document.title = `${dict[cleTitre]} — Chemin Vert`;
+    } else if (dict["meta.title"]) {
+      document.title = dict["meta.title"];
+    }
+
+    /* La description n'est jamais réécrite : celle servie dans le HTML est
+       propre à chaque page, alors que "meta.desc" est générique. Un visiteur
+       ne la voit pas ; seuls les moteurs la lisent, et une description
+       précise vaut mieux qu'une description traduite mais vague. */
 
     // Notifie les autres modules (valeurs de la charte, sélecteur…)
     document.dispatchEvent(new CustomEvent("langchange", { detail: { lang } }));
